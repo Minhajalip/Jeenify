@@ -53,3 +53,103 @@ Jeenify provides a centralized web application that allows teachers or administr
 ---
 
 ## 🏗️ Project Structure
+
+jeenify
+│
+├── frontend
+│ ├── html
+│ ├── css
+│ └── js
+│
+├── backend
+│ ├── controllers
+│ ├── services
+│ ├── models
+│ └── config
+│
+├── database
+│ ├── schema.sql
+│ └── sample_data.sql
+│
+├── docs
+│ ├── PROJECT_REQUIREMENTS.md
+│ ├── SYSTEM_ARCHITECTURE.md
+│ ├── DATABASE_SCHEMA.md
+│ └── CONTRIBUTING.md
+│
+└── tests
+
+---
+
+## 🧩 System Modules
+
+1. Authentication Module  
+2. Student Management Module  
+3. Attendance Management Module  
+4. Assessment Management Module  
+5. Dashboard Module  
+6. Search & Filter Module  
+7. Report Generation Module  
+
+---
+
+## 🖥️ Installation Guide
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/jeenify.git 
+```
+
+---
+
+2. Setup Database
+
+Install MySQL
+
+Create a database:
+CREATE DATABASE jeenify_db;
+
+Import the schema:
+database/schema.sql
+
+---
+
+3. Configure Backend
+
+Import project into IntelliJ / VS Code
+
+Configure database connection
+
+Run using Apache Tomcat
+
+---
+
+📚 Documentation
+
+Project documentation can be found inside the docs folder.
+
+Project Requirements
+
+System Architecture
+
+Database Schema
+
+Contribution Guidelines
+
+---
+
+🔮 Future Enhancements
+
+Role-based user access
+
+Mobile-friendly interface
+
+Advanced analytics for attendance
+
+Notification system
+
+Integration with university ERP systems
+
+---
+
