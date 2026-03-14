@@ -294,6 +294,65 @@ MySQL Workbench
 
 ---
 
+# 🏗 System Architecture
+
+flowchart TD
+
+A[Student / Teacher / Admin Browser]
+
+A --> B[Frontend Layer<br>HTML CSS JavaScript]
+
+B --> C[Backend Layer<br>Java Servlets / Spring Boot]
+
+C --> D[Business Logic]
+
+D --> E[(MySQL Database)]
+
+E --> F[Users]
+E --> G[Courses]
+E --> H[Attendance]
+E --> I[Assessments]
+E --> J[Timetable]
+E --> K[Academic Calendar]
+
+---
+
+# 🗄 Database Design
+
+erDiagram
+
+USERS ||--o{ STUDENTS : contains
+USERS ||--o{ TEACHERS : contains
+
+COURSES ||--o{ COURSE_ENROLLMENTS : has
+STUDENTS ||--o{ COURSE_ENROLLMENTS : enrolls
+
+COURSES ||--o{ COURSE_TEACHERS : assigned
+TEACHERS ||--o{ COURSE_TEACHERS : teaches
+
+COURSES ||--o{ TIMETABLE : schedules
+
+COURSES ||--o{ ATTENDANCE_SESSIONS : contains
+ATTENDANCE_SESSIONS ||--o{ ATTENDANCE_RECORDS : stores
+STUDENTS ||--o{ ATTENDANCE_RECORDS : attends
+
+ATTENDANCE_RECORDS ||--o{ ATTENDANCE_CLAIMS : disputes
+
+COURSES ||--o{ EXAMS : has
+COURSES ||--o{ ASSIGNMENTS : has
+
+STUDENTS ||--o{ MARKS : receives
+EXAMS ||--o{ MARKS : generates
+ASSIGNMENTS ||--o{ MARKS : generates
+
+ACADEMIC_CALENDAR {
+    int event_id
+    string title
+    date event_date
+}
+
+---
+
 # 📂 Project Structure
 
 ```
