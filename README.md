@@ -1,155 +1,409 @@
 # 🚀 Jeenify
 
-**Jeenify** is a modern web platform designed to simplify the management of student records, attendance tracking, and academic assessments.  
-It brings multiple academic management tasks together into one unified and easy-to-use system.
+### Student Attendance & Assessment Management System
+
+![Java](https://img.shields.io/badge/Backend-Java-orange)
+![Frontend](https://img.shields.io/badge/Frontend-HTML%20CSS%20JS-blue)
+![Database](https://img.shields.io/badge/Database-MySQL-green)
+![Server](https://img.shields.io/badge/Server-Apache%20Tomcat-red)
+![Status](https://img.shields.io/badge/Project-Active-brightgreen)
+
+Jeenify is a **web-based academic management platform** designed to simplify and centralize the management of student records, attendance tracking, course scheduling, assessments, and academic performance.
+
+The platform enables **admins, teachers, and students** to manage academic activities efficiently through a single unified system.
 
 ---
 
-## 📌 Project Overview
+# 📑 Table of Contents
 
-Managing student attendance and assessments manually can be time-consuming and inefficient.  
-Jeenify provides a centralized web application that allows teachers or administrators to:
-
-- Manage student information
-- Track attendance efficiently
-- Record academic assessments
-- View performance insights
-- Generate reports
+* Project Overview
+* System Roles
+* Core Features
+* Timetable System
+* Academic Calendar
+* Attendance System
+* Assessment System
+* Dashboards
+* Technology Stack
+* Project Structure
+* Installation Guide
+* Documentation
+* Development Workflow
+* Team
+* Future Enhancements
 
 ---
 
-## ⚙️ Technology Stack
+# 📌 Project Overview
+
+Managing attendance, exams, and academic schedules manually can be inefficient.
+
+Jeenify provides a **centralized digital system** for:
+
+* Student registration and approval
+* Course enrollment
+* Period-based attendance tracking
+* Timetable management
+* Academic calendar scheduling
+* Exam and assignment management
+* Student performance tracking
+
+---
+
+# 👥 System Roles
+
+## 1️⃣ Admin
+
+Admins manage the entire system.
+
+### Responsibilities
+
+* Create and manage teacher accounts
+* Manage courses
+* Assign teachers to courses
+* Monitor attendance records
+* View student performance
+* Manage academic calendar
+* View timetable schedules
+* Configure system settings
+* Access analytics and reports
+
+---
+
+## 2️⃣ Teachers
+
+Teachers manage academic activities within their courses.
+
+### Main Course Teacher
+
+Course-level administrator.
+
+Responsibilities include:
+
+* Approving student registrations
+* Managing course students
+* Creating course timetables
+* Assigning teachers to periods
+* Viewing course analytics
+* Approving attendance claims
+
+---
+
+### Normal Teacher
+
+Handles classroom-level activities.
+
+Responsibilities include:
+
+* Mark attendance
+* Create exams
+* Create assignments
+* Enter marks
+* View course timetable
+* View academic calendar
+
+---
+
+## 3️⃣ Students
+
+Students gain access after approval from the Main Course Teacher.
+
+### Student Features
+
+* Personal dashboard
+* View attendance percentage
+* View course-wise attendance
+* View exam marks
+* View assignment marks
+* View timetable
+* View academic calendar
+* Submit attendance claims
+
+---
+
+# 📅 Timetable System
+
+The timetable module organizes **weekly class schedules**.
+
+### Default Setup
+
+* 6 periods per day
+* 1 hour per period
+* Monday – Friday academic week
+
+### Features
+
+* Create weekly timetable
+* Assign teachers to periods
+* Assign subjects to periods
+* View daily schedules
+* Access attendance directly from timetable
+
+---
+
+# 📆 Academic Calendar
+
+The academic calendar manages **important academic events throughout the semester**.
+
+### Managed by Admin
+
+Events include:
+
+* Semester start date
+* Semester end date
+* Mid-term exams
+* Final exams
+* Assignment deadlines
+* Holidays
+* Study breaks
+
+Students and teachers can view events from their dashboards.
+
+---
+
+# 📊 Attendance System
+
+Attendance is tracked **per class period**.
+
+### Process
+
+Teachers select:
+
+* Course
+* Date
+* Period
+
+Students are marked:
+
+* Present
+* Absent
+
+Attendance percentages are **calculated automatically**.
+
+---
+
+# 📝 Attendance Claim System
+
+Students can submit attendance claims if marked absent incorrectly.
+
+Claim includes:
+
+* Date
+* Period number
+* Reason
+* Optional supporting document
+
+Teachers can **approve or reject claims**.
+
+---
+
+# 📚 Assessment System
+
+Teachers can create:
+
+* Exams
+* Assignments
+
+Each assessment includes:
+
+* Title
+* Description
+* Maximum marks
+
+Teachers enter marks and students view them on their dashboard.
+
+---
+
+# 📊 Dashboards
+
+## Student Dashboard
+
+Displays:
+
+* Overall attendance percentage
+* Course-wise attendance
+* Exam marks
+* Assignment marks
+* Timetable
+* Academic calendar
+* Performance summary
+
+---
+
+## Teacher Dashboard
+
+Displays:
+
+* Course attendance statistics
+* Student performance reports
+* Pending attendance claims
+* Course activity overview
+* Assigned timetable
+
+---
+
+# 🗄 Database Tables
+
+Main tables include:
+
+* users
+* students
+* teachers
+* courses
+* course_enrollments
+* course_teachers
+* timetable
+* attendance_sessions
+* attendance_records
+* attendance_claims
+* exams
+* assignments
+* marks
+* academic_calendar
+
+Tables are linked using **primary keys and foreign keys**.
+
+---
+
+# ⚙️ Technology Stack
 
 ### Backend
-- Java (Servlets / Spring Boot)
+
+Java (Servlets / Spring Boot)
 
 ### Frontend
-- HTML  
-- CSS  
-- JavaScript  
+
+HTML
+CSS
+JavaScript
 
 ### Database
-- MySQL
+
+MySQL
 
 ### Server
-- Apache Tomcat
 
-### Version Control
-- Git & GitHub
+Apache Tomcat
 
----
+### Tools
 
-## ✨ Features
-
-- 🔐 Secure Teacher/Admin Login
-- 👨‍🎓 Student Registration & Profile Management
-- 📅 Attendance Tracking System
-- 📝 Assessment & Marks Management
-- 📊 Student Performance Dashboard
-- 🔎 Search and Filter Students
-- 📑 Attendance and Performance Reports
-- 📤 Export Reports (CSV / PDF – optional)
+Git
+GitHub
+IntelliJ IDEA / VS Code
+MySQL Workbench
 
 ---
 
-## 🏗️ Project Structure
+# 📂 Project Structure
 
+```
 jeenify
 │
 ├── frontend
-│ ├── html
-│ ├── css
-│ └── js
+│   ├── html
+│   ├── css
+│   └── js
 │
 ├── backend
-│ ├── controllers
-│ ├── services
-│ ├── models
-│ └── config
+│   ├── controllers
+│   ├── services
+│   ├── models
+│   └── config
 │
 ├── database
-│ ├── schema.sql
-│ └── sample_data.sql
+│   ├── schema.sql
+│   └── sample_data.sql
 │
 ├── docs
-│ ├── PROJECT_REQUIREMENTS.md
-│ ├── SYSTEM_ARCHITECTURE.md
-│ ├── DATABASE_SCHEMA.md
-│ └── CONTRIBUTING.md
+│   ├── PROJECT_REQUIREMENTS.md
+│   ├── SYSTEM_ARCHITECTURE.md
+│   ├── DATABASE_SCHEMA.md
+│   ├── SYSTEM_DESIGN.md
+│   ├── API_SPECIFICATION.md
+│   ├── TEAM_STRUCTURE.md
+│   └── ROADMAP.md
 │
 └── tests
-
----
-
-## 🧩 System Modules
-
-1. Authentication Module  
-2. Student Management Module  
-3. Attendance Management Module  
-4. Assessment Management Module  
-5. Dashboard Module  
-6. Search & Filter Module  
-7. Report Generation Module  
-
----
-
-## 🖥️ Installation Guide
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/your-username/jeenify.git 
 ```
 
 ---
 
-2. Setup Database
+# 🖥 Installation
 
-Install MySQL
+### Clone the Repository
 
-Create a database:
+```bash
+git clone https://github.com/your-username/jeenify.git
+```
+
+### Setup Database
+
+Create database:
+
+```sql
 CREATE DATABASE jeenify_db;
+```
 
-Import the schema:
+Import schema:
+
+```
 database/schema.sql
+```
+
+### Run the Application
+
+Deploy the backend using **Apache Tomcat**.
 
 ---
 
-3. Configure Backend
+# 📚 Documentation
 
-Import project into IntelliJ / VS Code
+Detailed documentation is available inside the **docs folder**:
 
-Configure database connection
-
-Run using Apache Tomcat
-
----
-
-📚 Documentation
-
-Project documentation can be found inside the docs folder.
-
-Project Requirements
-
-System Architecture
-
-Database Schema
-
-Contribution Guidelines
+* Project Requirements
+* System Architecture
+* Database Schema
+* API Specification
+* System Design
+* Development Roadmap
 
 ---
 
-🔮 Future Enhancements
+# 🔧 Development Workflow
 
-Role-based user access
-
-Mobile-friendly interface
-
-Advanced analytics for attendance
-
-Notification system
-
-Integration with university ERP systems
+1. Create feature branch
+2. Implement feature
+3. Create Pull Request
+4. Code review
+5. Merge into develop branch
 
 ---
 
+# 👨‍💻 Team
+
+Project Manager
+Minhaj Ali P
+
+Technical Lead
+Ahmed Sultan P
+
+Git & Integration Lead
+Fadil Rahman
+
+Developed by a collaborative student team.
+
+---
+
+# 🔮 Future Enhancements
+
+* Mobile application
+* Email notifications
+* SMS alerts
+* Attendance analytics
+* Integration with university ERP systems
+
+---
+
+# 📜 License
+
+This project is developed for **academic purposes**.
