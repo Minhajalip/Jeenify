@@ -1,13 +1,13 @@
-📋 Task Board
+# 📋 Task Board
 
-Jeenify – Development Task Allocation
+## Jeenify – Development Task Allocation
 
 This task board outlines team responsibilities and development tasks for the Jeenify project.
 Tasks are divided by module and team specialization.
 
 ---
 
-👨‍💼 Project Management
+# 👨‍💼 Project Management
 
 Project Manager
 Minhaj Ali P
@@ -23,7 +23,7 @@ Responsibilities:
 
 ---
 
-💻 Backend Development Team
+# 💻 Backend Development Team
 
 Lead: Kevin Paulson
 
@@ -36,7 +36,7 @@ Members:
 - Feona Varghese
 - Nandana J S
 
-Responsibilities
+## Responsibilities
 
 Backend team develops Java APIs and business logic.
 
@@ -87,7 +87,7 @@ Dashboard APIs
 
 ---
 
-🎨 Frontend Development Team
+# 🎨 Frontend Development Team
 
 Lead: Ashiq Ali N.K
 
@@ -98,7 +98,7 @@ Members:
 - Advaith Babu K
 - Prajul P
 
-Responsibilities
+## Responsibilities
 
 Frontend team builds the user interface and client-side logic.
 
@@ -132,7 +132,7 @@ Student Interfaces
 
 ---
 
-🗄 Database Team
+# 🗄 Database Team
 
 Lead: Hannath C Shabeer
 
@@ -143,7 +143,7 @@ Members:
 - Pranav M P
 - Theja R
 
-Responsibilities
+## Responsibilities
 
 Design and maintain the MySQL database schema.
 
@@ -175,14 +175,14 @@ Additional responsibilities:
 
 ---
 
-🧪 Testing Team
+# 🧪 Testing Team
 
 Members:
 
 - Ziyana Ahammad S A P
 - Anaswara S
 
-Responsibilities
+## Responsibilities
 
 Ensure system quality and stability.
 
@@ -212,14 +212,14 @@ Bug Tracking
 
 ---
 
-📝 Documentation Team
+# 📝 Documentation Team
 
 Member:
 
 - Devipriya P R
 - Basil Sam Abraham
 
-Responsibilities
+## Responsibilities
 
 Maintain project documentation.
 
@@ -243,7 +243,7 @@ Additional Work
 
 ---
 
-🔧 Deployment & Integration Team
+# 🔧 Deployment & Integration Team
 
 Lead: Fadil Rahman
 
@@ -252,7 +252,7 @@ Members:
 - Ahmed Sultan P
 - Minhaj Ali P
 
-Responsibilities
+## Responsibilities
 
 Ensure all modules integrate properly.
 
@@ -267,7 +267,7 @@ Tasks
 
 ---
 
-📅 Development Flow
+# 📅 Development Flow
 
 Each feature follows this workflow:
 
@@ -281,7 +281,7 @@ Main Branch
 
 ---
 
-🎯 Final Deliverables
+# 🎯 Final Deliverables
 
 At the end of development the system will include:
 
