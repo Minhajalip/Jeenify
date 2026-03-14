@@ -297,7 +297,7 @@ MySQL Workbench
 # 🏗 System Architecture
 
 flowchart TD
-
+```
 A[Student / Teacher / Admin Browser]
 
 A --> B[Frontend Layer<br>HTML CSS JavaScript]
@@ -314,13 +314,13 @@ E --> H[Attendance]
 E --> I[Assessments]
 E --> J[Timetable]
 E --> K[Academic Calendar]
-
+```
 ---
 
 # 🗄 Database Design
 
 erDiagram
-
+```
 USERS ||--o{ STUDENTS : contains
 USERS ||--o{ TEACHERS : contains
 
@@ -350,7 +350,7 @@ ACADEMIC_CALENDAR {
     string title
     date event_date
 }
-
+```
 ---
 
 # 📂 Project Structure
