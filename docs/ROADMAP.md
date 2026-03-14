@@ -1,5 +1,5 @@
-📅 Project Roadmap
-
+# 📅 Project Roadmap
+ 
 Jeenify – 7 Day Development Plan
 
 This roadmap outlines the development schedule for building the Jeenify – Student Attendance & Assessment Management System.
@@ -8,13 +8,13 @@ The project will be completed over 7 days, with tasks distributed across fronten
 
 ---
 
-Day 1 – Project Setup & Planning
+# Day 1 – Project Setup & Planning
 
-Goals
+## Goals
 
 Establish the project structure and development workflow.
 
-Tasks
+### Tasks
 
 - Create GitHub repository
 - Setup repository branches
@@ -31,7 +31,7 @@ Tasks
 - Assign tasks to teams
 - Create documentation files
 
-Deliverables:
+#### Deliverables:
 
 - Project repository ready
 - Initial documentation completed
@@ -39,57 +39,57 @@ Deliverables:
 
 ---
 
-Day 2 – Authentication System
+# Day 2 – Authentication System
 
-Goals
+## Goals
 
 Implement role-based login system.
 
-Backend Tasks
+### Backend Tasks
 
 - Create users table
 - Implement authentication logic
 - Password hashing
 - Session management
 
-Frontend Tasks
+### Frontend Tasks
 
 - Create login page
 - Login form validation
 - Error handling
 
-Features Implemented
+#### Features Implemented
 
 - Admin login
 - Teacher login
 - Student login
 - Role-based redirection
 
-Deliverables:
+##### Deliverables:
 
 - Functional authentication system
 
 ---
 
-Day 3 – Student Registration & Course Management
+# Day 3 – Student Registration & Course Management
 
-Goals
+## Goals
 
 Implement student registration and approval workflow.
 
-Backend Tasks
+### Backend Tasks
 
 - Student registration API
 - Course management APIs
 - Student approval system
 
-Frontend Tasks
+### Frontend Tasks
 
 - Student registration page
 - Admin course management interface
 - Teacher student approval interface
 
-Database Tasks
+### Database Tasks
 
 Create tables:
 
@@ -98,7 +98,7 @@ Create tables:
 - course_enrollments
 - course_teachers
 
-Deliverables:
+#### Deliverables:
 
 - Students can register
 - Teachers can approve student accounts
@@ -106,60 +106,60 @@ Deliverables:
 
 ---
 
-Day 4 – Timetable & Academic Calendar
+# Day 4 – Timetable & Academic Calendar
 
-Goals
+## Goals
 
 Implement scheduling features.
 
-Backend Tasks
+### Backend Tasks
 
 - Timetable management API
 - Academic calendar API
 
-Frontend Tasks
+### Frontend Tasks
 
 - Timetable display interface
 - Academic calendar page
 
-Database Tasks
+### Database Tasks
 
 Create tables:
 
 - timetable
 - academic_calendar
 
-Features Implemented
+#### Features Implemented
 
 - Weekly timetable creation
 - Teacher period assignment
 - Academic event scheduling
 
-Deliverables:
+##### Deliverables:
 
 - Timetable system working
 - Academic calendar visible to users
 
 ---
 
-Day 5 – Attendance System
+# Day 5 – Attendance System
 
-Goals
+## Goals
 
 Implement period-based attendance tracking.
 
-Backend Tasks
+### Backend Tasks
 
 - Attendance session creation
 - Attendance recording API
 - Attendance percentage calculation
 
-Frontend Tasks
+### Frontend Tasks
 
 - Attendance marking interface
 - Attendance history display
 
-Database Tasks
+### Database Tasks
 
 Create tables:
 
@@ -167,37 +167,37 @@ Create tables:
 - attendance_records
 - attendance_claims
 
-Features Implemented
+#### Features Implemented
 
 - Period attendance marking
 - Attendance percentage tracking
 - Attendance claim submission
 
-Deliverables:
+##### Deliverables:
 
 - Fully functional attendance system
 
 ---
 
-Day 6 – Exams, Assignments & Marks
+# Day 6 – Exams, Assignments & Marks
 
-Goals
+## Goals
 
 Implement assessment system.
 
-Backend Tasks
+### Backend Tasks
 
 - Exam creation API
 - Assignment creation API
 - Marks entry API
 
-Frontend Tasks
+### Frontend Tasks
 
 - Exam creation interface
 - Assignment creation interface
 - Marks entry forms
 
-Database Tasks
+### Database Tasks
 
 Create tables:
 
@@ -205,50 +205,50 @@ Create tables:
 - assignments
 - marks
 
-Features Implemented
+#### Features Implemented
 
 - Exam creation
 - Assignment creation
 - Marks recording
 - Student marks display
 
-Deliverables:
+##### Deliverables:
 
 - Functional assessment system
 
 ---
 
-Day 7 – Dashboards, Testing & Final Integration
+# Day 7 – Dashboards, Testing & Final Integration
 
-Goals
+## Goals
 
 Complete system integration and prepare for presentation.
 
-Backend Tasks
+### Backend Tasks
 
 - Dashboard analytics
 - Performance summary APIs
 - System integration
 
-Frontend Tasks
+### Frontend Tasks
 
 - Student dashboard
 - Teacher dashboard
 - UI improvements
 
-Testing Tasks
+### Testing Tasks
 
 - Functional testing
 - UI testing
 - Bug fixes
 
-Documentation Tasks
+### Documentation Tasks
 
 - Update README
 - Complete project documentation
 - Final system testing
 
-Deliverables:
+#### Deliverables:
 
 - Fully working system
 - Final documentation
@@ -256,7 +256,7 @@ Deliverables:
 
 ---
 
-📌 Final Outcome
+# 📌 Final Outcome
 
 By the end of Day 7 the system will support:
 
