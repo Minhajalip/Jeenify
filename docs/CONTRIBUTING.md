@@ -34,7 +34,7 @@ jeenify
 │   ├── DATABASE_SCHEMA.md
 │   ├── SYSTEM_DESIGN.md
 │   ├── API_SPECIFICATION.md
-│   ├── TEAM_STRUCTURE.md
+│   ├── TASK_BOARD.md
 │   └── ROADMAP.md
 │
 └── tests
