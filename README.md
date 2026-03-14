@@ -34,21 +34,7 @@ The platform enables **admins, teachers, and students** to manage academic activ
 
 ---
 
-# 📌 Project Overview
 
-Managing attendance, exams, and academic schedules manually can be inefficient.
-
-Jeenify provides a **centralized digital system** for:
-
-* Student registration and approval
-* Course enrollment
-* Period-based attendance tracking
-* Timetable management
-* Academic calendar scheduling
-* Exam and assignment management
-* Student performance tracking
-
----
 
 # 👥 System Roles
 
