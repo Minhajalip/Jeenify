@@ -1,82 +1,32 @@
-# API Specification
-## Jeenify – Backend Endpoints
+# API Endpoints Specification
 
-This document outlines the core backend API endpoints used in the Jeenify system.
+## Timetable
+- **GET /api/timetable**: Retrieve the timetable for a user.
+- **POST /api/timetable**: Create or update a user's timetable entry.
 
-## Authentication
+## Academic Calendar
+- **GET /api/academic-calendar**: Get the academic calendar, including term dates and holidays.
 
-### POST /login
-Authenticate teacher/admin login.
+## Courses
+- **GET /api/courses**: List all available courses.
+- **POST /api/courses**: Create a new course.
+- **GET /api/courses/{id}**: Get details of a specific course.
+- **PUT /api/courses/{id}**: Update a course's information.
+- **DELETE /api/courses/{id}**: Delete a specific course.
 
-Request Body:
-- email
-- password
+## Exam Creation
+- **POST /api/exams**: Create a new exam.
+- **GET /api/exams**: List all exams.
+- **GET /api/exams/{id}**: Get details of a specific exam.
 
-Response:
-- success / failure
-- session token (if implemented)
+## Assignment Creation
+- **POST /api/assignments**: Create a new assignment.
+- **GET /api/assignments**: List all assignments.
+- **GET /api/assignments/{id}**: Get details of a specific assignment.
 
----
+## Attendance Claims
+- **POST /api/attendance**: Submit an attendance claim.
+- **GET /api/attendance**: Retrieve a user's attendance records.
 
-## Student Management
-
-### POST /students
-Add a new student.
-
-Fields:
-- name
-- department
-- email
-- phone
-
-### GET /students
-Retrieve list of all students.
-
-### GET /students/{id}
-Retrieve specific student details.
-
-### PUT /students/{id}
-Update student information.
-
-### DELETE /students/{id}
-Delete a student.
-
----
-
-## Attendance
-
-### POST /attendance
-Mark attendance for students.
-
-Fields:
-- student_id
-- date
-- status (Present / Absent)
-
-### GET /attendance/{student_id}
-Retrieve attendance history for a student.
-
----
-
-## Assessments
-
-### POST /assessments
-Add marks for a student.
-
-Fields:
-- student_id
-- subject
-- marks
-
-### GET /assessments/{student_id}
-Retrieve assessment records for a student.
-
----
-
-## Reports
-
-### GET /reports/attendance
-Generate attendance report.
-
-### GET /reports/performance
-Generate student performance report.
+## Dashboard Endpoints
+- **GET /api/dashboard**: Get a user’s dashboard with all relevant information, including assignments, exams, and attendance statistics.
