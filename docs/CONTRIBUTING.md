@@ -10,6 +10,7 @@ This document explains how team members should contribute to the Jeenify project
 
 The project repository is organized as follows:
 
+```bash
 jeenify
 │
 ├── frontend
@@ -37,6 +38,7 @@ jeenify
 │   └── ROADMAP.md
 │
 └── tests
+```
 
 Each team should only work within the relevant module folder.
 
