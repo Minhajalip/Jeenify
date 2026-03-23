@@ -1,6 +1,6 @@
 package com.tracker.studentracker.models;
 
-public class TimeTable {
+public class Timetable {
     private Long timetableId;
     private Long courseId;
     private String dayOfWeek;
