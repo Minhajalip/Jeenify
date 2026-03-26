@@ -36,7 +36,7 @@ public class UserRepository {
     }
 
     public int save(User user) {
-        String sql = "INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (full_name, email, password_hash, role) VALUES (?, ?, ?, ?)";
         return jdbc.update(sql,
                 user.getName(),
                 user.getEmail(),
@@ -47,8 +47,8 @@ public class UserRepository {
 
     private User mapUser(ResultSet rs) throws SQLException {
         User user = new User();
-        user.setId(rs.getLong("id"));
-        user.setName(rs.getString("name"));
+        user.setId(rs.getLong("user_id"));
+        user.setName(rs.getString("full_name"));
         user.setEmail(rs.getString("email"));
         user.setPasswordHash(rs.getString("password_hash"));
         user.setRole(rs.getString("role"));

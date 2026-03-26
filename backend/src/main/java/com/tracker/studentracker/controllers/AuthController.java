@@ -37,6 +37,9 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
+            if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+                return ResponseEntity.badRequest().body("Email already registered");
+            }
             User user = new User();
             user.setName(request.getName());
             user.setEmail(request.getEmail());

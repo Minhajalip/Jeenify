@@ -1,18 +1,18 @@
 package com.tracker.studentracker.models;
 
 public class User {
-    private Long id;
-    private String name;
+    private Long userId;
+    private String fullName;
     private String email;
     private String passwordHash;
     private String role;
     private String createdAt;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() { return userId; }
+    public void setId(Long userId) { this.userId = userId; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() { return fullName; }
+    public void setName(String fullName) { this.fullName = fullName; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
