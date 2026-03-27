@@ -2,21 +2,7 @@
 # Database Schema
 
 Jeenify – Student Attendance & Assessment Management System
-
-This document defines the database structure for the Jeenify system.
-
-## The schema supports:
-
-- User management
-- Student and teacher records
-- Course enrollment
-- Timetable scheduling
-- Attendance tracking
-- Attendance claims
-- Exams and assignments
-- Academic calendar
-
-All tables use primary keys and foreign keys to maintain relationships.
+s to maintain relationships.
 
 ---
 
