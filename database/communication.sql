@@ -1,13 +1,13 @@
 -- 1. Attendance Claims
 CREATE TABLE attendance_claims (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    student_id INT,
-    session_id INT,
+    student_id INT NOT NULL,
+    session_id INT NOT NULL,
     reason TEXT,
     file_path VARCHAR(255),
-    status VARCHAR(50),
-    FOREIGN KEY (student_id) REFERENCES students(id),
-    FOREIGN KEY (session_id) REFERENCES attendance_sessions(id)
+    status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (session_id) REFERENCES attendance_sessions(id) ON DELETE CASCADE
 );
 
 -- Sample Data
@@ -20,7 +20,7 @@ VALUES
 -- 2. Notifications
 CREATE TABLE notifications (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT,
+    user_id INT NOT NULL,
     message TEXT,
     is_read BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -37,10 +37,10 @@ VALUES
 -- 3. Resources
 CREATE TABLE resources (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    course_id INT,
+    course_id INT NOT NULL,
     title VARCHAR(255),
     file_path VARCHAR(255),
-    uploaded_by INT,
+    uploaded_by INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (course_id) REFERENCES courses(id),
     FOREIGN KEY (uploaded_by) REFERENCES users(id)
@@ -59,7 +59,7 @@ CREATE TABLE calendar_events (
     title VARCHAR(255),
     description TEXT,
     event_date DATE,
-    created_by INT,
+    created_by INT NOT NULL,
     FOREIGN KEY (created_by) REFERENCES users(id)
 );
 
