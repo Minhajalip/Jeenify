@@ -17,35 +17,41 @@ public class SecurityConfig {
 
     @Autowired
     private JwtFilter jwtFilter;
+
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
             throw new UsernameNotFoundException("Use JWT authentication");
         };
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/auth/register").permitAll()
+
+                        // ✅ Public endpoints
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        // ✅ FIXED courses path
+                        .requestMatchers("/courses/**").permitAll()
+
+                        // Protected endpoints
                         .requestMatchers("/api/students/approve/**").hasRole("ADMIN")
                         .requestMatchers("/api/departments/**").hasRole("ADMIN")
                         .requestMatchers("/api/exams/**").hasAnyRole("TEACHER", "ADMIN")
                         .requestMatchers("/api/assignments/**").hasAnyRole("TEACHER", "ADMIN")
                         .requestMatchers("/api/marks/**").hasAnyRole("TEACHER", "ADMIN")
-                        .requestMatchers("/api/attendance/sessions/**").hasAnyRole("TEACHER", "ADMIN")
-                        .requestMatchers("/api/attendance/records/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers("/api/attendance/**").hasAnyRole("TEACHER", "ADMIN")
+
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
-
 }
