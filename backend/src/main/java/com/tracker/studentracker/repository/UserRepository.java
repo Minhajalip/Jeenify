@@ -1,13 +1,18 @@
 package com.tracker.studentracker.repository;
 
-import com.tracker.studentracker.models.User;
+import com.tracker.studentracker.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Optional;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+
+import java.sql.PreparedStatement;
+//import java.sql.Connection;
+//import java.sql.SQLException;
+
+//import org.springframework.jdbc.core.PreparedStatementCreator;
 
 @Repository
 public class UserRepository {
@@ -15,44 +20,26 @@ public class UserRepository {
     @Autowired
     private JdbcTemplate jdbc;
 
-    public Optional<User> findByEmail(String email) {
-        String sql = "SELECT * FROM users WHERE email = ?";
-        try {
-            User user = jdbc.queryForObject(sql, (rs, row) -> mapUser(rs), email);
-            return Optional.ofNullable(user);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
+    public int save(Users user){
+        String sql = "INSERT INTO users(full_name, email, password_hash, role) VALUES(?,?,?,?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbc.update(connection -> {
+            // Use the Statement constant for better compatibility
+            PreparedStatement ps = connection.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPasswordHash()); // Plain text as requested
+            ps.setString(4, user.getRole().name());
+            return ps;
+        }, keyHolder);
+
+        return keyHolder.getKey().intValue();
     }
 
-    public Optional<User> findById(Long id) {
-        String sql = "SELECT * FROM users WHERE id = ?";
-        try {
-            User user = jdbc.queryForObject(sql, (rs, row) -> mapUser(rs), id);
-            return Optional.ofNullable(user);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
-    }
-
-    public int save(User user) {
-        String sql = "INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)";
-        return jdbc.update(sql,
-                user.getName(),
-                user.getEmail(),
-                user.getPasswordHash(),
-                user.getRole()
-        );
-    }
-
-    private User mapUser(ResultSet rs) throws SQLException {
-        User user = new User();
-        user.setId(rs.getLong("id"));
-        user.setName(rs.getString("name"));
-        user.setEmail(rs.getString("email"));
-        user.setPasswordHash(rs.getString("password_hash"));
-        user.setRole(rs.getString("role"));
-        user.setCreatedAt(rs.getString("created_at"));
-        return user;
+    public boolean existsByEmail(String email){
+        String sql = "SELECT COUNT(*) FROM users WHERE email=?";
+        Integer count = jdbc.queryForObject(sql, Integer.class, email);
+        return count != null && count > 0;
     }
 }
