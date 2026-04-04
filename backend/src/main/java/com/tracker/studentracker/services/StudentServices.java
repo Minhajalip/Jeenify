@@ -52,4 +52,11 @@ public class StudentServices {
             enrollmentRepo.save(studentId, courseId);
         }
     }
+    @Transactional
+    public void approveStudent(int studentId){
+        int rows = studentRepo.approveStudent(studentId);
+        if(rows == 0){
+            throw new RuntimeException("Student not found");
+        }
+    }
 }

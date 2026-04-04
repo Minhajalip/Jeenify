@@ -21,6 +21,10 @@ public class StudentRepository {
                 "pending"
         );
     }
+    public int approveStudent(int studentId){
+       String sql = "UPDATE students SET status = 'approved' WHERE id = ?";
+       return jdbc.update(sql, studentId);
+   }
 
     public boolean existsByStudentId(int studentId){
         String sql = "SELECT COUNT(*) FROM students WHERE id=?";

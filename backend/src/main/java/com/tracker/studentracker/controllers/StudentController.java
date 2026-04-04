@@ -61,4 +61,14 @@ public class StudentController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+    // 3. Approve Student (ADMIN only)
+    @PutMapping("/approve/{studentId}")
+    public ResponseEntity<String> approveStudent(@PathVariable int studentId){
+        try{
+            studentServices.approveStudent(studentId);
+            return ResponseEntity.ok("Student approved successfully");
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
 }
