@@ -42,11 +42,27 @@ public class CourseController {
     @PostMapping("/{courseId}/assign-teacher/{teacherId}")
     public ResponseEntity<?> assignTeacher(@PathVariable int courseId, @PathVariable int teacherId) {
         try {
+            if(courseTeacherRepository.existsByCourseIdAndTeacherId(courseId, teacherId)){
+                return ResponseEntity.badRequest().body("Teacher already assigned to this course");
+            }
             CourseTeacher ct = new CourseTeacher();
             ct.setCourseId(courseId);
             ct.setTeacherId(teacherId);
             courseTeacherRepository.save(ct);
             return ResponseEntity.ok("Teacher assigned to course successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+    // Remove teacher from course
+    @DeleteMapping("/{courseId}/remove-teacher/{teacherId}")
+    public ResponseEntity<?> removeTeacher(@PathVariable int courseId, @PathVariable int teacherId) {
+        try {
+            if(!courseTeacherRepository.existsByCourseIdAndTeacherId(courseId, teacherId)){
+                return ResponseEntity.badRequest().body("Teacher is not assigned to this course");
+            }
+            courseTeacherRepository.deleteByCourseIdAndTeacherId(courseId, teacherId);
+            return ResponseEntity.ok("Teacher removed from course successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
