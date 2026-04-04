@@ -1,6 +1,6 @@
 package com.tracker.studentracker.services;
 
-import com.tracker.studentracker.models.Users;
+import com.tracker.studentracker.models.User;
 import com.tracker.studentracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,19 +13,20 @@ public class UserServices {
     public UserRepository userRepo;
 
     @Transactional
-    public int registerStudentUser(String name, String email, String password) {
+    public Long registerStudentUser(String name, String email, String password) {
 
         if(userRepo.existsByEmail(email)){
             throw new RuntimeException("Email already exists");
         }
 
-        Users user = new Users();
+        User user = new User();
         user.setName(name);
         user.setEmail(email);
         user.setPasswordHash(password);
-        user.setRole(Users.Role.STUDENT);
+        user.setRole("STUDENT"); 
 
-        return userRepo.save(user);
+        // Save user, then return the generated ID
+        User savedUser = userRepo.save(user);
+        return savedUser.getId();
     }
-
 }
