@@ -19,10 +19,10 @@ public class StudentServices {
     private CourseEnrollmentRepository enrollmentRepo;
 
     @Transactional
-    public void createStudent(int userId, String studentNumber, int majorCourseId){
+    public void createStudent(Long userId, String studentNumber, int majorCourseId){
 
         Student student = new Student();
-        student.setStudentId(userId);
+        student.setStudentId(userId.intValue());
         student.setUserId(userId);
         student.setStudentNumber(studentNumber);
         student.setMajorCourseId(majorCourseId);
@@ -35,7 +35,7 @@ public class StudentServices {
     public void selectCourses(int studentId, List<Integer> courseIds){
 
         // Step 1: fetch student
-        Student student = studentRepo.findById(studentId);
+        Student student = studentRepo.findById((long) studentId); 
 
         // Step 2: check approval
         if(student.getStatus() != Student.Status.APPROVED){

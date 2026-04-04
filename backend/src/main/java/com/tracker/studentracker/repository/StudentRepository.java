@@ -28,14 +28,14 @@ public class StudentRepository {
         return count != null && count > 0;
     }
 
-    public Student findById(int studentId){
+    public Student findById(Long studentId){ 
 
         String sql = "SELECT * FROM students WHERE student_id=?";
 
         return jdbc.queryForObject(sql, (rs, rowNum) -> {
             Student s = new Student();
             s.setStudentId(rs.getInt("student_id"));
-            s.setUserId(rs.getInt("user_id"));
+            s.setUserId(rs.getLong("user_id"));  
             s.setStudentNumber(rs.getString("student_number"));
             s.setMajorCourseId(rs.getInt("major_course_id"));
             s.setStatus(Student.Status.valueOf(rs.getString("approval_status")));

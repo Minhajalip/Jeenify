@@ -26,7 +26,7 @@ public class StudentController {
 
         try{
 
-            int userId = userService.registerStudentUser(
+            Long userId = userService.registerStudentUser(
                     request.getName(),
                     request.getEmail(),
                     request.getPassword()
