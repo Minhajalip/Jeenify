@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package com.tracker.studentracker.models;
 
 import jakarta.persistence.*;
