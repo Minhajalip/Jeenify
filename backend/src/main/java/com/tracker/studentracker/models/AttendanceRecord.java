@@ -3,6 +3,7 @@ package com.tracker.studentracker.models;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "attendance_records")
 public class AttendanceRecord {
 
     @Id
@@ -11,9 +12,8 @@ public class AttendanceRecord {
 
     private Long sessionId;
     private Long studentId;
-    private String status; // PRESENT / ABSENT
+    private String status;
 
-    // getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

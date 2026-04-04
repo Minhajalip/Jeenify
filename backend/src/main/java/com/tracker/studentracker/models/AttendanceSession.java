@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "attendance_sessions")
 public class AttendanceSession {
 
     @Id
@@ -11,11 +12,13 @@ public class AttendanceSession {
     private Long id;
 
     private Long courseId;
+
+    @Column(name = "session_date")
     private LocalDate date;
+
     private int period;
     private Long teacherId;
 
-    // getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
