@@ -35,8 +35,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
-            "http://localhost:3000",   // React default
-            "http://localhost:5173"    // Vite default
+            "http://localhost:3000",
+            "http://localhost:5173"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
@@ -50,7 +50,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // ✅ added
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
@@ -63,10 +63,22 @@ public class SecurityConfig {
                         .requestMatchers("/api/students/select-courses").hasAnyRole("TEACHER", "ADMIN")
                         .requestMatchers("/api/students/approve/**").hasRole("ADMIN")
                         .requestMatchers("/api/departments/**").hasRole("ADMIN")
-                        .requestMatchers("/api/exams/**").hasAnyRole("TEACHER", "ADMIN")
-                        .requestMatchers("/api/assignments/**").hasAnyRole("TEACHER", "ADMIN")
-                        .requestMatchers("/api/marks/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers("/api/exams/**").hasAnyRole("TEACHER", "ADMIN", "STUDENT")
+                        .requestMatchers("/api/assignments/**").hasAnyRole("TEACHER", "ADMIN", "STUDENT")
+                        .requestMatchers("/api/marks/**").hasAnyRole("TEACHER", "ADMIN", "STUDENT")
+
+                        // Attendance claims - students can submit, view and delete their own
+                        .requestMatchers(HttpMethod.POST, "/api/attendance/claims").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/attendance/claims/student/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/attendance/claims/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+
+                        // Attendance claims - teacher/admin only
+                        .requestMatchers(HttpMethod.GET, "/api/attendance/claims/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/attendance/claims/**").hasAnyRole("TEACHER", "ADMIN")
+
+                        // Rest of attendance - teacher/admin only
                         .requestMatchers("/api/attendance/**").hasAnyRole("TEACHER", "ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
