@@ -16,7 +16,7 @@ public class Student {
     public int getStudentId() { return this.studentId; }
     public void setStudentId(int studentId) { this.studentId = studentId; }
 
-    public Long getUserId() { return this.userId; }   // ✅ was int, now Long
+    public Long getUserId() { return this.userId; }   
     public void setUserId(Long userId) { this.userId = userId; }
 
     public String getStudentNumber() { return this.studentNumber; }
