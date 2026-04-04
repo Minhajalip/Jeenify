@@ -26,5 +26,4 @@
 hs_err_pid*
 replay_pid*
 
-# Local secrets - never commit
-src/main/resources/application-local.properties
+backend/src/main/resources/application-local.properties
