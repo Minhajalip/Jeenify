@@ -14,6 +14,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -44,6 +46,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String email = jwtService.extractEmail(token);
         String role = jwtService.extractRole(token);
+        Long userId = jwtService.extractUserId(token);
+
+        // Store userId and role in details so controllers can access them
+        Map<String, Object> details = new HashMap<>();
+        details.put("userId", userId);
+        details.put("role", role);
 
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(
@@ -54,6 +62,7 @@ public class JwtFilter extends OncePerRequestFilter {
                         )
                 );
 
+        authentication.setDetails(details);  // ✅ attach userId and role
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
     }

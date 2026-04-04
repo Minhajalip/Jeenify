@@ -79,6 +79,9 @@ public class SecurityConfig {
                         // Rest of attendance - teacher/admin only
                         .requestMatchers("/api/attendance/**").hasAnyRole("TEACHER", "ADMIN")
 
+                        .requestMatchers("/api/reports/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+                        
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
