@@ -18,6 +18,16 @@ You get the token from the login response. Store it (in memory or localStorage) 
 
 ---
 
+## Important — Student ID vs User ID
+
+After login you get a `userId`. But many student-specific endpoints require a `studentId` which is different. Always call the student profile endpoint right after login to get the `studentId`:
+
+```
+GET /api/students/me/{userId}
+```
+
+---
+
 ## Endpoints
 
 ### AUTH
@@ -114,6 +124,29 @@ Note: Student cannot be assigned courses until an admin approves them.
 
 ---
 
+#### Get student profile
+```
+GET /api/students/me/{userId}
+```
+Token required. Any role.
+
+Example: `GET /api/students/me/10`
+
+Response:
+```json
+{
+    "studentId": 5,
+    "userId": 10,
+    "studentNumber": "STU004",
+    "majorCourseId": 1,
+    "status": "PENDING"
+}
+```
+
+Note: Students can only view their own profile. Use `studentId` from this response for all student-specific endpoints.
+
+---
+
 #### Approve a student
 ```
 PUT /api/students/approve/{studentId}
@@ -191,16 +224,7 @@ Request body:
 }
 ```
 
-Response:
-```json
-{
-    "id": 2,
-    "courseCode": "MATH101",
-    "courseName": "Mathematics",
-    "departmentId": 1,
-    "mainTeacherId": 1
-}
-```
+Response: Created course object.
 
 ---
 
@@ -307,6 +331,120 @@ Attendance marked successfully
 
 ---
 
+### ATTENDANCE CLAIMS
+
+#### Submit a claim
+```
+POST /api/attendance/claims
+```
+Token required. Role: `STUDENT`, `TEACHER` or `ADMIN`
+
+Request body:
+```json
+{
+    "studentId": 5,
+    "sessionId": 1,
+    "reason": "I was sick that day"
+}
+```
+
+Note: Use `studentId` from the student profile, not `userId` from login. Students can only submit claims for themselves.
+
+Response:
+```json
+{
+    "id": 1,
+    "studentId": 5,
+    "sessionId": 1,
+    "reason": "I was sick that day",
+    "filePath": null,
+    "status": "Pending"
+}
+```
+
+---
+
+#### View own claims
+```
+GET /api/attendance/claims/student/{studentId}
+```
+Token required. Any role.
+
+Example: `GET /api/attendance/claims/student/5`
+
+Note: Students can only view their own claims.
+
+Response: List of claims for that student.
+
+---
+
+#### Delete a claim (only if pending)
+```
+DELETE /api/attendance/claims/{claimId}/student/{studentId}
+```
+Token required. Any role.
+
+Example: `DELETE /api/attendance/claims/8/student/5`
+
+Note: Students can only delete their own claims. Returns 400 if claim has already been approved or rejected.
+
+Response:
+```
+Claim deleted successfully
+```
+
+---
+
+#### Get all claims
+```
+GET /api/attendance/claims
+```
+Token required. Role: `TEACHER` or `ADMIN`
+
+Response: List of all claims.
+
+---
+
+#### Get claims for a session
+```
+GET /api/attendance/claims/session/{sessionId}
+```
+Token required. Role: `TEACHER` or `ADMIN`
+
+Example: `GET /api/attendance/claims/session/1`
+
+Response: List of claims for that session.
+
+---
+
+#### Approve a claim
+```
+PUT /api/attendance/claims/{claimId}/approve
+```
+Token required. Role: `TEACHER` or `ADMIN`
+
+Example: `PUT /api/attendance/claims/6/approve`
+
+Response: Updated claim object with status `Approved`.
+
+Note: Returns 400 if claim has already been reviewed.
+
+---
+
+#### Reject a claim
+```
+PUT /api/attendance/claims/{claimId}/reject
+```
+Token required. Role: `TEACHER` or `ADMIN`
+
+Example: `PUT /api/attendance/claims/7/reject`
+
+Response: Updated claim object with status `Rejected`.
+
+Note: Returns 400 if claim has already been reviewed.
+
+---
+
 ### EXAMS
 
 #### Create an exam
@@ -326,17 +464,7 @@ Request body:
 }
 ```
 
-Response:
-```json
-{
-    "examId": 1,
-    "courseId": 1,
-    "title": "Midterm Exam",
-    "description": "Covers chapters 1-5",
-    "maxMarks": 100,
-    "examDate": "2026-05-01"
-}
-```
+Response: Created exam object.
 
 ---
 
@@ -359,6 +487,8 @@ GET /api/exams/student/{studentId}
 Token required. Any role.
 
 Example: `GET /api/exams/student/1`
+
+Note: Students can only view their own exams.
 
 Response: List of exams for courses the student is enrolled in.
 
@@ -416,17 +546,7 @@ Request body:
 }
 ```
 
-Response:
-```json
-{
-    "assignmentId": 1,
-    "courseId": 1,
-    "title": "Assignment 1",
-    "description": "Implement a linked list",
-    "maxMarks": 20,
-    "dueDate": "2026-05-10"
-}
-```
+Response: Created assignment object.
 
 ---
 
@@ -449,6 +569,8 @@ GET /api/assignments/student/{studentId}
 Token required. Any role.
 
 Example: `GET /api/assignments/student/1`
+
+Note: Students can only view their own assignments.
 
 Response: List of assignments for courses the student is enrolled in.
 
@@ -542,6 +664,8 @@ Token required. Any role.
 
 Example: `GET /api/marks/exam/student/1`
 
+Note: Students can only view their own marks.
+
 Response: List of all exam marks for the student.
 
 ---
@@ -599,7 +723,126 @@ Token required. Any role.
 
 Example: `GET /api/marks/assignment/student/1`
 
+Note: Students can only view their own marks.
+
 Response: List of all assignment marks for the student.
+
+---
+
+### REPORTS
+
+#### Get attendance report for a student in a course
+```
+GET /api/reports/attendance/student/{studentId}/course/{courseId}
+```
+Token required. Any role.
+
+Example: `GET /api/reports/attendance/student/1/course/1`
+
+Note: Students can only view their own report.
+
+Response:
+```json
+{
+    "total_sessions": 10,
+    "present_count": 8,
+    "attendance_percentage": 80.00
+}
+```
+
+---
+
+#### Get attendance report for all students in a course
+```
+GET /api/reports/attendance/course/{courseId}
+```
+Token required. Role: `TEACHER` or `ADMIN`
+
+Example: `GET /api/reports/attendance/course/1`
+
+Response:
+```json
+[
+    {
+        "student_id": 1,
+        "total_sessions": 10,
+        "present_count": 8,
+        "attendance_percentage": 80.00
+    }
+]
+```
+
+---
+
+#### Get exam report for a student
+```
+GET /api/reports/exams/student/{studentId}
+```
+Token required. Any role.
+
+Example: `GET /api/reports/exams/student/1`
+
+Note: Students can only view their own report.
+
+Response:
+```json
+[
+    {
+        "exam_title": "Midterm Exam",
+        "max_marks": 100,
+        "marks_obtained": 85,
+        "percentage": 85.00
+    }
+]
+```
+
+---
+
+#### Get exam report for all students in a course
+```
+GET /api/reports/exams/course/{courseId}
+```
+Token required. Role: `TEACHER` or `ADMIN`
+
+Example: `GET /api/reports/exams/course/1`
+
+Response: List of exam marks with percentage for all students in the course.
+
+---
+
+#### Get assignment report for a student
+```
+GET /api/reports/assignments/student/{studentId}
+```
+Token required. Any role.
+
+Example: `GET /api/reports/assignments/student/1`
+
+Note: Students can only view their own report.
+
+Response:
+```json
+[
+    {
+        "assignment_title": "Assignment 1",
+        "max_marks": 20,
+        "marks_obtained": 18,
+        "percentage": 90.00
+    }
+]
+```
+
+---
+
+#### Get assignment report for all students in a course
+```
+GET /api/reports/assignments/course/{courseId}
+```
+Token required. Role: `TEACHER` or `ADMIN`
+
+Example: `GET /api/reports/assignments/course/1`
+
+Response: List of assignment marks with percentage for all students in the course.
 
 ---
 
@@ -608,18 +851,22 @@ Response: List of all assignment marks for the student.
 | Endpoint | ADMIN | TEACHER | STUDENT |
 |---|---|---|---|
 | Register/Login | ✅ | ✅ | ✅ |
+| Get student profile | ✅ | ✅ | ✅ (own only) |
 | Approve student | ✅ | ❌ | ❌ |
 | Assign courses to student | ✅ | ✅ | ❌ |
 | Create/Delete course | ✅ | ❌ | ❌ |
 | Assign/Remove teacher from course | ✅ | ❌ | ❌ |
 | Create attendance session | ✅ | ✅ | ❌ |
 | Mark attendance | ✅ | ✅ | ❌ |
+| Submit/View/Delete own claims | ✅ | ✅ | ✅ (own only) |
+| Approve/Reject claims | ✅ | ✅ | ❌ |
 | Create/Update/Delete exam | ✅ | ✅ | ❌ |
 | View exams | ✅ | ✅ | ✅ (own courses only) |
 | Create/Update/Delete assignment | ✅ | ✅ | ❌ |
 | View assignments | ✅ | ✅ | ✅ (own courses only) |
 | Enter/Update marks | ✅ | ✅ | ❌ |
 | View marks | ✅ | ✅ | ✅ (own only) |
+| View reports | ✅ | ✅ | ✅ (own only) |
 
 ---
 
@@ -644,6 +891,39 @@ const response = await fetch('http://localhost:8080/api/exams', {
     })
 });
 ```
+
+---
+
+## Typical Frontend Flow
+
+### Student flow:
+1. Register → `POST /api/students/register`
+2. Wait for admin approval
+3. Login → `POST /api/auth/login` → save token, userId, role
+4. Get student profile → `GET /api/students/me/{userId}` → save studentId
+5. View courses → `GET /courses`
+6. View exams → `GET /api/exams/student/{studentId}`
+7. View assignments → `GET /api/assignments/student/{studentId}`
+8. View marks → `GET /api/marks/exam/student/{studentId}`
+9. Submit attendance claim → `POST /api/attendance/claims`
+10. View reports → `GET /api/reports/attendance/student/{studentId}/course/{courseId}`
+
+### Teacher flow:
+1. Login → `POST /api/auth/login` → save token, userId, role
+2. Create attendance session → `POST /api/attendance/session`
+3. Mark attendance → `POST /api/attendance/mark`
+4. Create exam → `POST /api/exams`
+5. Enter marks → `POST /api/marks/exam`
+6. Review claims → `GET /api/attendance/claims`
+7. Approve/reject claims → `PUT /api/attendance/claims/{id}/approve`
+
+### Admin flow:
+1. Login → `POST /api/auth/login`
+2. Approve students → `PUT /api/students/approve/{studentId}`
+3. Create courses → `POST /courses`
+4. Assign teachers → `POST /courses/{courseId}/assign-teacher/{teacherId}`
+5. Assign courses to students → `POST /api/students/select-courses`
+6. View all reports → `GET /api/reports/attendance/course/{courseId}`
 
 ---
 
