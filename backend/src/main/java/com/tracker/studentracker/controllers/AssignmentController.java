@@ -1,7 +1,10 @@
 package com.tracker.studentracker.controllers;
 
+import com.tracker.studentracker.config.AuthHelper;
 import com.tracker.studentracker.models.Assignment;
+import com.tracker.studentracker.models.Student;
 import com.tracker.studentracker.services.AssignmentService;
+import com.tracker.studentracker.services.StudentServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,12 @@ public class AssignmentController {
 
     @Autowired
     private AssignmentService assignmentService;
+
+    @Autowired
+    private AuthHelper authHelper;
+
+    @Autowired
+    private StudentServices studentServices;
 
     // TEACHER/ADMIN - create assignment
     @PostMapping
@@ -60,10 +69,18 @@ public class AssignmentController {
         }
     }
 
-    // STUDENT - get assignments for enrolled courses
+    // STUDENT - get assignments for own enrolled courses only
     @GetMapping("/student/{studentId}")
     public ResponseEntity<?> getAssignmentsForStudent(@PathVariable int studentId) {
         try {
+            String role = authHelper.getCurrentRole();
+            if (role.equals("STUDENT")) {
+                Long userId = authHelper.getCurrentUserId();
+                Student student = studentServices.getStudentByUserId(userId);
+                if (student.getStudentId() != studentId) {
+                    return ResponseEntity.status(403).body("Access denied: you can only view your own assignments");
+                }
+            }
             List<Assignment> assignments = assignmentService.getAssignmentsForStudent(studentId);
             return ResponseEntity.ok(assignments);
         } catch (Exception e) {

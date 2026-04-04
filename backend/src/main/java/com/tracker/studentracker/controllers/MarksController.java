@@ -1,8 +1,11 @@
 package com.tracker.studentracker.controllers;
 
+import com.tracker.studentracker.config.AuthHelper;
 import com.tracker.studentracker.models.AssignmentMark;
 import com.tracker.studentracker.models.ExamMark;
+import com.tracker.studentracker.models.Student;
 import com.tracker.studentracker.services.MarksService;
+import com.tracker.studentracker.services.StudentServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +17,12 @@ public class MarksController {
 
     @Autowired
     private MarksService marksService;
+
+    @Autowired
+    private AuthHelper authHelper;
+
+    @Autowired
+    private StudentServices studentServices;
 
     // TEACHER/ADMIN - enter exam marks
     @PostMapping("/exam")
@@ -50,10 +59,18 @@ public class MarksController {
         }
     }
 
-    // STUDENT - get own exam marks
+    // STUDENT - get own exam marks only
     @GetMapping("/exam/student/{studentId}")
     public ResponseEntity<?> getExamMarksByStudent(@PathVariable int studentId) {
         try {
+            String role = authHelper.getCurrentRole();
+            if (role.equals("STUDENT")) {
+                Long userId = authHelper.getCurrentUserId();
+                Student student = studentServices.getStudentByUserId(userId);
+                if (student.getStudentId() != studentId) {
+                    return ResponseEntity.status(403).body("Access denied: you can only view your own marks");
+                }
+            }
             return ResponseEntity.ok(marksService.getExamMarksByStudent(studentId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
@@ -95,10 +112,18 @@ public class MarksController {
         }
     }
 
-    // STUDENT - get own assignment marks
+    // STUDENT - get own assignment marks only
     @GetMapping("/assignment/student/{studentId}")
     public ResponseEntity<?> getAssignmentMarksByStudent(@PathVariable int studentId) {
         try {
+            String role = authHelper.getCurrentRole();
+            if (role.equals("STUDENT")) {
+                Long userId = authHelper.getCurrentUserId();
+                Student student = studentServices.getStudentByUserId(userId);
+                if (student.getStudentId() != studentId) {
+                    return ResponseEntity.status(403).body("Access denied: you can only view your own marks");
+                }
+            }
             return ResponseEntity.ok(marksService.getAssignmentMarksByStudent(studentId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
