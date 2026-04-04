@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.http.HttpMethod;
 
 import java.util.List;
 
@@ -53,8 +54,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/courses/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/courses/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/courses/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/courses/**").hasRole("ADMIN")
+
                         .requestMatchers("/api/students/register").permitAll()
+                        .requestMatchers("/api/students/select-courses").hasAnyRole("TEACHER", "ADMIN")
                         .requestMatchers("/api/students/approve/**").hasRole("ADMIN")
                         .requestMatchers("/api/departments/**").hasRole("ADMIN")
                         .requestMatchers("/api/exams/**").hasAnyRole("TEACHER", "ADMIN")
