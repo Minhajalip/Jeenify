@@ -46,4 +46,17 @@ public class StudentRepository {
             return s;
         }, studentId);
     }
+    public Student findByUserId(Long userId){
+        String sql = "SELECT * FROM students WHERE user_id=?";
+
+        return jdbc.queryForObject(sql, (rs, rowNum) -> {
+            Student s = new Student();
+            s.setStudentId(rs.getInt("id"));
+            s.setUserId(rs.getLong("user_id"));
+            s.setStudentNumber(rs.getString("student_number"));
+            s.setMajorCourseId(rs.getInt("major_course_id"));
+            s.setStatus(Student.Status.valueOf(rs.getString("status").toUpperCase()));
+            return s;
+        }, userId);
+    }
 }

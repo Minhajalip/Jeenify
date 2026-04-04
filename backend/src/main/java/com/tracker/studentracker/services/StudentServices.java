@@ -59,4 +59,7 @@ public class StudentServices {
             throw new RuntimeException("Student not found");
         }
     }
+    public Student getStudentByUserId(Long userId){
+        return studentRepo.findByUserId(userId);
+    }
 }
