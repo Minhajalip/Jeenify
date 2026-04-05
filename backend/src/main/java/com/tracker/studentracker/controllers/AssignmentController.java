@@ -25,51 +25,57 @@ public class AssignmentController {
     @Autowired
     private StudentServices studentServices;
 
-    // TEACHER/ADMIN - create assignment
     @PostMapping
     public ResponseEntity<?> createAssignment(@RequestBody Assignment assignment) {
         try {
-            Assignment created = assignmentService.createAssignment(assignment);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            Assignment created = assignmentService.createAssignment(assignment, role, currentUserId);
             return ResponseEntity.ok(created);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // TEACHER/ADMIN - get all assignments for a course
     @GetMapping("/course/{courseId}")
     public ResponseEntity<?> getAssignmentsForCourse(@PathVariable int courseId) {
         try {
-            List<Assignment> assignments = assignmentService.getAssignmentsForCourse(courseId);
+            String role = authHelper.getCurrentRole();
+            if (role.equals("STUDENT")) {
+                return ResponseEntity.status(403).body("Access denied");
+            }
+            Long currentUserId = authHelper.getCurrentUserId();
+            List<Assignment> assignments = assignmentService.getAssignmentsForCourse(courseId, role, currentUserId);
             return ResponseEntity.ok(assignments);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // TEACHER/ADMIN - update assignment
     @PutMapping("/{assignmentId}")
     public ResponseEntity<?> updateAssignment(@PathVariable int assignmentId, @RequestBody Assignment assignment) {
         try {
-            Assignment updated = assignmentService.updateAssignment(assignmentId, assignment);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            Assignment updated = assignmentService.updateAssignment(assignmentId, assignment, role, currentUserId);
             return ResponseEntity.ok(updated);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // TEACHER/ADMIN - delete assignment
     @DeleteMapping("/{assignmentId}")
     public ResponseEntity<?> deleteAssignment(@PathVariable int assignmentId) {
         try {
-            assignmentService.deleteAssignment(assignmentId);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            assignmentService.deleteAssignment(assignmentId, role, currentUserId);
             return ResponseEntity.ok("Assignment deleted successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // STUDENT - get assignments for own enrolled courses only
     @GetMapping("/student/{studentId}")
     public ResponseEntity<?> getAssignmentsForStudent(@PathVariable int studentId) {
         try {

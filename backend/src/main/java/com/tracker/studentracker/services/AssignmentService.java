@@ -1,8 +1,11 @@
 package com.tracker.studentracker.services;
 
 import com.tracker.studentracker.models.Assignment;
+import com.tracker.studentracker.models.Teacher;
 import com.tracker.studentracker.repository.AssignmentRepository;
 import com.tracker.studentracker.repository.CourseEnrollmentRepository;
+import com.tracker.studentracker.repository.CourseTeacherRepository;
+import com.tracker.studentracker.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,20 +20,40 @@ public class AssignmentService {
     @Autowired
     private CourseEnrollmentRepository enrollmentRepository;
 
-    // TEACHER/ADMIN - create assignment
-    public Assignment createAssignment(Assignment assignment) {
+    @Autowired
+    private CourseTeacherRepository courseTeacherRepository;
+
+    @Autowired
+    private TeacherRepository teacherRepository;
+
+    private void checkTeacherOwnership(int courseId, Long currentUserId) {
+        Teacher teacher = teacherRepository.findByUserId(currentUserId);
+        if (teacher == null) throw new RuntimeException("Teacher profile not found");
+        if (!courseTeacherRepository.existsByCourseIdAndTeacherId(courseId, teacher.getId().intValue())) {
+            throw new RuntimeException("Access denied: you are not assigned to this course");
+        }
+    }
+
+    public Assignment createAssignment(Assignment assignment, String role, Long currentUserId) {
+        if (role.equals("TEACHER")) {
+            checkTeacherOwnership(assignment.getCourseId(), currentUserId);
+        }
         return assignmentRepository.save(assignment);
     }
 
-    // TEACHER/ADMIN - get all assignments for a course
-    public List<Assignment> getAssignmentsForCourse(int courseId) {
+    public List<Assignment> getAssignmentsForCourse(int courseId, String role, Long currentUserId) {
+        if (role.equals("TEACHER")) {
+            checkTeacherOwnership(courseId, currentUserId);
+        }
         return assignmentRepository.findByCourseId(courseId);
     }
 
-    // TEACHER/ADMIN - update assignment
-    public Assignment updateAssignment(int assignmentId, Assignment updated) {
+    public Assignment updateAssignment(int assignmentId, Assignment updated, String role, Long currentUserId) {
         Assignment assignment = assignmentRepository.findById(assignmentId)
                 .orElseThrow(() -> new RuntimeException("Assignment not found"));
+        if (role.equals("TEACHER")) {
+            checkTeacherOwnership(assignment.getCourseId(), currentUserId);
+        }
         assignment.setTitle(updated.getTitle());
         assignment.setDescription(updated.getDescription());
         assignment.setMaxMarks(updated.getMaxMarks());
@@ -38,15 +61,15 @@ public class AssignmentService {
         return assignmentRepository.save(assignment);
     }
 
-    // TEACHER/ADMIN - delete assignment
-    public void deleteAssignment(int assignmentId) {
-        if (!assignmentRepository.existsById(assignmentId)) {
-            throw new RuntimeException("Assignment not found");
+    public void deleteAssignment(int assignmentId, String role, Long currentUserId) {
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new RuntimeException("Assignment not found"));
+        if (role.equals("TEACHER")) {
+            checkTeacherOwnership(assignment.getCourseId(), currentUserId);
         }
         assignmentRepository.deleteById(assignmentId);
     }
 
-    // STUDENT - get assignments for enrolled courses
     public List<Assignment> getAssignmentsForStudent(int studentId) {
         List<Integer> enrolledCourseIds = enrollmentRepository.getEnrolledCourseIds(studentId);
         if (enrolledCourseIds.isEmpty()) {
