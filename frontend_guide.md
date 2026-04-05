@@ -32,26 +32,48 @@ GET /api/students/me/{userId}
 
 ### AUTH
 
-#### Register a user (Admin/Teacher use only)
+#### Register a student (public)
 ```
 POST /api/auth/register
 ```
-No token required.
+No token required. Always creates a `STUDENT` account — any `role` field sent is ignored.
 
 Request body:
 ```json
 {
     "name": "John Doe",
     "email": "john@example.com",
-    "password": "password123",
-    "role": "ADMIN"
+    "password": "password123"
 }
 ```
-Roles: `ADMIN`, `TEACHER`, `STUDENT`
 
 Response:
 ```
-User registered successfully
+Student registered successfully
+```
+
+---
+
+#### Register a teacher or admin (admin only)
+```
+POST /api/auth/register/staff
+```
+Token required. Role: `ADMIN`
+
+Request body:
+```json
+{
+    "name": "Dr Smith",
+    "email": "smith@college.com",
+    "password": "password123",
+    "role": "TEACHER"
+}
+```
+Role must be `TEACHER` or `ADMIN`. Sending `STUDENT` returns 400.
+
+Response:
+```
+TEACHER registered successfully
 ```
 
 ---
@@ -250,6 +272,8 @@ Teacher assigned to course successfully
 ```
 
 Note: Returns 400 if teacher is already assigned to the course.
+
+⚠️ `teacherId` here is the `id` from the `teachers` table, **not** the `userId` from the login response or users table. To get the correct teacher id, query your teachers data separately.
 
 ---
 
@@ -919,11 +943,13 @@ const response = await fetch('http://localhost:8080/api/exams', {
 
 ### Admin flow:
 1. Login → `POST /api/auth/login`
-2. Approve students → `PUT /api/students/approve/{studentId}`
-3. Create courses → `POST /courses`
-4. Assign teachers → `POST /courses/{courseId}/assign-teacher/{teacherId}`
-5. Assign courses to students → `POST /api/students/select-courses`
-6. View all reports → `GET /api/reports/attendance/course/{courseId}`
+2. Register teachers → `POST /api/auth/register/staff` with `role: "TEACHER"`
+3. Register other admins → `POST /api/auth/register/staff` with `role: "ADMIN"`
+4. Approve students → `PUT /api/students/approve/{studentId}`
+5. Create courses → `POST /courses`
+6. Assign teachers → `POST /courses/{courseId}/assign-teacher/{teacherId}`
+7. Assign courses to students → `POST /api/students/select-courses`
+8. View all reports → `GET /api/reports/attendance/course/{courseId}`
 
 ---
 
