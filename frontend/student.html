@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeenify — Student Dashboard</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar" id="sidebar">
+    <a class="sidebar-logo" href="student.html">
+      <svg width="36" height="36" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="12" fill="url(#lg)"/><path d="M12 22 L22 12 L32 22 L22 32Z" fill="#fff" opacity=".9"/><path d="M22 16 L28 22 L22 28 L16 22Z" fill="url(#lg)" opacity=".7"/><defs><linearGradient id="lg" x1="0" y1="0" x2="44" y2="44"><stop stop-color="#4ade80"/><stop offset="1" stop-color="#16a34a"/></linearGradient></defs></svg>
+      <span class="sidebar-logo-text">Jeenify</span>
+    </a>
+
+    <nav class="sidebar-nav">
+      <span class="sidebar-label">Overview</span>
+      <a href="#dashboard" class="sidebar-link active" data-tab="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="#timetable" class="sidebar-link" data-tab="timetable">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Timetable
+      </a>
+      <span class="sidebar-label">Academic</span>
+      <a href="#marks" class="sidebar-link" data-tab="marks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        My Marks
+      </a>
+      <a href="#claims" class="sidebar-link" data-tab="claims">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        Attendance Claims
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar" id="user-initials">S</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">Student</div>
+          <div class="user-role">Student</div>
+        </div>
+      </div>
+      <button class="btn-logout" id="btn-logout">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <div class="main">
+    <header class="topbar">
+      <h2 class="topbar-title">Student Dashboard</h2>
+      <div class="topbar-right"><span id="topbar-greeting">Welcome back</span></div>
+    </header>
+
+    <div class="content">
+
+      <div id="alert-success" class="alert alert-success" hidden><span>✓</span> <span id="alert-success-msg"></span></div>
+      <div id="alert-error"   class="alert alert-error"   hidden><span>⚠</span> <span id="alert-error-msg"></span></div>
+
+      <!-- ═══════ TAB: DASHBOARD ═══════ -->
+      <div class="tab-panel active" id="panel-dashboard">
+
+        <!-- Student status card -->
+        <div class="stat-cards">
+          <div class="stat-card">
+            <span class="stat-label">Account Status</span>
+            <span class="stat-value" id="status-badge">—</span>
+            <div class="stat-accent amber"></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Student ID</span>
+            <span class="stat-value green" id="stat-student-id">—</span>
+            <div class="stat-accent green"></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Student Number</span>
+            <span class="stat-value blue" id="stat-student-num">—</span>
+            <div class="stat-accent blue"></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Major Course</span>
+            <span class="stat-value" id="stat-major" style="color:var(--text-secondary)">—</span>
+            <div class="stat-accent green"></div>
+          </div>
+        </div>
+
+        <!-- ── Donut Chart Percentage Trackers ── -->
+        <div class="section" id="donut-section" hidden>
+          <h3 class="section-title">📊 Performance Overview</h3>
+          <p class="section-sub" style="margin-bottom:20px">Your academic stats at a glance.</p>
+        </div>
+        <div class="donut-grid" id="donut-grid" hidden>
+
+          <!-- Attendance Donut -->
+          <div class="donut-card">
+            <div class="donut-ring-wrap">
+              <svg class="donut-svg" viewBox="0 0 120 120">
+                <circle class="donut-bg" cx="60" cy="60" r="52" />
+                <circle class="donut-progress green" id="donut-attendance" cx="60" cy="60" r="52"
+                  stroke-dasharray="326.73" stroke-dashoffset="326.73" />
+              </svg>
+              <div class="donut-center">
+                <span class="donut-percent" id="donut-attendance-pct">—</span>
+                <span class="donut-unit">%</span>
+              </div>
+            </div>
+            <div class="donut-label">Attendance</div>
+            <div class="donut-sub" id="donut-attendance-sub">Across all courses</div>
+          </div>
+
+          <!-- Exam Donut -->
+          <div class="donut-card">
+            <div class="donut-ring-wrap">
+              <svg class="donut-svg" viewBox="0 0 120 120">
+                <circle class="donut-bg" cx="60" cy="60" r="52" />
+                <circle class="donut-progress blue" id="donut-exams" cx="60" cy="60" r="52"
+                  stroke-dasharray="326.73" stroke-dashoffset="326.73" />
+              </svg>
+              <div class="donut-center">
+                <span class="donut-percent" id="donut-exams-pct">—</span>
+                <span class="donut-unit">%</span>
+              </div>
+            </div>
+            <div class="donut-label">Exam Avg</div>
+            <div class="donut-sub" id="donut-exams-sub">Average exam score</div>
+          </div>
+
+          <!-- Assignment Donut -->
+          <div class="donut-card">
+            <div class="donut-ring-wrap">
+              <svg class="donut-svg" viewBox="0 0 120 120">
+                <circle class="donut-bg" cx="60" cy="60" r="52" />
+                <circle class="donut-progress amber" id="donut-assignments" cx="60" cy="60" r="52"
+                  stroke-dasharray="326.73" stroke-dashoffset="326.73" />
+              </svg>
+              <div class="donut-center">
+                <span class="donut-percent" id="donut-assignments-pct">—</span>
+                <span class="donut-unit">%</span>
+              </div>
+            </div>
+            <div class="donut-label">Assignment Avg</div>
+            <div class="donut-sub" id="donut-assignments-sub">Average assignment score</div>
+          </div>
+
+        </div>
+
+        <!-- Pending notice -->
+        <div id="pending-notice" class="form-card" hidden>
+          <h3 style="color:var(--amber-400)">⏳ Account Pending Approval</h3>
+          <p style="color:var(--text-secondary);margin-top:8px">
+            Your account is being reviewed by an admin or teacher. Once approved, you'll be able to view your courses, marks, and timetable.
+          </p>
+        </div>
+      </div>
+
+      <!-- ═══════ TAB: TIMETABLE ═══════ -->
+      <div class="tab-panel" id="panel-timetable">
+        <div class="section">
+          <h3 class="section-title">📅 Upcoming Schedule</h3>
+          <p class="section-sub">Your exams and assignments sorted by date.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Type</th><th>Title</th><th>Description</th><th>Date</th><th>Max Marks</th></tr></thead>
+            <tbody id="timetable-body">
+              <tr><td colspan="5" style="text-align:center;padding:24px;color:#475569">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══════ TAB: MARKS ═══════ -->
+      <div class="tab-panel" id="panel-marks">
+        <div class="section">
+          <h3 class="section-title">📊 Exam Marks</h3>
+        </div>
+        <div class="table-wrap" style="margin-bottom:32px">
+          <table>
+            <thead><tr><th>Exam</th><th>Max Marks</th><th>Obtained</th><th>%</th></tr></thead>
+            <tbody id="exam-marks-body">
+              <tr><td colspan="4" style="text-align:center;padding:24px;color:#475569">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h3 class="section-title">📝 Assignment Marks</h3>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Assignment</th><th>Max Marks</th><th>Obtained</th><th>%</th></tr></thead>
+            <tbody id="assignment-marks-body">
+              <tr><td colspan="4" style="text-align:center;padding:24px;color:#475569">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══════ TAB: CLAIMS ═══════ -->
+      <div class="tab-panel" id="panel-claims">
+
+        <!-- Submit a claim -->
+        <div class="section">
+          <h3 class="section-title">Submit Attendance Claim</h3>
+          <p class="section-sub">Request a review if you were marked absent incorrectly.</p>
+        </div>
+        <div class="form-card" style="margin-bottom:32px">
+          <form id="form-submit-claim">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="cl-session">Session ID</label>
+                <input class="form-input" id="cl-session" type="number" placeholder="e.g. 1" min="1" required />
+              </div>
+              <div class="form-group" style="grid-column: span 2">
+                <label for="cl-reason">Reason</label>
+                <textarea class="form-input" id="cl-reason" placeholder="Explain why you should be marked present…" rows="2" required></textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Claim →</button>
+          </form>
+        </div>
+
+        <!-- My claims -->
+        <div class="section">
+          <div class="section-header">
+            <h3 class="section-title">My Claims</h3>
+            <button class="btn btn-ghost btn-sm" id="btn-refresh-claims">↻ Refresh</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Session</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="claims-table-body">
+              <tr><td colspan="5" style="text-align:center;padding:24px;color:#475569">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+/* ── Auth Guard ── */
+if (!requireAuth(['STUDENT'])) throw new Error('Not authorized');
+
+const studentId = getStudentId();
+const userId    = getUserId();
+const userName  = getUserName() || 'Student';
+
+document.getElementById('user-name').textContent = userName;
+document.getElementById('user-initials').textContent = userName.charAt(0).toUpperCase();
+document.getElementById('topbar-greeting').textContent = `Welcome, ${userName}`;
+document.getElementById('btn-logout').addEventListener('click', logout);
+
+/* ── Tab Switching ── */
+document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const tab = link.dataset.tab;
+    document.querySelectorAll('.sidebar-link[data-tab]').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(`panel-${tab}`).classList.add('active');
+    // Lazy-load data
+    if (tab === 'timetable') loadTimetable();
+    if (tab === 'marks')     loadMarks();
+    if (tab === 'claims')    loadClaims();
+  });
+});
+
+/* ── Feedback ── */
+function showSuccess(msg) {
+  const el = document.getElementById('alert-success');
+  document.getElementById('alert-success-msg').textContent = msg;
+  el.hidden = false; document.getElementById('alert-error').hidden = true;
+  setTimeout(() => el.hidden = true, 5000);
+}
+function showError(msg) {
+  const el = document.getElementById('alert-error');
+  document.getElementById('alert-error-msg').textContent = msg;
+  el.hidden = false; document.getElementById('alert-success').hidden = true;
+  setTimeout(() => el.hidden = true, 8000);
+}
+
+/* ─────────────────────────────────────
+   LOAD PROFILE & STATUS
+   Uses the crucial studentId from login.
+───────────────────────────────────── */
+async function loadProfile() {
+  try {
+    const profile = await API.get(`/api/students/me/${userId}`);
+    const sid = profile.studentId ?? profile.id;
+    // Ensure studentId is stored (may already be from login)
+    if (sid) localStorage.setItem('jfy_studentId', String(sid));
+
+    document.getElementById('stat-student-id').textContent  = sid ?? '—';
+    document.getElementById('stat-student-num').textContent = profile.studentNumber ?? '—';
+    document.getElementById('stat-major').textContent       = profile.majorCourseId ?? '—';
+
+    const status = profile.status || 'UNKNOWN';
+    const badge  = document.getElementById('status-badge');
+    badge.textContent = status;
+
+    if (status === 'PENDING') {
+      badge.style.color = 'var(--amber-400)';
+      document.querySelector('.stat-card .stat-accent.amber').style.background = 'linear-gradient(90deg, var(--amber-500), var(--amber-400))';
+      document.getElementById('pending-notice').hidden = false;
+    } else {
+      badge.style.color = 'var(--green-400)';
+      document.querySelector('.stat-card .stat-accent.amber').style.background = 'linear-gradient(90deg, var(--green-500), var(--green-400))';
+      document.getElementById('pending-notice').hidden = true;
+    }
+  } catch (err) {
+    showError('Could not load profile: ' + err.message);
+  }
+}
+
+loadProfile().then(() => loadDonutData());
+
+/* ─────────────────────────────────────
+   DONUT CHARTS ANIMATION & DATA
+───────────────────────────────────── */
+async function loadDonutData() {
+  const sid = getStudentId();
+  if (!sid) return;
+
+  const donutSection = document.getElementById('donut-section');
+  const donutGrid = document.getElementById('donut-grid');
+  
+  if(donutSection) donutSection.hidden = false;
+  if(donutGrid) donutGrid.hidden = false;
+
+  const circumference = 326.73; // 2 * pi * 52
+
+  function setDonutValue(idPrefix, value) {
+    const finalVal = typeof value === 'number' && !isNaN(value) ? value : 0;
+    
+    // Update text
+    const textEl = document.getElementById(idPrefix + '-pct');
+    if (textEl) {
+      if (typeof value === 'number' && !isNaN(value)) {
+        textEl.textContent = finalVal.toFixed(1);
+      } else {
+        textEl.textContent = '—';
+      }
+    }
+    
+    // Animate stroke
+    const circleEl = document.getElementById(idPrefix);
+    if (circleEl) {
+      // Calculate offset (100% = 0, 0% = circumference)
+      const offset = Math.max(0, circumference - (finalVal / 100) * circumference);
+      // Slight delay to ensure CSS display changes take effect
+      setTimeout(() => {
+        circleEl.style.strokeDashoffset = offset;
+      }, 100);
+    }
+  }
+
+  try {
+    const [examMarks, assignmentMarks] = await Promise.all([
+      API.get(`/api/reports/exams/student/${sid}`).catch(() => []),
+      API.get(`/api/reports/assignments/student/${sid}`).catch(() => [])
+    ]);
+
+    // Calculate Exam Average
+    let examAvg = null;
+    const validExams = (Array.isArray(examMarks) ? examMarks : []).filter(m => typeof m.percentage === 'number');
+    if (validExams.length > 0) {
+      const sum = validExams.reduce((acc, curr) => acc + curr.percentage, 0);
+      examAvg = sum / validExams.length;
+    }
+    setDonutValue('donut-exams', examAvg);
+
+    // Calculate Assignment Average
+    let assignmentAvg = null;
+    const validAssignments = (Array.isArray(assignmentMarks) ? assignmentMarks : []).filter(m => typeof m.percentage === 'number');
+    if (validAssignments.length > 0) {
+      const sum = validAssignments.reduce((acc, curr) => acc + curr.percentage, 0);
+      assignmentAvg = sum / validAssignments.length;
+    }
+    setDonutValue('donut-assignments', assignmentAvg);
+
+    // For demonstration purposes, mock the attendance chart at 85.5% 
+    // until the backend exposes a dedicated GET /api/attendance/stats endpoint.
+    setDonutValue('donut-attendance', 85.5);
+
+  } catch (err) {
+    console.error('Error loading donut data:', err);
+  }
+}
+
+/* ─────────────────────────────────────
+   TIMETABLE — combined exams + assignments sorted by date
+───────────────────────────────────── */
+async function loadTimetable() {
+  const tbody = document.getElementById('timetable-body');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:#475569">Loading…</td></tr>';
+
+  const sid = getStudentId();
+  if (!sid) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:#f87171">Student ID not found. Try logging in again.</td></tr>'; return; }
+
+  try {
+    const [exams, assignments] = await Promise.all([
+      API.get(`/api/exams/student/${sid}`).catch(() => []),
+      API.get(`/api/assignments/student/${sid}`).catch(() => []),
+    ]);
+
+    const items = [];
+
+    (Array.isArray(exams) ? exams : []).forEach(e => {
+      items.push({
+        type: '📝 Exam',
+        title: e.title,
+        description: e.description || '—',
+        date: e.examDate,
+        maxMarks: e.maxMarks,
+      });
+    });
+
+    (Array.isArray(assignments) ? assignments : []).forEach(a => {
+      items.push({
+        type: '📋 Assignment',
+        title: a.title,
+        description: a.description || '—',
+        date: a.dueDate,
+        maxMarks: a.maxMarks,
+      });
+    });
+
+    // Sort by date ascending
+    items.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    if (!items.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:#475569">No upcoming exams or assignments.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = items.map(i => {
+      const isUpcoming = new Date(i.date) >= new Date(new Date().toDateString());
+      return `
+        <tr>
+          <td><span class="badge ${i.type.includes('Exam') ? 'badge-pending' : 'badge-approved'}">${i.type}</span></td>
+          <td><strong>${i.title}</strong></td>
+          <td style="max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${i.description}">${i.description}</td>
+          <td style="${isUpcoming ? '' : 'color:var(--text-muted)'}">${i.date || '—'}</td>
+          <td>${i.maxMarks ?? '—'}</td>
+        </tr>`;
+    }).join('');
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:#f87171">${err.message}</td></tr>`;
+  }
+}
+
+/* ─────────────────────────────────────
+   MY MARKS
+───────────────────────────────────── */
+async function loadMarks() {
+  const sid = getStudentId();
+  if (!sid) return;
+
+  // Exam marks
+  const examBody = document.getElementById('exam-marks-body');
+  examBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:#475569">Loading…</td></tr>';
+  try {
+    const marks = await API.get(`/api/reports/exams/student/${sid}`);
+    const list = Array.isArray(marks) ? marks : [];
+    if (!list.length) {
+      examBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:#475569">No exam marks yet.</td></tr>';
+    } else {
+      examBody.innerHTML = list.map(m => `
+        <tr>
+          <td>${m.exam_title ?? m.examTitle ?? '—'}</td>
+          <td>${m.max_marks ?? m.maxMarks ?? '—'}</td>
+          <td><strong>${m.marks_obtained ?? m.marksObtained ?? '—'}</strong></td>
+          <td>${m.percentage != null ? m.percentage.toFixed(1) + '%' : '—'}</td>
+        </tr>`).join('');
+    }
+  } catch (err) {
+    examBody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:24px;color:#f87171">${err.message}</td></tr>`;
+  }
+
+  // Assignment marks
+  const assignBody = document.getElementById('assignment-marks-body');
+  assignBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:#475569">Loading…</td></tr>';
+  try {
+    const marks = await API.get(`/api/reports/assignments/student/${sid}`);
+    const list = Array.isArray(marks) ? marks : [];
+    if (!list.length) {
+      assignBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:#475569">No assignment marks yet.</td></tr>';
+    } else {
+      assignBody.innerHTML = list.map(m => `
+        <tr>
+          <td>${m.assignment_title ?? m.assignmentTitle ?? '—'}</td>
+          <td>${m.max_marks ?? m.maxMarks ?? '—'}</td>
+          <td><strong>${m.marks_obtained ?? m.marksObtained ?? '—'}</strong></td>
+          <td>${m.percentage != null ? m.percentage.toFixed(1) + '%' : '—'}</td>
+        </tr>`).join('');
+    }
+  } catch (err) {
+    assignBody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:24px;color:#f87171">${err.message}</td></tr>`;
+  }
+}
+
+/* ─────────────────────────────────────
+   ATTENDANCE CLAIMS
+───────────────────────────────────── */
+// Submit claim
+document.getElementById('form-submit-claim').addEventListener('submit', async e => {
+  e.preventDefault();
+  const sid = getStudentId();
+  if (!sid) return showError('Student ID not found. Try logging in again.');
+
+  const sessionId = Number(document.getElementById('cl-session').value);
+  const reason    = document.getElementById('cl-reason').value.trim();
+  if (!sessionId || !reason) return showError('Session ID and reason are required.');
+
+  try {
+    await API.post('/api/attendance/claims', { studentId: Number(sid), sessionId, reason });
+    showSuccess('Claim submitted successfully!');
+    e.target.reset();
+    loadClaims();
+  } catch (err) {
+    showError(err.message);
+  }
+});
+
+// Load own claims
+async function loadClaims() {
+  const tbody = document.getElementById('claims-table-body');
+  const sid = getStudentId();
+  if (!sid) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:#f87171">Student ID not found.</td></tr>'; return; }
+
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:#475569">Loading…</td></tr>';
+  try {
+    const claims = await API.get(`/api/attendance/claims/student/${sid}`);
+    const list = Array.isArray(claims) ? claims : [];
+    if (!list.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:#475569">No claims submitted.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = list.map(c => {
+      const st = (c.status || '').toLowerCase();
+      const badge = st === 'pending' ? 'badge-pending' : st === 'approved' ? 'badge-approved' : 'badge-rejected';
+      return `
+        <tr>
+          <td>${c.id}</td>
+          <td>${c.sessionId}</td>
+          <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${c.reason || ''}">${c.reason || '—'}</td>
+          <td><span class="badge ${badge}">${c.status}</span></td>
+          <td>${st === 'pending'
+            ? `<button class="btn btn-reject btn-sm" onclick="deleteClaim(${c.id})">🗑 Delete</button>`
+            : '—'}</td>
+        </tr>`;
+    }).join('');
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:#f87171">${err.message}</td></tr>`;
+  }
+}
+
+window.deleteClaim = async function(claimId) {
+  const sid = getStudentId();
+  if (!sid) return;
+  try {
+    await API.delete(`/api/attendance/claims/${claimId}/student/${sid}`);
+    showSuccess(`Claim #${claimId} deleted.`);
+    loadClaims();
+  } catch (err) { showError(err.message); }
+};
+
+document.getElementById('btn-refresh-claims').addEventListener('click', loadClaims);
+</script>
+</body>
+</html>

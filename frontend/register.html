@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeenify — Student Registration</title>
+  <meta name="description" content="Register as a student on Jeenify, the academic management platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+
+  <!-- Animated background blobs -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="auth-container auth-container--register">
+
+    <!-- Branding panel -->
+    <div class="brand-panel">
+      <div class="brand-logo">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="44" height="44" rx="12" fill="url(#logo-gradient)"/>
+          <path d="M12 22 L22 12 L32 22 L22 32 Z" fill="white" opacity="0.9"/>
+          <path d="M22 16 L28 22 L22 28 L16 22 Z" fill="url(#logo-gradient)" opacity="0.7"/>
+          <defs>
+            <linearGradient id="logo-gradient" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#4ade80"/>
+              <stop offset="1" stop-color="#16a34a"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="brand-name">Jeenify</span>
+      </div>
+      <h1 class="brand-tagline">Join your<br/><em>Academic Hub.</em></h1>
+      <p class="brand-sub">Register as a student to access attendance, courses, exams, and more. Your account will be reviewed by an admin or teacher before activation.</p>
+
+      <div class="feature-pills">
+        <div class="pill">📋 Track Attendance</div>
+        <div class="pill">📊 View Marks</div>
+        <div class="pill">📅 Timetable</div>
+        <div class="pill">🎓 Course Enrollment</div>
+      </div>
+    </div>
+
+    <!-- Registration Card -->
+    <div class="login-card">
+
+      <div class="card-header">
+        <h2>Create your account</h2>
+        <p>Fill in your details to register as a student</p>
+      </div>
+
+      <form id="register-form" class="login-form" novalidate>
+
+        <!-- Banners -->
+        <div id="reg-error" class="alert alert-error" role="alert" aria-live="assertive" hidden>
+          <span class="alert-icon">⚠</span>
+          <span id="reg-error-msg">Something went wrong.</span>
+        </div>
+        <div id="reg-success" class="alert alert-info" role="status" aria-live="polite" hidden>
+          <span class="alert-icon">✓</span>
+          <span id="reg-success-msg">Registration successful! Pending approval.</span>
+        </div>
+        <div id="reg-loading" class="alert alert-info" role="status" aria-live="polite" hidden>
+          <span class="spinner"></span>
+          <span id="reg-loading-msg">Registering…</span>
+        </div>
+
+        <!-- Name -->
+        <div class="form-group">
+          <label for="reg-name">Full Name</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </span>
+            <input type="text" id="reg-name" name="name" placeholder="Jane Student" autocomplete="name" required />
+          </div>
+          <span class="field-error" id="name-error" aria-live="polite"></span>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="reg-email">Email Address</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </span>
+            <input type="email" id="reg-email" name="email" placeholder="you@example.com" autocomplete="email" required />
+          </div>
+          <span class="field-error" id="email-error" aria-live="polite"></span>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <input type="password" id="reg-password" name="password" placeholder="Min. 6 characters" autocomplete="new-password" required />
+          </div>
+          <span class="field-error" id="password-error" aria-live="polite"></span>
+        </div>
+
+        <!-- Student Number -->
+        <div class="form-group">
+          <label for="reg-studentNumber">Student Number</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>
+            </span>
+            <input type="text" id="reg-studentNumber" name="studentNumber" placeholder="e.g. STU001" required />
+          </div>
+          <span class="field-error" id="studentNumber-error" aria-live="polite"></span>
+        </div>
+
+        <!-- Major Course ID -->
+        <div class="form-group">
+          <label for="reg-majorCourseId">Major Course ID</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </span>
+            <input type="number" id="reg-majorCourseId" name="majorCourseId" placeholder="e.g. 1" min="1" required />
+          </div>
+          <span class="field-error" id="majorCourseId-error" aria-live="polite"></span>
+        </div>
+
+        <button type="submit" class="btn-primary" id="register-btn">
+          <span class="btn-text">Register</span>
+          <span class="btn-arrow">→</span>
+        </button>
+
+      </form>
+
+      <div class="card-footer">
+        <p>Already have an account?&nbsp;<a href="index.html" class="link">Sign in</a></p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:8080';
+
+    /* ── UI helpers ── */
+    function showRegError(msg) {
+      document.getElementById('reg-error').hidden = false;
+      document.getElementById('reg-error-msg').textContent = msg;
+      document.getElementById('reg-success').hidden = true;
+      document.getElementById('reg-loading').hidden = true;
+    }
+    function showRegSuccess(msg) {
+      document.getElementById('reg-success').hidden = false;
+      document.getElementById('reg-success-msg').textContent = msg;
+      document.getElementById('reg-error').hidden = true;
+      document.getElementById('reg-loading').hidden = true;
+    }
+    function showRegLoading(msg) {
+      document.getElementById('reg-loading').hidden = false;
+      document.getElementById('reg-loading-msg').textContent = msg;
+      document.getElementById('reg-error').hidden = true;
+      document.getElementById('reg-success').hidden = true;
+    }
+    function clearRegFeedback() {
+      document.getElementById('reg-error').hidden = true;
+      document.getElementById('reg-success').hidden = true;
+      document.getElementById('reg-loading').hidden = true;
+    }
+    function setFieldError(inputId, errorId, msg) {
+      const el = document.getElementById(inputId);
+      const sp = document.getElementById(errorId);
+      if (el) el.classList.add('invalid');
+      if (sp) sp.textContent = msg;
+    }
+    function clearFieldErrors() {
+      document.querySelectorAll('.input-wrapper input').forEach(el => el.classList.remove('invalid'));
+      document.querySelectorAll('.field-error').forEach(el => el.textContent = '');
+    }
+    function setRegLoading(loading) {
+      const btn = document.getElementById('register-btn');
+      btn.disabled = loading;
+      btn.querySelector('.btn-text').textContent = loading ? 'Registering…' : 'Register';
+    }
+
+    /* ── Registration handler ── */
+    async function handleRegister(name, email, password, studentNumber, majorCourseId) {
+      clearFieldErrors();
+      clearRegFeedback();
+
+      let hasErr = false;
+      if (!name.trim())    { setFieldError('reg-name', 'name-error', 'Name is required.'); hasErr = true; }
+      if (!email)          { setFieldError('reg-email', 'email-error', 'Email is required.'); hasErr = true; }
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setFieldError('reg-email', 'email-error', 'Enter a valid email.'); hasErr = true; }
+      if (!password)       { setFieldError('reg-password', 'password-error', 'Password is required.'); hasErr = true; }
+      else if (password.length < 6) { setFieldError('reg-password', 'password-error', 'At least 6 characters.'); hasErr = true; }
+      if (!studentNumber.trim()) { setFieldError('reg-studentNumber', 'studentNumber-error', 'Student number is required.'); hasErr = true; }
+      if (!majorCourseId || majorCourseId < 1) { setFieldError('reg-majorCourseId', 'majorCourseId-error', 'Enter a valid course ID.'); hasErr = true; }
+      if (hasErr) return;
+
+      setRegLoading(true);
+      showRegLoading('Creating your account…');
+
+      try {
+        const res = await fetch(`${API_BASE}/api/students/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password, studentNumber, majorCourseId: Number(majorCourseId) }),
+        });
+
+        const text = await res.text();
+        if (!res.ok) throw new Error(text || `Registration failed (${res.status})`);
+
+        setRegLoading(false);
+        showRegSuccess(text || 'Registration successful! Pending approval.');
+        document.getElementById('register-form').reset();
+
+      } catch (err) {
+        setRegLoading(false);
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+          showRegError('Cannot reach the server. Is the backend running?');
+        } else {
+          showRegError(err.message || 'An unexpected error occurred.');
+        }
+      }
+    }
+
+    /* ── DOM wiring ── */
+    document.addEventListener('DOMContentLoaded', () => {
+      // Clear errors on input
+      document.querySelectorAll('.input-wrapper input').forEach(input => {
+        input.addEventListener('input', () => {
+          input.classList.remove('invalid');
+          const sp = document.getElementById(`${input.name}-error`);
+          if (sp) sp.textContent = '';
+          clearRegFeedback();
+        });
+      });
+
+      const form = document.getElementById('register-form');
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const name = document.getElementById('reg-name').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+        const password = document.getElementById('reg-password').value;
+        const studentNumber = document.getElementById('reg-studentNumber').value.trim();
+        const majorCourseId = document.getElementById('reg-majorCourseId').value;
+        handleRegister(name, email, password, studentNumber, majorCourseId);
+      });
+    });
+  </script>
+
+</body>
+</html>

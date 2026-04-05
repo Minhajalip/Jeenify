@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeenify — Teacher Dashboard</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+      <a class="sidebar-logo" href="teacher.html">
+        <svg width="36" height="36" viewBox="0 0 44 44" fill="none">
+          <rect width="44" height="44" rx="12" fill="url(#lg)" />
+          <path d="M12 22 L22 12 L32 22 L22 32Z" fill="#fff" opacity=".9" />
+          <path d="M22 16 L28 22 L22 28 L16 22Z" fill="url(#lg)" opacity=".7" />
+          <defs>
+            <linearGradient id="lg" x1="0" y1="0" x2="44" y2="44">
+              <stop stop-color="#4ade80" />
+              <stop offset="1" stop-color="#16a34a" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="sidebar-logo-text">Jeenify</span>
+      </a>
+
+      <nav class="sidebar-nav">
+        <span class="sidebar-label">Daily Operations</span>
+        <a href="#attendance" class="sidebar-link active" data-tab="attendance">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Attendance
+        </a>
+        <a href="#students" class="sidebar-link" data-tab="students">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="m22 2-5 5" />
+            <path d="m17 2 5 5" />
+          </svg>
+          Student Approvals
+        </a>
+        <a href="#claims" class="sidebar-link" data-tab="claims">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="12" y1="18" x2="12" y2="12" />
+            <line x1="9" y1="15" x2="15" y2="15" />
+          </svg>
+          Attendance Claims
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar" id="user-initials">T</div>
+          <div class="user-info">
+            <div class="user-name" id="user-name">Teacher</div>
+            <div class="user-role">Teacher</div>
+          </div>
+        </div>
+        <button class="btn-logout" id="btn-logout">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main ── -->
+    <div class="main">
+      <header class="topbar">
+        <h2 class="topbar-title">Teacher Dashboard</h2>
+        <div class="topbar-right"><span id="topbar-greeting">Welcome back</span></div>
+      </header>
+
+      <div class="content">
+
+        <div id="alert-success" class="alert alert-success" hidden><span>✓</span> <span id="alert-success-msg"></span>
+        </div>
+        <div id="alert-error" class="alert alert-error" hidden><span>⚠</span> <span id="alert-error-msg"></span></div>
+
+        <!-- ═══════ TAB: ATTENDANCE ═══════ -->
+        <div class="tab-panel active" id="panel-attendance">
+
+          <!-- Create Session -->
+          <div class="section">
+            <h3 class="section-title">Create Attendance Session</h3>
+            <p class="section-sub">Start a new session for a course period.</p>
+          </div>
+          <div class="form-card" style="margin-bottom:32px">
+            <form id="form-create-session">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="s-course">Course ID</label>
+                  <input class="form-input" id="s-course" type="number" placeholder="1" min="1" required />
+                </div>
+                <div class="form-group">
+                  <label for="s-teacher">Teacher ID (your ID)</label>
+                  <input class="form-input" id="s-teacher" type="number" placeholder="1" min="1" required />
+                </div>
+                <div class="form-group">
+                  <label for="s-date">Date</label>
+                  <input class="form-input" id="s-date" type="date" required />
+                </div>
+                <div class="form-group">
+                  <label for="s-period">Period</label>
+                  <input class="form-input" id="s-period" type="number" placeholder="1" min="1" max="8" required />
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Create Session →</button>
+            </form>
+          </div>
+
+          <!-- Mark Attendance -->
+          <div class="section">
+            <h3 class="section-title">Mark Attendance</h3>
+            <p class="section-sub">Enter session &amp; student details to mark attendance.</p>
+          </div>
+          <div class="form-card">
+            <form id="form-mark-attendance">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="m-session">Session ID</label>
+                  <input class="form-input" id="m-session" type="number" placeholder="Session ID from above" min="1"
+                    required />
+                </div>
+              </div>
+              <div class="section" style="margin-top:16px">
+                <p class="section-sub">Add students to mark (you can add multiple):</p>
+              </div>
+              <div id="attendance-entries">
+                <div class="form-row attendance-entry">
+                  <div class="form-group">
+                    <label>Student ID</label>
+                    <input class="form-input att-student" type="number" placeholder="1" min="1" required />
+                  </div>
+                  <div class="form-group">
+                    <label>Status</label>
+                    <select class="form-select att-status">
+                      <option value="PRESENT">PRESENT</option>
+                      <option value="ABSENT">ABSENT</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap">
+                <button type="button" class="btn btn-ghost btn-sm" id="btn-add-entry">+ Add Student</button>
+                <button type="submit" class="btn btn-primary">Mark Attendance →</button>
+              </div>
+            </form>
+          </div>
+
+          <div id="session-result" style="margin-top:16px"></div>
+        </div>
+
+        <!-- ═══════ TAB: STUDENT APPROVALS ═══════ -->
+        <div class="tab-panel" id="panel-students">
+          <div class="section">
+            <div class="section-header">
+              <div>
+                <h3 class="section-title">Pending Student Approvals</h3>
+                <p class="section-sub">Approve students waiting for access.</p>
+              </div>
+              <button class="btn btn-ghost btn-sm" id="btn-refresh-students">↻ Refresh</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student ID</th>
+                  <th>Student Number</th>
+                  <th>Major Course</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="students-table-body">
+                <tr>
+                  <td colspan="5" style="text-align:center;padding:24px;color:#475569">Click ↻ Refresh to load students
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ═══════ TAB: CLAIMS ═══════ -->
+        <div class="tab-panel" id="panel-claims">
+          <div class="section">
+            <div class="section-header">
+              <div>
+                <h3 class="section-title">Attendance Claims</h3>
+                <p class="section-sub">Review and approve or reject student claims.</p>
+              </div>
+              <button class="btn btn-ghost btn-sm" id="btn-refresh-claims">↻ Refresh</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Claim ID</th>
+                  <th>Student ID</th>
+                  <th>Session ID</th>
+                  <th>Reason</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="claims-table-body">
+                <tr>
+                  <td colspan="6" style="text-align:center;padding:24px;color:#475569">Click ↻ Refresh to load claims
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    /* ── Auth Guard ── */
+    if (!requireAuth(['TEACHER', 'ADMIN'])) throw new Error('Not authorized');
+
+    document.getElementById('user-name').textContent = getUserName() || 'Teacher';
+    document.getElementById('user-initials').textContent = (getUserName() || 'T').charAt(0).toUpperCase();
+    document.getElementById('topbar-greeting').textContent = `Welcome, ${getUserName() || 'Teacher'}`;
+    document.getElementById('btn-logout').addEventListener('click', logout);
+
+    /* Set today's date as default */
+    document.getElementById('s-date').valueAsDate = new Date();
+
+    /* ── Tab Switching ── */
+    document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const tab = link.dataset.tab;
+        document.querySelectorAll('.sidebar-link[data-tab]').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(`panel-${tab}`).classList.add('active');
+      });
+    });
+
+    /* ── Feedback ── */
+    function showSuccess(msg) {
+      const el = document.getElementById('alert-success');
+      document.getElementById('alert-success-msg').textContent = msg;
+      el.hidden = false; document.getElementById('alert-error').hidden = true;
+      setTimeout(() => el.hidden = true, 5000);
+    }
+    function showError(msg) {
+      const el = document.getElementById('alert-error');
+      document.getElementById('alert-error-msg').textContent = msg;
+      el.hidden = false; document.getElementById('alert-success').hidden = true;
+      setTimeout(() => el.hidden = true, 8000);
+    }
+
+    /* ─────────────────────────────────────
+       CREATE ATTENDANCE SESSION
+    ───────────────────────────────────── */
+    document.getElementById('form-create-session').addEventListener('submit', async e => {
+      e.preventDefault();
+      const courseId = Number(document.getElementById('s-course').value);
+      const teacherId = Number(document.getElementById('s-teacher').value);
+      const date = document.getElementById('s-date').value;
+      const period = Number(document.getElementById('s-period').value);
+
+      try {
+        const session = await API.post('/api/attendance/session', { courseId, teacherId, date, period });
+        showSuccess(`Session created! Session ID: ${session?.id ?? 'N/A'}`);
+        // Auto-fill the mark attendance session field
+        document.getElementById('m-session').value = session?.id ?? '';
+        document.getElementById('session-result').innerHTML =
+          `<div class="alert alert-success">Session ID: <strong>${session?.id}</strong> — Use this to mark attendance below.</div>`;
+      } catch (err) {
+        showError(err.message);
+      }
+    });
+
+    /* ─────────────────────────────────────
+       MARK ATTENDANCE
+    ───────────────────────────────────── */
+    // Add more student rows
+    document.getElementById('btn-add-entry').addEventListener('click', () => {
+      const container = document.getElementById('attendance-entries');
+      const row = document.createElement('div');
+      row.className = 'form-row attendance-entry';
+      row.innerHTML = `
+    <div class="form-group">
+      <label>Student ID</label>
+      <input class="form-input att-student" type="number" placeholder="1" min="1" required />
+    </div>
+    <div class="form-group">
+      <label>Status</label>
+      <select class="form-select att-status">
+        <option value="PRESENT">PRESENT</option>
+        <option value="ABSENT">ABSENT</option>
+      </select>
+    </div>
+  `;
+      container.appendChild(row);
+    });
+
+    document.getElementById('form-mark-attendance').addEventListener('submit', async e => {
+      e.preventDefault();
+      const sessionId = Number(document.getElementById('m-session').value);
+      if (!sessionId) return showError('Session ID is required.');
+
+      const entries = document.querySelectorAll('.attendance-entry');
+      const records = [];
+      entries.forEach(entry => {
+        const studentId = Number(entry.querySelector('.att-student').value);
+        const status = entry.querySelector('.att-status').value;
+        if (studentId > 0) records.push({ sessionId, studentId, status });
+      });
+
+      if (!records.length) return showError('Add at least one student.');
+
+      try {
+        await API.post('/api/attendance/mark', records);
+        showSuccess(`Attendance marked for ${records.length} student(s).`);
+      } catch (err) {
+        showError(err.message);
+      }
+    });
+
+    /* ─────────────────────────────────────
+       STUDENT APPROVALS
+    ───────────────────────────────────── */
+    async function loadStudents() {
+      const tbody = document.getElementById('students-table-body');
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:#475569">Loading…</td></tr>';
+      try {
+        const students = await API.get('/api/students');
+        const list = Array.isArray(students) ? students : [];
+        if (!list.length) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:#475569">No students found.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = list.map(s => `
+      <tr>
+        <td>${s.studentId ?? s.id ?? '—'}</td>
+        <td>${s.studentNumber ?? '—'}</td>
+        <td>${s.majorCourseId ?? '—'}</td>
+        <td><span class="badge ${s.status === 'PENDING' ? 'badge-pending' : 'badge-approved'}">${s.status || '—'}</span></td>
+        <td>
+          ${s.status === 'PENDING'
+            ? `<button class="btn btn-approve btn-sm" onclick="approveStudent(${s.studentId ?? s.id})">✓ Approve</button>`
+            : '<span style="color:#475569">Approved</span>'}
+        </td>
+      </tr>
+    `).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:#f87171">${err.message}</td></tr>`;
+      }
+    }
+
+    window.approveStudent = async function (studentId) {
+      try {
+        await API.put(`/api/students/approve/${studentId}`);
+        showSuccess(`Student #${studentId} approved.`);
+        loadStudents();
+      } catch (err) {
+        showError(err.message);
+      }
+    };
+
+    document.getElementById('btn-refresh-students').addEventListener('click', loadStudents);
+
+    /* ─────────────────────────────────────
+       ATTENDANCE CLAIMS
+    ───────────────────────────────────── */
+    async function loadClaims() {
+      const tbody = document.getElementById('claims-table-body');
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:#475569">Loading…</td></tr>';
+      try {
+        const claims = await API.get('/api/attendance/claims');
+        const list = Array.isArray(claims) ? claims : [];
+        if (!list.length) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:#475569">No claims found.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = list.map(c => {
+          const st = (c.status || '').toLowerCase();
+          const badgeClass = st === 'pending' ? 'badge-pending' : st === 'approved' ? 'badge-approved' : 'badge-rejected';
+          const isPending = st === 'pending';
+          return `
+        <tr>
+          <td>${c.id}</td>
+          <td>${c.studentId}</td>
+          <td>${c.sessionId}</td>
+          <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${c.reason || ''}">${c.reason || '—'}</td>
+          <td><span class="badge ${badgeClass}">${c.status}</span></td>
+          <td>
+            ${isPending
+              ? `<button class="btn btn-approve btn-sm" onclick="approveClaim(${c.id})">✓ Approve</button>
+                 <button class="btn btn-reject btn-sm" onclick="rejectClaim(${c.id})" style="margin-left:6px">✕ Reject</button>`
+              : '<span style="color:#475569">Reviewed</span>'}
+          </td>
+        </tr>`;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:24px;color:#f87171">${err.message}</td></tr>`;
+      }
+    }
+
+    window.approveClaim = async function (claimId) {
+      try {
+        await API.put(`/api/attendance/claims/${claimId}/approve`);
+        showSuccess(`Claim #${claimId} approved.`);
+        loadClaims();
+      } catch (err) { showError(err.message); }
+    };
+
+    window.rejectClaim = async function (claimId) {
+      try {
+        await API.put(`/api/attendance/claims/${claimId}/reject`);
+        showSuccess(`Claim #${claimId} rejected.`);
+        loadClaims();
+      } catch (err) { showError(err.message); }
+    };
+
+    document.getElementById('btn-refresh-claims').addEventListener('click', loadClaims);
+  </script>
+</body>
+
+</html>
