@@ -169,6 +169,13 @@ let _calYear = new Date().getFullYear();
 let _calMonth = new Date().getMonth();
 let _calSelected = null;
 
+// Helper: offset a date string by N days
+function offsetDateStr(dateStr, days) {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + days);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
 function renderCalendar() {
   const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const DAYS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
@@ -177,6 +184,16 @@ function renderCalendar() {
   const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
   const eventMap = {};
   _calEvents.forEach(ev => { if (ev.eventDate) { if (!eventMap[ev.eventDate]) eventMap[ev.eventDate] = []; eventMap[ev.eventDate].push(ev); } });
+
+  const remind2 = new Set();
+  const remind1 = new Set();
+  _calEvents.forEach(ev => {
+    if (ev.eventDate) {
+      remind2.add(offsetDateStr(ev.eventDate, -2));
+      remind1.add(offsetDateStr(ev.eventDate, -1));
+    }
+  });
+
   const firstDay = new Date(_calYear, _calMonth, 1).getDay();
   const daysInMonth = new Date(_calYear, _calMonth + 1, 0).getDate();
   let html = DAYS.map(d => `<div class="cal-dow">${d}</div>`).join('');
@@ -187,8 +204,19 @@ function renderCalendar() {
     const isToday = dateStr === todayStr;
     const isSel = dateStr === _calSelected;
     const hasEv = evts.length > 0;
-    const cls = ['cal-day', isToday?'cal-today':'', hasEv?'cal-has-event':'', isSel?'cal-selected':''].filter(Boolean).join(' ');
-    const dots = hasEv ? `<div class="cal-dot-row">${evts.slice(0,3).map(()=>'<span class="cal-dot"></span>').join('')}</div>` : '';
+    const isR2 = remind2.has(dateStr) && !hasEv;
+    const isR1 = remind1.has(dateStr) && !hasEv;
+    const cls = ['cal-day',
+      isToday ? 'cal-today' : '',
+      hasEv   ? 'cal-has-event' : '',
+      isSel   ? 'cal-selected' : '',
+      isR2    ? 'cal-remind-2' : '',
+      isR1    ? 'cal-remind-1' : ''
+    ].filter(Boolean).join(' ');
+    let dots = '';
+    if (hasEv) dots = `<div class="cal-dot-row">${evts.slice(0,3).map(()=>'<span class="cal-dot"></span>').join('')}</div>`;
+    else if (isR1) dots = `<div class="cal-dot-row"><span class="cal-dot orange"></span></div>`;
+    else if (isR2) dots = `<div class="cal-dot-row"><span class="cal-dot amber"></span></div>`;
     html += `<div class="${cls}" onclick="calSelectDay('${dateStr}')">${d}${dots}</div>`;
   }
   document.getElementById('cal-grid').innerHTML = html;
@@ -198,10 +226,29 @@ function renderCalendar() {
 function updateCalSidePanel() {
   const list = document.getElementById('cal-side-list');
   const title = document.getElementById('cal-side-title');
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
   const eventsToShow = _calSelected ? _calEvents.filter(e => e.eventDate === _calSelected) : _calEvents;
   title.textContent = _calSelected ? `Events on ${_calSelected}` : 'All Events';
-  if (!eventsToShow.length) { list.innerHTML = `<div class="empty-state" style="padding:12px">${_calSelected ? 'No events on this day' : 'No events yet'}</div>`; return; }
-  list.innerHTML = eventsToShow.map(e => `<div class="cal-event-item"><span class="cal-event-date-badge">${e.eventDate}</span><span class="cal-event-name">${e.title}</span>${e.description?`<span class="cal-event-desc">${e.description}</span>`:''}</div>`).join('');
+
+  let banners = '';
+  if (!_calSelected) {
+    _calEvents.forEach(ev => {
+      if (!ev.eventDate) return;
+      const in1 = offsetDateStr(ev.eventDate, -1) === todayStr; // tomorrow
+      const in2 = offsetDateStr(ev.eventDate, -2) === todayStr; // in 2 days
+      if (in1) banners += `<div class="cal-reminder-banner remind-1">🔔 Tomorrow: <span class="remind-event-name">${ev.title}</span></div>`;
+      else if (in2) banners += `<div class="cal-reminder-banner remind-2">📌 In 2 days: <span class="remind-event-name">${ev.title}</span></div>`;
+    });
+  }
+
+  if (!eventsToShow.length && !banners) { list.innerHTML = `<div class="empty-state" style="padding:12px">${_calSelected ? 'No events on this day' : 'No events yet'}</div>`; return; }
+  list.innerHTML = banners + eventsToShow.map(e => {
+    const in1 = offsetDateStr(e.eventDate, -1) === todayStr;
+    const in2 = offsetDateStr(e.eventDate, -2) === todayStr;
+    const extra = in1 ? 'remind-1-item' : in2 ? 'remind-2-item' : '';
+    return `<div class="cal-event-item ${extra}"><span class="cal-event-date-badge">${e.eventDate}</span><span class="cal-event-name">${e.title}</span>${e.description?`<span class="cal-event-desc">${e.description}</span>`:''}</div>`;
+  }).join('');
 }
 
 window.calSelectDay = function(dateStr) {
@@ -213,6 +260,9 @@ document.getElementById('cal-prev').addEventListener('click', () => { _calMonth-
 document.getElementById('cal-next').addEventListener('click', () => { _calMonth++; if (_calMonth > 11) { _calMonth = 0; _calYear++; } renderCalendar(); });
 
 async function loadCalendar() {
+  _calYear = new Date().getFullYear();
+  _calMonth = new Date().getMonth();
+  _calSelected = null;
   try {
     const l = await API.get('/api/calendar');
     _calEvents = Array.isArray(l) ? l : [];
