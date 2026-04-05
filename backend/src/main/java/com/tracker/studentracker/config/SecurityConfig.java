@@ -86,6 +86,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/timetable/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/timetable/**").hasRole("ADMIN")
 
+                        .requestMatchers(HttpMethod.GET, "/api/calendar/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/calendar/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/calendar/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/calendar/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
