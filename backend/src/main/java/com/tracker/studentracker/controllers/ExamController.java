@@ -25,51 +25,57 @@ public class ExamController {
     @Autowired
     private StudentServices studentServices;
 
-    // TEACHER/ADMIN - create exam
     @PostMapping
     public ResponseEntity<?> createExam(@RequestBody Exam exam) {
         try {
-            Exam created = examService.createExam(exam);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            Exam created = examService.createExam(exam, role, currentUserId);
             return ResponseEntity.ok(created);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // TEACHER/ADMIN - get all exams for a course
     @GetMapping("/course/{courseId}")
     public ResponseEntity<?> getExamsForCourse(@PathVariable int courseId) {
         try {
-            List<Exam> exams = examService.getExamsForCourse(courseId);
+            String role = authHelper.getCurrentRole();
+            if (role.equals("STUDENT")) {
+                return ResponseEntity.status(403).body("Access denied");
+            }
+            Long currentUserId = authHelper.getCurrentUserId();
+            List<Exam> exams = examService.getExamsForCourse(courseId, role, currentUserId);
             return ResponseEntity.ok(exams);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // TEACHER/ADMIN - update exam
     @PutMapping("/{examId}")
     public ResponseEntity<?> updateExam(@PathVariable int examId, @RequestBody Exam exam) {
         try {
-            Exam updated = examService.updateExam(examId, exam);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            Exam updated = examService.updateExam(examId, exam, role, currentUserId);
             return ResponseEntity.ok(updated);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // TEACHER/ADMIN - delete exam
     @DeleteMapping("/{examId}")
     public ResponseEntity<?> deleteExam(@PathVariable int examId) {
         try {
-            examService.deleteExam(examId);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            examService.deleteExam(examId, role, currentUserId);
             return ResponseEntity.ok("Exam deleted successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // STUDENT - get exams for own enrolled courses only
     @GetMapping("/student/{studentId}")
     public ResponseEntity<?> getExamsForStudent(@PathVariable int studentId) {
         try {

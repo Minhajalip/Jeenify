@@ -1,8 +1,11 @@
 package com.tracker.studentracker.services;
 
 import com.tracker.studentracker.models.Exam;
+import com.tracker.studentracker.models.Teacher;
 import com.tracker.studentracker.repository.CourseEnrollmentRepository;
+import com.tracker.studentracker.repository.CourseTeacherRepository;
 import com.tracker.studentracker.repository.ExamRepository;
+import com.tracker.studentracker.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,20 +20,40 @@ public class ExamService {
     @Autowired
     private CourseEnrollmentRepository enrollmentRepository;
 
-    // TEACHER/ADMIN - create exam
-    public Exam createExam(Exam exam) {
+    @Autowired
+    private CourseTeacherRepository courseTeacherRepository;
+
+    @Autowired
+    private TeacherRepository teacherRepository;
+
+    private void checkTeacherOwnership(int courseId, Long currentUserId) {
+        Teacher teacher = teacherRepository.findByUserId(currentUserId);
+        if (teacher == null) throw new RuntimeException("Teacher profile not found");
+        if (!courseTeacherRepository.existsByCourseIdAndTeacherId(courseId, teacher.getId().intValue())) {
+            throw new RuntimeException("Access denied: you are not assigned to this course");
+        }
+    }
+
+    public Exam createExam(Exam exam, String role, Long currentUserId) {
+        if (role.equals("TEACHER")) {
+            checkTeacherOwnership(exam.getCourseId(), currentUserId);
+        }
         return examRepository.save(exam);
     }
 
-    // TEACHER/ADMIN - get all exams for a course
-    public List<Exam> getExamsForCourse(int courseId) {
+    public List<Exam> getExamsForCourse(int courseId, String role, Long currentUserId) {
+        if (role.equals("TEACHER")) {
+            checkTeacherOwnership(courseId, currentUserId);
+        }
         return examRepository.findByCourseId(courseId);
     }
 
-    // TEACHER/ADMIN - update exam
-    public Exam updateExam(int examId, Exam updated) {
+    public Exam updateExam(int examId, Exam updated, String role, Long currentUserId) {
         Exam exam = examRepository.findById(examId)
                 .orElseThrow(() -> new RuntimeException("Exam not found"));
+        if (role.equals("TEACHER")) {
+            checkTeacherOwnership(exam.getCourseId(), currentUserId);
+        }
         exam.setTitle(updated.getTitle());
         exam.setDescription(updated.getDescription());
         exam.setMaxMarks(updated.getMaxMarks());
@@ -38,15 +61,15 @@ public class ExamService {
         return examRepository.save(exam);
     }
 
-    // TEACHER/ADMIN - delete exam
-    public void deleteExam(int examId) {
-        if (!examRepository.existsById(examId)) {
-            throw new RuntimeException("Exam not found");
+    public void deleteExam(int examId, String role, Long currentUserId) {
+        Exam exam = examRepository.findById(examId)
+                .orElseThrow(() -> new RuntimeException("Exam not found"));
+        if (role.equals("TEACHER")) {
+            checkTeacherOwnership(exam.getCourseId(), currentUserId);
         }
         examRepository.deleteById(examId);
     }
 
-    // STUDENT - get exams only for enrolled courses
     public List<Exam> getExamsForStudent(int studentId) {
         List<Integer> enrolledCourseIds = enrollmentRepository.getEnrolledCourseIds(studentId);
         if (enrolledCourseIds.isEmpty()) {

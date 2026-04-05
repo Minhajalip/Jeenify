@@ -67,10 +67,22 @@ public class SecurityConfig {
                         .requestMatchers("/api/students/select-courses").hasAnyRole("TEACHER", "ADMIN")
                         .requestMatchers("/api/students/approve/**").hasRole("ADMIN")
                         .requestMatchers("/api/departments/**").hasRole("ADMIN")
-                        .requestMatchers("/api/exams/**").hasAnyRole("TEACHER", "ADMIN", "STUDENT")
-                        .requestMatchers("/api/assignments/**").hasAnyRole("TEACHER", "ADMIN", "STUDENT")
-                        .requestMatchers("/api/marks/**").hasAnyRole("TEACHER", "ADMIN", "STUDENT")
 
+                        // exams
+                        .requestMatchers(HttpMethod.GET, "/api/exams/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/exams/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/exams/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/exams/**").hasAnyRole("TEACHER", "ADMIN")
+                         //assignments
+                        .requestMatchers(HttpMethod.GET, "/api/assignments/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/assignments/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/assignments/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/assignments/**").hasAnyRole("TEACHER", "ADMIN")
+                         //marks
+                        .requestMatchers(HttpMethod.GET, "/api/marks/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/marks/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/marks/**").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/marks/**").hasAnyRole("TEACHER", "ADMIN")
                         // Attendance claims - students can submit, view and delete their own
                         .requestMatchers(HttpMethod.POST, "/api/attendance/claims").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/attendance/claims/student/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
