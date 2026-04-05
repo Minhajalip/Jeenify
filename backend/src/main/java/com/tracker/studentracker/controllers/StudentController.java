@@ -10,6 +10,7 @@ import com.tracker.studentracker.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/students")
@@ -47,14 +48,20 @@ public class StudentController {
 
     // 2. Course Selection (AFTER approval)
     @PostMapping("/select-courses")
-    public ResponseEntity<String> selectCourses(@RequestBody CourseSelectionRequest request){
-        try{
+    @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
+    public ResponseEntity<String> selectCourses(@RequestBody CourseSelectionRequest request) {
+        try {
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+
             studentServices.selectCourses(
                     request.getStudentId(),
-                    request.getCourseIds()
+                    request.getCourseIds(),
+                    role,
+                    currentUserId
             );
             return ResponseEntity.ok("Courses selected successfully");
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }

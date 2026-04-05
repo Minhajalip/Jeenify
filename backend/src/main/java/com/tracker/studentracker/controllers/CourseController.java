@@ -6,6 +6,7 @@ import com.tracker.studentracker.repository.CourseRepository;
 import com.tracker.studentracker.repository.CourseTeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,26 +21,23 @@ public class CourseController {
     @Autowired
     private CourseTeacherRepository courseTeacherRepository;
 
-    // GET all courses
     @GetMapping
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
 
-    // POST create course
     @PostMapping
     public Course createCourse(@RequestBody Course course) {
         return courseRepository.save(course);
     }
 
-    // DELETE all courses
     @DeleteMapping
     public void deleteAllCourses() {
         courseRepository.deleteAll();
     }
 
-    // Assign teacher to course
     @PostMapping("/{courseId}/assign-teacher/{teacherId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> assignTeacher(@PathVariable int courseId, @PathVariable int teacherId) {
         try {
             if(courseTeacherRepository.existsByCourseIdAndTeacherId(courseId, teacherId)){
@@ -54,8 +52,9 @@ public class CourseController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
-    // Remove teacher from course
+
     @DeleteMapping("/{courseId}/remove-teacher/{teacherId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> removeTeacher(@PathVariable int courseId, @PathVariable int teacherId) {
         try {
             if(!courseTeacherRepository.existsByCourseIdAndTeacherId(courseId, teacherId)){
