@@ -6,12 +6,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import com.tracker.studentracker.models.Teacher;
+import com.tracker.studentracker.repository.CourseTeacherRepository;
+import com.tracker.studentracker.repository.TeacherRepository;
 
 @Service
 public class ReportService {
 
     @Autowired
     private JdbcTemplate jdbc;
+
+    @Autowired
+    private CourseTeacherRepository courseTeacherRepository;
+
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     // Attendance percentage for a student in a course
     public Map<String, Object> getAttendanceReport(int studentId, int courseId) {
@@ -104,4 +113,13 @@ public class ReportService {
                 """;
         return jdbc.queryForList(sql, courseId);
     }
+    public void checkTeacherOwnership(int courseId, String role, Long currentUserId) {
+    if (role.equals("TEACHER")) {
+        Teacher teacher = teacherRepository.findByUserId(currentUserId);
+        if (teacher == null) throw new RuntimeException("Teacher profile not found");
+        if (!courseTeacherRepository.existsByCourseIdAndTeacherId(courseId, teacher.getId().intValue())) {
+            throw new RuntimeException("Access denied: you are not assigned to this course");
+        }
+    }
+}
 }
