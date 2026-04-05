@@ -53,8 +53,21 @@
 
       <!-- CALENDAR -->
       <div class="tab-panel" id="panel-calendar">
-        <div class="section"><h3 class="section-title">📅 Upcoming Events</h3></div>
-        <div class="table-wrap"><table><thead><tr><th>Date</th><th>Title</th><th>Description</th></tr></thead><tbody id="calendar-body"><tr><td colspan="3" class="empty-state">Loading…</td></tr></tbody></table></div>
+        <div class="section"><h3 class="section-title">📅 Academic Calendar</h3><p class="section-sub">Events and announcements from your institution.</p></div>
+        <div class="cal-layout">
+          <div class="cal-widget">
+            <div class="cal-header">
+              <button class="cal-nav" id="cal-prev">‹</button>
+              <span class="cal-month-label" id="cal-month-label">Loading…</span>
+              <button class="cal-nav" id="cal-next">›</button>
+            </div>
+            <div class="cal-grid" id="cal-grid"></div>
+          </div>
+          <div class="cal-events-panel">
+            <div class="cal-events-title" id="cal-side-title">All Events</div>
+            <div id="cal-side-list"><div class="empty-state" style="padding:12px">Loading…</div></div>
+          </div>
+        </div>
       </div>
 
       <!-- MY COURSES -->
@@ -151,7 +164,62 @@ async function loadTimetable(){
 }
 
 /* CALENDAR */
-async function loadCalendar(){const t=document.getElementById('calendar-body');t.innerHTML='<tr><td colspan="3" class="empty-state">Loading…</td></tr>';try{const l=await API.get('/api/calendar');const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="3" class="empty-state">No events.</td></tr>';return;}a.sort((x,y)=>new Date(x.eventDate)-new Date(y.eventDate));t.innerHTML=a.map(e=>`<tr><td><strong>${e.eventDate||'—'}</strong></td><td>${e.title}</td><td>${e.description||'—'}</td></tr>`).join('');}catch(e){t.innerHTML=`<tr><td colspan="3" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}}
+let _calEvents = [];
+let _calYear = new Date().getFullYear();
+let _calMonth = new Date().getMonth();
+let _calSelected = null;
+
+function renderCalendar() {
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DAYS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  document.getElementById('cal-month-label').textContent = `${MONTHS[_calMonth]} ${_calYear}`;
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  const eventMap = {};
+  _calEvents.forEach(ev => { if (ev.eventDate) { if (!eventMap[ev.eventDate]) eventMap[ev.eventDate] = []; eventMap[ev.eventDate].push(ev); } });
+  const firstDay = new Date(_calYear, _calMonth, 1).getDay();
+  const daysInMonth = new Date(_calYear, _calMonth + 1, 0).getDate();
+  let html = DAYS.map(d => `<div class="cal-dow">${d}</div>`).join('');
+  for (let i = 0; i < firstDay; i++) html += `<div class="cal-day cal-empty"></div>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${_calYear}-${String(_calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const evts = eventMap[dateStr] || [];
+    const isToday = dateStr === todayStr;
+    const isSel = dateStr === _calSelected;
+    const hasEv = evts.length > 0;
+    const cls = ['cal-day', isToday?'cal-today':'', hasEv?'cal-has-event':'', isSel?'cal-selected':''].filter(Boolean).join(' ');
+    const dots = hasEv ? `<div class="cal-dot-row">${evts.slice(0,3).map(()=>'<span class="cal-dot"></span>').join('')}</div>` : '';
+    html += `<div class="${cls}" onclick="calSelectDay('${dateStr}')">${d}${dots}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML = html;
+  updateCalSidePanel();
+}
+
+function updateCalSidePanel() {
+  const list = document.getElementById('cal-side-list');
+  const title = document.getElementById('cal-side-title');
+  const eventsToShow = _calSelected ? _calEvents.filter(e => e.eventDate === _calSelected) : _calEvents;
+  title.textContent = _calSelected ? `Events on ${_calSelected}` : 'All Events';
+  if (!eventsToShow.length) { list.innerHTML = `<div class="empty-state" style="padding:12px">${_calSelected ? 'No events on this day' : 'No events yet'}</div>`; return; }
+  list.innerHTML = eventsToShow.map(e => `<div class="cal-event-item"><span class="cal-event-date-badge">${e.eventDate}</span><span class="cal-event-name">${e.title}</span>${e.description?`<span class="cal-event-desc">${e.description}</span>`:''}</div>`).join('');
+}
+
+window.calSelectDay = function(dateStr) {
+  _calSelected = _calSelected === dateStr ? null : dateStr;
+  renderCalendar();
+};
+
+document.getElementById('cal-prev').addEventListener('click', () => { _calMonth--; if (_calMonth < 0) { _calMonth = 11; _calYear--; } renderCalendar(); });
+document.getElementById('cal-next').addEventListener('click', () => { _calMonth++; if (_calMonth > 11) { _calMonth = 0; _calYear++; } renderCalendar(); });
+
+async function loadCalendar() {
+  try {
+    const l = await API.get('/api/calendar');
+    _calEvents = Array.isArray(l) ? l : [];
+    _calEvents.sort((a,b) => new Date(a.eventDate) - new Date(b.eventDate));
+    renderCalendar();
+  } catch(e) { document.getElementById('cal-side-list').innerHTML = `<div class="empty-state" style="padding:12px;color:#f87171">${e.message}</div>`; }
+}
 
 /* MY COURSES */
 async function loadMyCourses(){const t=document.getElementById('courses-table-body');const sid=getStudentId();if(!sid){t.innerHTML='<tr><td colspan="5" class="empty-state" style="color:#f87171">Student ID not found.</td></tr>';return;}t.innerHTML='<tr><td colspan="5" class="empty-state">Loading…</td></tr>';try{const l=await API.get('/courses');const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="5" class="empty-state">No courses.</td></tr>';return;}const rows=[];for(const c of a){let att='—';try{const r=await API.get(`/api/reports/attendance/student/${sid}/course/${c.id}`);const p=r?.attendance_percentage??r?.attendancePercentage;if(p!=null){const color=p>=75?'#4ade80':p>=50?'#fbbf24':'#f87171';att=`<strong style="color:${color}">${p.toFixed(1)}%</strong> <span style="color:#64748b;font-size:.85em">(${r?.present_count??r?.presentCount??'?'}/${r?.total_sessions??r?.totalSessions??'?'})</span>`;}}catch(_){att='<span style="color:#64748b">Not enrolled</span>';}rows.push(`<tr><td>${c.id}</td><td><strong>${c.courseCode}</strong></td><td>${c.courseName}</td><td>${c.departmentId??'—'}</td><td>${att}</td></tr>`);}t.innerHTML=rows.join('');}catch(e){t.innerHTML=`<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}}
