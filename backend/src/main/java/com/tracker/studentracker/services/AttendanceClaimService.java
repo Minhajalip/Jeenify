@@ -1,7 +1,12 @@
 package com.tracker.studentracker.services;
 
 import com.tracker.studentracker.models.AttendanceClaim;
+import com.tracker.studentracker.models.AttendanceSession;
+import com.tracker.studentracker.models.Teacher;
 import com.tracker.studentracker.repository.AttendanceClaimRepository;
+import com.tracker.studentracker.repository.AttendanceSessionRepository;
+import com.tracker.studentracker.repository.CourseTeacherRepository;
+import com.tracker.studentracker.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,18 +18,36 @@ public class AttendanceClaimService {
     @Autowired
     private AttendanceClaimRepository claimRepository;
 
-    // STUDENT - submit a claim
+    @Autowired
+    private AttendanceSessionRepository sessionRepository;
+
+    @Autowired
+    private CourseTeacherRepository courseTeacherRepository;
+
+    @Autowired
+    private TeacherRepository teacherRepository;
+
+    private void checkTeacherOwnershipByClaim(int claimId, Long currentUserId) {
+        AttendanceClaim claim = claimRepository.findById(claimId)
+                .orElseThrow(() -> new RuntimeException("Claim not found"));
+        AttendanceSession session = sessionRepository.findById((long) claim.getSessionId())
+                .orElseThrow(() -> new RuntimeException("Session not found"));
+        Teacher teacher = teacherRepository.findByUserId(currentUserId);
+        if (teacher == null) throw new RuntimeException("Teacher profile not found");
+        if (!courseTeacherRepository.existsByCourseIdAndTeacherId(session.getCourseId().intValue(), teacher.getId().intValue())) {
+            throw new RuntimeException("Access denied: you are not assigned to this course");
+        }
+    }
+
     public AttendanceClaim submitClaim(AttendanceClaim claim) {
         claim.setStatus("Pending");
         return claimRepository.save(claim);
     }
 
-    // STUDENT - view own claims
     public List<AttendanceClaim> getClaimsByStudent(int studentId) {
         return claimRepository.findByStudentId(studentId);
     }
 
-    // STUDENT - delete a claim (only if pending)
     public void deleteClaim(int claimId, int studentId) {
         AttendanceClaim claim = claimRepository.findById(claimId)
                 .orElseThrow(() -> new RuntimeException("Claim not found"));
@@ -37,18 +60,18 @@ public class AttendanceClaimService {
         claimRepository.deleteById(claimId);
     }
 
-    // TEACHER/ADMIN - view all claims
     public List<AttendanceClaim> getAllClaims() {
         return claimRepository.findAll();
     }
 
-    // TEACHER/ADMIN - view claims for a session
     public List<AttendanceClaim> getClaimsBySession(int sessionId) {
         return claimRepository.findBySessionId(sessionId);
     }
 
-    // TEACHER/ADMIN - approve a claim
-    public AttendanceClaim approveClaim(int claimId) {
+    public AttendanceClaim approveClaim(int claimId, String role, Long currentUserId) {
+        if (role.equals("TEACHER")) {
+            checkTeacherOwnershipByClaim(claimId, currentUserId);
+        }
         AttendanceClaim claim = claimRepository.findById(claimId)
                 .orElseThrow(() -> new RuntimeException("Claim not found"));
         if (!claim.getStatus().equals("Pending")) {
@@ -58,8 +81,10 @@ public class AttendanceClaimService {
         return claimRepository.save(claim);
     }
 
-    // TEACHER/ADMIN - reject a claim
-    public AttendanceClaim rejectClaim(int claimId) {
+    public AttendanceClaim rejectClaim(int claimId, String role, Long currentUserId) {
+        if (role.equals("TEACHER")) {
+            checkTeacherOwnershipByClaim(claimId, currentUserId);
+        }
         AttendanceClaim claim = claimRepository.findById(claimId)
                 .orElseThrow(() -> new RuntimeException("Claim not found"));
         if (!claim.getStatus().equals("Pending")) {

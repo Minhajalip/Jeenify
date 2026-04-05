@@ -84,7 +84,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/marks/**").hasAnyRole("TEACHER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/marks/**").hasAnyRole("TEACHER", "ADMIN")
                         // Attendance claims - students can submit, view and delete their own
-                        .requestMatchers(HttpMethod.POST, "/api/attendance/claims").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/attendance/claims").hasAnyRole("STUDENT","ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/attendance/claims/student/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/attendance/claims/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
 

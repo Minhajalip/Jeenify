@@ -108,18 +108,21 @@ public class AttendanceClaimController {
     @PutMapping("/{claimId}/approve")
     public ResponseEntity<?> approveClaim(@PathVariable int claimId) {
         try {
-            AttendanceClaim claim = claimService.approveClaim(claimId);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            AttendanceClaim claim = claimService.approveClaim(claimId, role, currentUserId);
             return ResponseEntity.ok(claim);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // TEACHER/ADMIN - reject a claim
     @PutMapping("/{claimId}/reject")
     public ResponseEntity<?> rejectClaim(@PathVariable int claimId) {
         try {
-            AttendanceClaim claim = claimService.rejectClaim(claimId);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            AttendanceClaim claim = claimService.rejectClaim(claimId, role, currentUserId);
             return ResponseEntity.ok(claim);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
