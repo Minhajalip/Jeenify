@@ -322,7 +322,9 @@ Response:
     "teacherId": 1
 }
 ```
-
+Note: 
+- TEACHER role: teacherId is automatically set from your token, no need to send it.
+- ADMIN role: teacherId is required in the request body. Use teachers.id not users.id.
 ---
 
 #### Mark attendance
