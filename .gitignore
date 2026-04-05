@@ -27,3 +27,6 @@ hs_err_pid*
 replay_pid*
 
 backend/src/main/resources/application-local.properties
+
+.idea/
+*.iml
