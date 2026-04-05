@@ -24,42 +24,47 @@ public class MarksController {
     @Autowired
     private StudentServices studentServices;
 
-    // TEACHER/ADMIN - enter exam marks
     @PostMapping("/exam")
     public ResponseEntity<?> enterExamMarks(@RequestBody ExamMark mark) {
         try {
-            ExamMark created = marksService.enterExamMarks(mark);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            ExamMark created = marksService.enterExamMarks(mark, role, currentUserId);
             return ResponseEntity.ok(created);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // TEACHER/ADMIN - update exam marks
     @PutMapping("/exam/{studentId}/{examId}")
     public ResponseEntity<?> updateExamMarks(
             @PathVariable int studentId,
             @PathVariable int examId,
             @RequestParam int marksObtained) {
         try {
-            ExamMark updated = marksService.updateExamMarks(studentId, examId, marksObtained);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            ExamMark updated = marksService.updateExamMarks(studentId, examId, marksObtained, role, currentUserId);
             return ResponseEntity.ok(updated);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // TEACHER/ADMIN - get all marks for an exam
     @GetMapping("/exam/{examId}")
     public ResponseEntity<?> getMarksByExam(@PathVariable int examId) {
         try {
-            return ResponseEntity.ok(marksService.getMarksByExam(examId));
+            String role = authHelper.getCurrentRole();
+            if (role.equals("STUDENT")) {
+                return ResponseEntity.status(403).body("Access denied");
+            }
+            Long currentUserId = authHelper.getCurrentUserId();
+            return ResponseEntity.ok(marksService.getMarksByExam(examId, role, currentUserId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // STUDENT - get own exam marks only
     @GetMapping("/exam/student/{studentId}")
     public ResponseEntity<?> getExamMarksByStudent(@PathVariable int studentId) {
         try {
@@ -77,42 +82,47 @@ public class MarksController {
         }
     }
 
-    // TEACHER/ADMIN - enter assignment marks
     @PostMapping("/assignment")
     public ResponseEntity<?> enterAssignmentMarks(@RequestBody AssignmentMark mark) {
         try {
-            AssignmentMark created = marksService.enterAssignmentMarks(mark);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            AssignmentMark created = marksService.enterAssignmentMarks(mark, role, currentUserId);
             return ResponseEntity.ok(created);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // TEACHER/ADMIN - update assignment marks
     @PutMapping("/assignment/{studentId}/{assignmentId}")
     public ResponseEntity<?> updateAssignmentMarks(
             @PathVariable int studentId,
             @PathVariable int assignmentId,
             @RequestParam int marksObtained) {
         try {
-            AssignmentMark updated = marksService.updateAssignmentMarks(studentId, assignmentId, marksObtained);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            AssignmentMark updated = marksService.updateAssignmentMarks(studentId, assignmentId, marksObtained, role, currentUserId);
             return ResponseEntity.ok(updated);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // TEACHER/ADMIN - get all marks for an assignment
     @GetMapping("/assignment/{assignmentId}")
     public ResponseEntity<?> getMarksByAssignment(@PathVariable int assignmentId) {
         try {
-            return ResponseEntity.ok(marksService.getMarksByAssignment(assignmentId));
+            String role = authHelper.getCurrentRole();
+            if (role.equals("STUDENT")) {
+                return ResponseEntity.status(403).body("Access denied");
+            }
+            Long currentUserId = authHelper.getCurrentUserId();
+            return ResponseEntity.ok(marksService.getMarksByAssignment(assignmentId, role, currentUserId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-    // STUDENT - get own assignment marks only
     @GetMapping("/assignment/student/{studentId}")
     public ResponseEntity<?> getAssignmentMarksByStudent(@PathVariable int studentId) {
         try {
