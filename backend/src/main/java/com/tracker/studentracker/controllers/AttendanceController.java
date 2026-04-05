@@ -1,5 +1,6 @@
 package com.tracker.studentracker.controllers;
 
+import com.tracker.studentracker.config.AuthHelper;
 import com.tracker.studentracker.models.AttendanceRecord;
 import com.tracker.studentracker.models.AttendanceSession;
 import com.tracker.studentracker.services.AttendanceService;
@@ -17,10 +18,15 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
+    @Autowired
+    private AuthHelper authHelper;
+
     @PostMapping("/session")
     public ResponseEntity<?> createSession(@RequestBody AttendanceSession session) {
         try {
-            AttendanceSession created = attendanceService.createSession(session);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            AttendanceSession created = attendanceService.createSession(session, role, currentUserId);
             return ResponseEntity.ok(created);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -30,7 +36,9 @@ public class AttendanceController {
     @PostMapping("/mark")
     public ResponseEntity<?> markAttendance(@RequestBody List<AttendanceRecord> records) {
         try {
-            attendanceService.markAttendance(records);
+            String role = authHelper.getCurrentRole();
+            Long currentUserId = authHelper.getCurrentUserId();
+            attendanceService.markAttendance(records, role, currentUserId);
             return ResponseEntity.ok("Attendance marked successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
