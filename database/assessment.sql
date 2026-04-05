@@ -1,4 +1,3 @@
-SET FOREIGN_KEY_CHECKS=0;
 CREATE TABLE exams (
   exam_id INT AUTO_INCREMENT PRIMARY KEY,
   course_id INT,
@@ -7,8 +6,7 @@ CREATE TABLE exams (
   max_marks INT,
   exam_date DATE,
   FOREIGN KEY (course_id) REFERENCES courses(id)
-  );
-
+);
 CREATE TABLE assignments (
   assignment_id INT AUTO_INCREMENT PRIMARY KEY,
   course_id INT,
@@ -17,8 +15,7 @@ CREATE TABLE assignments (
   max_marks INT,
   due_date DATE,
   FOREIGN KEY (course_id) REFERENCES courses(id)
-  );
-
+);
 CREATE TABLE exam_marks (
   mark_id INT AUTO_INCREMENT PRIMARY KEY,
   student_id INT,
@@ -28,7 +25,6 @@ CREATE TABLE exam_marks (
   FOREIGN KEY (exam_id) REFERENCES exams(exam_id),
   UNIQUE (student_id, exam_id)
 );
-
 CREATE TABLE assignment_marks (
   mark_id INT AUTO_INCREMENT PRIMARY KEY,
   student_id INT,
@@ -52,10 +48,9 @@ INSERT INTO assignments (course_id, title, description, max_marks, due_date) VAL
 INSERT INTO exam_marks (student_id, exam_id, marks_obtained) VALUES
 (1, 1, 15),
 (2, 2, 18),
-(3, 3, 40);
+(2, 3, 40); -- ✅ FIX: changed student_id 3 → 2
 
 INSERT INTO assignment_marks (student_id, assignment_id, marks_obtained) VALUES
 (1, 1, 4),
 (2, 2, 5),
 (1, 3, 8);
-SET FOREIGN_KEY_CHECKS=1;
