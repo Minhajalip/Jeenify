@@ -80,7 +80,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/attendance/**").hasAnyRole("TEACHER", "ADMIN")
 
                         .requestMatchers("/api/reports/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
-                        
+
+                        // Timetable - get is public, create/delete is admin only
+                        .requestMatchers(HttpMethod.GET, "/api/timetable/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/timetable/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/timetable/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )

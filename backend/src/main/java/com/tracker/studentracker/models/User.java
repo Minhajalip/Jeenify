@@ -21,12 +21,11 @@ public class User {
     private String passwordHash;
 
     @Column(nullable = false)
-    private String role; // "ADMIN", "TEACHER", "STUDENT"
+    private String role;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // --- Getters & Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

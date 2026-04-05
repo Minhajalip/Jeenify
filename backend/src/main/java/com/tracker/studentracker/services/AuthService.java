@@ -29,7 +29,6 @@ public class AuthService {
         String token = jwtService.generateToken(user);
         return new AuthResponse(token, user.getRole(), user.getName(), user.getId());
     }
-
     public String hashPassword(String plainPassword) {
         return passwordEncoder.encode(plainPassword);
     }
