@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.tracker.studentracker.models.Role;
 
 @Service
 public class UserServices {
@@ -26,7 +27,7 @@ public class UserServices {
         user.setName(name);
         user.setEmail(email);
         user.setPasswordHash(passwordEncoder.encode(password));  
-        user.setRole("STUDENT");
+        user.setRole(Role.STUDENT);
 
         User savedUser = userRepo.save(user);
         return savedUser.getId();
