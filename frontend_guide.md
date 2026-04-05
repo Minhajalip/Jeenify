@@ -871,6 +871,236 @@ Example: `GET /api/reports/assignments/course/1`
 Response: List of assignment marks with percentage for all students in the course.
 
 ---
+### TIMETABLE
+
+#### Get all timetable slots
+```
+GET /api/timetable
+```
+Token required. Role: `STUDENT`, `TEACHER` or `ADMIN`
+
+Response:
+```json
+[
+    {
+        "id": 1,
+        "courseId": 1,
+        "teacherId": 1,
+        "dayOfWeek": "Monday",
+        "period": 1,
+        "room": "A101"
+    }
+]
+```
+
+---
+
+#### Get timetable by day
+```
+GET /api/timetable/day/{dayOfWeek}
+```
+Token required. Role: `STUDENT`, `TEACHER` or `ADMIN`
+
+Example: `GET /api/timetable/day/Monday`
+
+Response: List of all slots for that day.
+
+---
+
+#### Get timetable by course
+```
+GET /api/timetable/course/{courseId}
+```
+Token required. Role: `STUDENT`, `TEACHER` or `ADMIN`
+
+Example: `GET /api/timetable/course/1`
+
+Response: List of all slots for that course.
+
+---
+
+#### Get timetable by teacher
+```
+GET /api/timetable/teacher/{teacherId}
+```
+Token required. Role: `STUDENT`, `TEACHER` or `ADMIN`
+
+Example: `GET /api/timetable/teacher/1`
+
+Response: List of all slots for that teacher.
+
+---
+
+#### Get timetable slot by id
+```
+GET /api/timetable/{id}
+```
+Token required. Role: `STUDENT`, `TEACHER` or `ADMIN`
+
+Response: Single timetable slot.
+
+---
+
+#### Add a timetable slot
+```
+POST /api/timetable
+```
+Token required. Role: `ADMIN`
+
+Request body:
+```json
+{
+    "courseId": 1,
+    "teacherId": 1,
+    "dayOfWeek": "Monday",
+    "period": 2,
+    "room": "A102"
+}
+```
+
+Response: Created timetable slot object.
+
+---
+
+#### Update a timetable slot
+```
+PUT /api/timetable/{id}
+```
+Token required. Role: `ADMIN`
+
+Request body:
+```json
+{
+    "courseId": 1,
+    "teacherId": 1,
+    "dayOfWeek": "Monday",
+    "period": 2,
+    "room": "C303"
+}
+```
+
+Response:
+```
+Timetable updated successfully
+```
+
+---
+
+#### Delete a timetable slot
+```
+DELETE /api/timetable/{id}
+```
+Token required. Role: `ADMIN`
+
+Response:
+```
+Timetable deleted successfully
+```
+
+---
+
+### CALENDAR EVENTS
+
+#### Get all events
+```
+GET /api/calendar
+```
+Token required. Role: `STUDENT`, `TEACHER` or `ADMIN`
+
+Response:
+```json
+[
+    {
+        "id": 1,
+        "title": "Mid Exam",
+        "description": "Mid semester exams start",
+        "eventDate": "2026-04-10",
+        "createdBy": 1
+    }
+]
+```
+
+---
+
+#### Get events for a specific date
+```
+GET /api/calendar/date/{date}
+```
+Token required. Role: `STUDENT`, `TEACHER` or `ADMIN`
+
+Example: `GET /api/calendar/date/2026-04-10`
+
+Date format: `YYYY-MM-DD`
+
+Response: List of events on that date.
+
+---
+
+#### Get events between two dates
+```
+GET /api/calendar/range?startDate={date}&endDate={date}
+```
+Token required. Role: `STUDENT`, `TEACHER` or `ADMIN`
+
+Example: `GET /api/calendar/range?startDate=2026-01-01&endDate=2026-04-30`
+
+Date format: `YYYY-MM-DD`
+
+Response: List of events within the date range.
+
+---
+
+#### Create an event
+```
+POST /api/calendar
+```
+Token required. Role: `ADMIN`
+
+Request body:
+```json
+{
+    "title": "Republic Day Holiday",
+    "description": "National Holiday",
+    "eventDate": "2026-01-26"
+}
+```
+
+Note: `createdBy` is automatically set from the admin's token — do not send it in the request.
+
+Response: Created event object.
+
+---
+
+#### Update an event
+```
+PUT /api/calendar/{id}
+```
+Token required. Role: `ADMIN`
+
+Request body:
+```json
+{
+    "title": "Republic Day",
+    "description": "National Holiday - Office Closed",
+    "eventDate": "2026-01-26"
+}
+```
+
+Response: Updated event object.
+
+---
+
+#### Delete an event
+```
+DELETE /api/calendar/{id}
+```
+Token required. Role: `ADMIN`
+
+Response:
+```
+Event deleted successfully
+```
+
 
 ## Roles & Access
 
@@ -893,6 +1123,10 @@ Response: List of assignment marks with percentage for all students in the cours
 | Enter/Update marks | ✅ | ✅ | ❌ |
 | View marks | ✅ | ✅ | ✅ (own only) |
 | View reports | ✅ | ✅ | ✅ (own only) |
+| Add/Update/Delete timetable | ✅ | ❌ | ❌ |
+| View timetable | ✅ | ✅ | ✅ |
+| Create/Update/Delete calendar events | ✅ | ❌ | ❌ |
+| View calendar events | ✅ | ✅ | ✅ |
 
 ---
 
