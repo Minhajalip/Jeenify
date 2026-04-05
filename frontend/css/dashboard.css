@@ -465,6 +465,97 @@ tbody tr:hover { background: rgba(255,255,255,0.02); }
 .donut-label { font-size: 0.92rem; font-weight: 600; color: var(--text); }
 .donut-sub { font-size: 0.75rem; color: var(--text-muted); text-align: center; }
 
+/* ── Timetable Grid ── */
+.tt-grid-wrap {
+  overflow-x: auto;
+  margin-bottom: 32px;
+}
+.tt-grid {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  min-width: 640px;
+}
+.tt-grid thead th {
+  background: rgba(74,222,128,0.07);
+  color: var(--green-400);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 12px 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.tt-grid thead th:first-child {
+  text-align: left;
+  min-width: 110px;
+  color: var(--text-muted);
+}
+.tt-grid tbody tr:last-child td { border-bottom: none; }
+.tt-grid tbody td {
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  padding: 0;
+  vertical-align: top;
+  min-width: 100px;
+}
+.tt-grid tbody td:last-child { border-right: none; }
+.tt-day-label {
+  padding: 14px 16px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text);
+  background: rgba(255,255,255,0.02);
+  white-space: nowrap;
+}
+.tt-cell-empty {
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  opacity: 0.4;
+}
+.tt-cell {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 68px;
+  background: rgba(74,222,128,0.04);
+  transition: background 0.2s;
+  cursor: default;
+}
+.tt-cell:hover { background: rgba(74,222,128,0.09); }
+.tt-cell-course {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--green-400);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tt-cell-teacher {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.tt-cell-room {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+.tt-cell-actions {
+  margin-top: 4px;
+}
+.tt-cell-actions button {
+  font-size: 0.68rem;
+  padding: 2px 7px;
+}
+
 /* ── Mobile Responsive ── */
 @media (max-width: 820px) {
   :root { --sidebar-w: 0px; }
@@ -475,4 +566,6 @@ tbody tr:hover { background: rgba(255,255,255,0.02); }
   .stat-cards { grid-template-columns: repeat(2, 1fr); }
   .form-row { grid-template-columns: 1fr; }
   .donut-grid { grid-template-columns: repeat(2, 1fr); }
+  .tt-grid { min-width: 480px; }
 }
+

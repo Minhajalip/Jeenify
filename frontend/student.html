@@ -46,7 +46,9 @@
       <!-- TIMETABLE -->
       <div class="tab-panel" id="panel-timetable">
         <div class="section"><h3 class="section-title">📅 My Timetable</h3><p class="section-sub">Your weekly class schedule.</p></div>
-        <div class="table-wrap"><table><thead><tr><th>Day</th><th>Period</th><th>Course</th><th>Teacher</th><th>Room</th></tr></thead><tbody id="timetable-body"><tr><td colspan="5" class="empty-state">Loading…</td></tr></tbody></table></div>
+        <div class="tt-grid-wrap" id="timetable-grid-wrap">
+          <div style="text-align:center;padding:32px;color:var(--text-muted)">Loading…</div>
+        </div>
       </div>
 
       <!-- CALENDAR -->
@@ -109,7 +111,44 @@ try{const courses=await API.get('/courses').catch(()=>[]);const cl=Array.isArray
 }catch(e){console.error('Donut error:',e);}}
 
 /* TIMETABLE */
-async function loadTimetable(){const t=document.getElementById('timetable-body');t.innerHTML='<tr><td colspan="5" class="empty-state">Loading…</td></tr>';try{const l=await API.get('/api/timetable');const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="5" class="empty-state">No timetable data.</td></tr>';return;}const days=['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];a.sort((x,y)=>days.indexOf(x.dayOfWeek)-days.indexOf(y.dayOfWeek)||x.period-y.period);t.innerHTML=a.map(s=>`<tr><td><strong>${s.dayOfWeek}</strong></td><td>${s.period}</td><td>${s.courseId}</td><td>${s.teacherId}</td><td>${s.room||'—'}</td></tr>`).join('');}catch(e){t.innerHTML=`<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}}
+async function loadTimetable(){
+  const wrap = document.getElementById('timetable-grid-wrap');
+  wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Loading…</div>';
+  try {
+    const l = await API.get('/api/timetable');
+    const slots = Array.isArray(l) ? l : [];
+    if (!slots.length) { wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">No timetable data yet.</div>'; return; }
+    const DAYS = ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+    const maxPeriod = Math.max(...slots.map(s => s.period), 6);
+    const periods = Array.from({length: maxPeriod}, (_, i) => i + 1);
+    const map = {};
+    slots.forEach(s => { if (!map[s.dayOfWeek]) map[s.dayOfWeek] = {}; if (!map[s.dayOfWeek][s.period]) map[s.dayOfWeek][s.period] = []; map[s.dayOfWeek][s.period].push(s); });
+    const daysToShow = DAYS.filter(d => map[d]);
+    if (!daysToShow.length) { wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">No timetable data yet.</div>'; return; }
+    wrap.innerHTML = `<table class="tt-grid">
+      <thead><tr>
+        <th>Day / Period</th>
+        ${periods.map(p => `<th>Period ${p}</th>`).join('')}
+      </tr></thead>
+      <tbody>
+        ${daysToShow.map(day => `
+          <tr>
+            <td><div class="tt-day-label">${day.charAt(0) + day.slice(1).toLowerCase()}</div></td>
+            ${periods.map(p => {
+              const cell = map[day] && map[day][p];
+              if (!cell) return `<td><div class="tt-cell-empty">—</div></td>`;
+              return `<td>${cell.map(s => `
+                <div class="tt-cell">
+                  <span class="tt-cell-course">Course #${s.courseId}</span>
+                  <span class="tt-cell-teacher">Teacher #${s.teacherId}</span>
+                  <span class="tt-cell-room">${s.room || ''}</span>
+                </div>`).join('')}</td>`;
+            }).join('')}
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+  } catch(e) { wrap.innerHTML = `<div style="text-align:center;padding:32px;color:#f87171">${e.message}</div>`; }
+}
 
 /* CALENDAR */
 async function loadCalendar(){const t=document.getElementById('calendar-body');t.innerHTML='<tr><td colspan="3" class="empty-state">Loading…</td></tr>';try{const l=await API.get('/api/calendar');const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="3" class="empty-state">No events.</td></tr>';return;}a.sort((x,y)=>new Date(x.eventDate)-new Date(y.eventDate));t.innerHTML=a.map(e=>`<tr><td><strong>${e.eventDate||'—'}</strong></td><td>${e.title}</td><td>${e.description||'—'}</td></tr>`).join('');}catch(e){t.innerHTML=`<tr><td colspan="3" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}}

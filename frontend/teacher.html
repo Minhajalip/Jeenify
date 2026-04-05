@@ -18,6 +18,7 @@
       <a href="#exams" class="sidebar-link" data-tab="exams"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Exams</a>
       <a href="#assignments" class="sidebar-link" data-tab="assignments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>Assignments</a>
       <a href="#marks" class="sidebar-link" data-tab="marks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Marks</a>
+      <a href="#timetable" class="sidebar-link" data-tab="timetable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>My Timetable</a>
       <a href="#reports" class="sidebar-link" data-tab="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Reports</a>
     </nav>
     <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar" id="user-initials">T</div><div class="user-info"><div class="user-name" id="user-name">Teacher</div><div class="user-role">Teacher</div></div></div><button class="btn-logout" id="btn-logout"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</button></div>
@@ -75,6 +76,14 @@
         <div class="table-wrap"><table><thead><tr><th>Student</th><th>Assignment</th><th>Marks</th><th>Edit</th></tr></thead><tbody id="assignment-marks-view-body"><tr><td colspan="4" class="empty-state">Enter assignment ID</td></tr></tbody></table></div>
       </div>
 
+      <!-- TIMETABLE -->
+      <div class="tab-panel" id="panel-timetable">
+        <div class="section"><h3 class="section-title">📅 My Timetable</h3><p class="section-sub">Your assigned classes this week.</p></div>
+        <div class="tt-grid-wrap" id="teacher-timetable-grid-wrap">
+          <div style="text-align:center;padding:32px;color:var(--text-muted)">Loading…</div>
+        </div>
+      </div>
+
       <!-- REPORTS -->
       <div class="tab-panel" id="panel-reports">
         <div class="section"><h3 class="section-title">Course Reports</h3></div>
@@ -100,7 +109,7 @@ document.getElementById('btn-logout').addEventListener('click', logout);
 document.getElementById('s-date').valueAsDate = new Date();
 document.getElementById('s-teacher').value = getUserId()||'';
 
-document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => { link.addEventListener('click', e => { e.preventDefault(); const tab=link.dataset.tab; document.querySelectorAll('.sidebar-link[data-tab]').forEach(l=>l.classList.remove('active')); link.classList.add('active'); document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`panel-${tab}`).classList.add('active'); }); });
+document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => { link.addEventListener('click', e => { e.preventDefault(); const tab=link.dataset.tab; document.querySelectorAll('.sidebar-link[data-tab]').forEach(l=>l.classList.remove('active')); link.classList.add('active'); document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`panel-${tab}`).classList.add('active'); if(tab==='timetable') loadTeacherTimetable(); }); });
 
 function showSuccess(msg) { const el=document.getElementById('alert-success'); document.getElementById('alert-success-msg').textContent=msg; el.hidden=false; document.getElementById('alert-error').hidden=true; setTimeout(()=>el.hidden=true,5000); }
 function showError(msg) { const el=document.getElementById('alert-error'); document.getElementById('alert-error-msg').textContent=msg; el.hidden=false; document.getElementById('alert-success').hidden=true; setTimeout(()=>el.hidden=true,8000); }
@@ -144,6 +153,49 @@ document.getElementById('btn-load-reports').addEventListener('click', async()=>{
   const asb=document.getElementById('rpt-assignment-body');asb.innerHTML='<tr><td colspan="5" class="empty-state">Loading…</td></tr>';
   try{const d=await API.get(`/api/reports/assignments/course/${cid}`);const l=Array.isArray(d)?d:[];if(!l.length)asb.innerHTML='<tr><td colspan="5" class="empty-state">No data.</td></tr>';else asb.innerHTML=l.map(r=>`<tr><td>${r.assignment_title??r.assignmentTitle??'—'}</td><td>${r.student_id??r.studentId??'—'}</td><td>${r.max_marks??r.maxMarks??'—'}</td><td><strong>${r.marks_obtained??r.marksObtained??'—'}</strong></td><td>${r.percentage!=null?r.percentage.toFixed(1)+'%':'—'}</td></tr>`).join('');}catch(e){asb.innerHTML=`<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}
 });
+
+/* TEACHER TIMETABLE */
+async function loadTeacherTimetable() {
+  const wrap = document.getElementById('teacher-timetable-grid-wrap');
+  wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Loading…</div>';
+  try {
+    const teacherUserId = Number(getUserId());
+    const l = await API.get('/api/timetable');
+    // Try filter by teacher, fallback to all if teacherId != userId format
+    let slots = Array.isArray(l) ? l : [];
+    const mine = slots.filter(s => s.teacherId === teacherUserId);
+    if (mine.length > 0) slots = mine;
+    if (!slots.length) { wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">No timetable slots assigned to you yet.</div>'; return; }
+    const DAYS = ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+    const maxPeriod = Math.max(...slots.map(s => s.period), 6);
+    const periods = Array.from({length: maxPeriod}, (_, i) => i + 1);
+    const map = {};
+    slots.forEach(s => { if(!map[s.dayOfWeek])map[s.dayOfWeek]={}; if(!map[s.dayOfWeek][s.period])map[s.dayOfWeek][s.period]=[]; map[s.dayOfWeek][s.period].push(s); });
+    const daysToShow = DAYS.filter(d => map[d]);
+    if (!daysToShow.length) { wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">No timetable slots assigned yet.</div>'; return; }
+    wrap.innerHTML = `<table class="tt-grid">
+      <thead><tr>
+        <th>Day / Period</th>
+        ${periods.map(p => `<th>Period ${p}</th>`).join('')}
+      </tr></thead>
+      <tbody>
+        ${daysToShow.map(day => `
+          <tr>
+            <td><div class="tt-day-label">${day.charAt(0)+day.slice(1).toLowerCase()}</div></td>
+            ${periods.map(p => {
+              const cell = map[day] && map[day][p];
+              if (!cell) return `<td><div class="tt-cell-empty">—</div></td>`;
+              return `<td>${cell.map(s => `
+                <div class="tt-cell">
+                  <span class="tt-cell-course">Course #${s.courseId}</span>
+                  <span class="tt-cell-room">${s.room || ''}</span>
+                </div>`).join('')}</td>`;
+            }).join('')}
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+  } catch(e) { wrap.innerHTML = `<div style="text-align:center;padding:32px;color:#f87171">${e.message}</div>`; }
+}
 </script>
 </body>
 </html>

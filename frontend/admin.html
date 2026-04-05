@@ -114,8 +114,10 @@
       <div class="tab-panel" id="panel-timetable">
         <div class="section"><h3 class="section-title">Add Timetable Slot</h3><p class="section-sub">Create a weekly recurring class slot.</p></div>
         <div class="form-card" style="margin-bottom:32px"><form id="form-add-timetable"><div class="form-row"><div class="form-group"><label for="tt-course">Course ID</label><input class="form-input" id="tt-course" type="number" min="1" required /></div><div class="form-group"><label for="tt-teacher">Teacher ID</label><input class="form-input" id="tt-teacher" type="number" min="1" required /></div><div class="form-group"><label for="tt-day">Day</label><select class="form-select" id="tt-day"><option>MONDAY</option><option>TUESDAY</option><option>WEDNESDAY</option><option>THURSDAY</option><option>FRIDAY</option><option>SATURDAY</option></select></div><div class="form-group"><label for="tt-period">Period</label><input class="form-input" id="tt-period" type="number" min="1" max="8" required /></div><div class="form-group"><label for="tt-room">Room</label><input class="form-input" id="tt-room" type="text" placeholder="A-301" /></div></div><button type="submit" class="btn btn-primary">Add Slot →</button></form></div>
-        <div class="section"><div class="section-header"><h3 class="section-title">All Timetable Slots</h3><button class="btn btn-ghost btn-sm" id="btn-refresh-timetable">↻ Refresh</button></div></div>
-        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Course</th><th>Teacher</th><th>Day</th><th>Period</th><th>Room</th><th>Action</th></tr></thead><tbody id="timetable-table-body"><tr><td colspan="7" class="empty-state">Click Refresh</td></tr></tbody></table></div>
+        <div class="section"><div class="section-header"><h3 class="section-title">Class Timetable</h3><button class="btn btn-ghost btn-sm" id="btn-refresh-timetable">↻ Refresh</button></div></div>
+        <div class="tt-grid-wrap" id="timetable-grid-wrap">
+          <div id="timetable-grid-placeholder" style="text-align:center;padding:32px;color:var(--text-muted)">Click Refresh to load the timetable grid</div>
+        </div>
       </div>
 
       <!-- TAB: CALENDAR -->
@@ -215,7 +217,45 @@ document.getElementById('btn-view-assignment-marks').addEventListener('click', a
 
 /* TIMETABLE */
 document.getElementById('form-add-timetable').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/timetable', { courseId: Number(document.getElementById('tt-course').value), teacherId: Number(document.getElementById('tt-teacher').value), dayOfWeek: document.getElementById('tt-day').value, period: Number(document.getElementById('tt-period').value), room: document.getElementById('tt-room').value.trim() }); showSuccess('Timetable slot added.'); e.target.reset(); loadTimetable(); } catch(e) { showError(e.message); } });
-async function loadTimetable() { const t = document.getElementById('timetable-table-body'); t.innerHTML='<tr><td colspan="7" class="empty-state">Loading…</td></tr>'; try { const l = await API.get('/api/timetable'); const a = Array.isArray(l)?l:[]; if(!a.length) { t.innerHTML='<tr><td colspan="7" class="empty-state">No slots.</td></tr>'; return; } t.innerHTML=a.map(s=>`<tr><td>${s.id}</td><td>${s.courseId}</td><td>${s.teacherId}</td><td>${s.dayOfWeek}</td><td>${s.period}</td><td>${s.room||'—'}</td><td><button class="btn btn-reject btn-sm" onclick="deleteTimetable(${s.id})">🗑</button></td></tr>`).join(''); } catch(e) { t.innerHTML=`<tr><td colspan="7" class="empty-state" style="color:#f87171">${e.message}</td></tr>`; } }
+async function loadTimetable() {
+  const wrap = document.getElementById('timetable-grid-wrap');
+  wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Loading…</div>';
+  try {
+    const l = await API.get('/api/timetable');
+    const slots = Array.isArray(l) ? l : [];
+    if (!slots.length) { wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">No timetable slots yet. Add one above.</div>'; return; }
+    const DAYS = ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+    const maxPeriod = Math.max(...slots.map(s => s.period), 6);
+    const periods = Array.from({length: maxPeriod}, (_, i) => i + 1);
+    const map = {};
+    slots.forEach(s => { if (!map[s.dayOfWeek]) map[s.dayOfWeek] = {}; if (!map[s.dayOfWeek][s.period]) map[s.dayOfWeek][s.period] = []; map[s.dayOfWeek][s.period].push(s); });
+    const activeDays = DAYS.filter(d => map[d] || slots.some(s => s.dayOfWeek === d));
+    const daysToShow = activeDays.length ? activeDays : DAYS.slice(0, 5);
+    wrap.innerHTML = `<table class="tt-grid">
+      <thead><tr>
+        <th>Day / Period</th>
+        ${periods.map(p => `<th>Period ${p}</th>`).join('')}
+      </tr></thead>
+      <tbody>
+        ${daysToShow.map(day => `
+          <tr>
+            <td><div class="tt-day-label">${day.charAt(0) + day.slice(1).toLowerCase()}</div></td>
+            ${periods.map(p => {
+              const cell = map[day] && map[day][p];
+              if (!cell) return `<td><div class="tt-cell-empty">—</div></td>`;
+              return `<td>${cell.map(s => `
+                <div class="tt-cell">
+                  <span class="tt-cell-course">Course #${s.courseId}</span>
+                  <span class="tt-cell-teacher">Teacher #${s.teacherId}</span>
+                  <span class="tt-cell-room">${s.room || ''}</span>
+                  <div class="tt-cell-actions"><button class="btn btn-reject btn-sm" onclick="deleteTimetable(${s.id})">🗑 Delete</button></div>
+                </div>`).join('')}</td>`;
+            }).join('')}
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+  } catch(e) { wrap.innerHTML = `<div style="text-align:center;padding:32px;color:#f87171">${e.message}</div>`; }
+}
 window.deleteTimetable = async function(id) { try { await API.delete(`/api/timetable/${id}`); showSuccess('Slot deleted.'); loadTimetable(); } catch(e) { showError(e.message); } };
 document.getElementById('btn-refresh-timetable').addEventListener('click', loadTimetable);
 
