@@ -63,7 +63,8 @@ async function api(path, options = {}) {
   }
 
   const text = await res.text();
-  return text ? JSON.parse(text) : null;
+  if (!text) return null;
+  try { return JSON.parse(text); } catch { return text; }
 }
 
 /* Convenience methods */
