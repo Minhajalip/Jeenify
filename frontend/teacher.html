@@ -64,16 +64,71 @@
 
       <!-- MARKS -->
       <div class="tab-panel" id="panel-marks">
-        <div class="section"><h3 class="section-title">Enter Exam Marks</h3></div>
-        <div class="form-card" style="margin-bottom:32px"><form id="form-exam-marks"><div class="form-row"><div class="form-group"><label for="em-student">Student ID</label><input class="form-input" id="em-student" type="number" min="1" required /></div><div class="form-group"><label for="em-exam">Exam ID</label><input class="form-input" id="em-exam" type="number" min="1" required /></div><div class="form-group"><label for="em-marks">Marks</label><input class="form-input" id="em-marks" type="number" min="0" required /></div></div><button type="submit" class="btn btn-primary">Submit →</button></form></div>
-        <div class="section"><h3 class="section-title">Enter Assignment Marks</h3></div>
-        <div class="form-card" style="margin-bottom:32px"><form id="form-assignment-marks"><div class="form-row"><div class="form-group"><label for="am-student">Student ID</label><input class="form-input" id="am-student" type="number" min="1" required /></div><div class="form-group"><label for="am-assignment">Assignment ID</label><input class="form-input" id="am-assignment" type="number" min="1" required /></div><div class="form-group"><label for="am-marks">Marks</label><input class="form-input" id="am-marks" type="number" min="0" required /></div></div><button type="submit" class="btn btn-primary">Submit →</button></form></div>
+
+        <!-- BULK EXAM MARKS -->
+        <div class="section"><h3 class="section-title">Enter Exam Marks</h3><p class="section-sub">Enter Exam ID once, then add marks for all students at once.</p></div>
+        <div class="form-card" style="margin-bottom:32px">
+          <form id="form-exam-marks">
+            <div class="form-row" style="align-items:flex-end;margin-bottom:20px">
+              <div class="form-group">
+                <label for="em-exam">Exam ID</label>
+                <input class="form-input" id="em-exam" type="number" min="1" placeholder="e.g. 3" required />
+              </div>
+            </div>
+            <div class="bulk-marks-header" style="display:grid;grid-template-columns:1fr 1fr auto;gap:12px;padding:0 4px 8px;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">
+              <span>#  Student ID</span><span>Marks Obtained</span><span></span>
+            </div>
+            <div id="em-entries">
+              <div class="bulk-mark-row" style="display:grid;grid-template-columns:1fr 1fr auto;gap:12px;margin-bottom:10px;align-items:center">
+                <input class="form-input bulk-student-id" type="number" min="1" placeholder="Student ID" required />
+                <input class="form-input bulk-marks" type="number" min="0" placeholder="Marks" required />
+                <button type="button" class="btn btn-reject btn-sm bulk-rm" title="Remove">✕</button>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;margin-top:12px;align-items:center">
+              <button type="button" class="btn btn-ghost btn-sm" id="btn-add-exam-row">+ Add Student</button>
+              <button type="submit" class="btn btn-primary">Submit All Marks →</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- BULK ASSIGNMENT MARKS -->
+        <div class="section"><h3 class="section-title">Enter Assignment Marks</h3><p class="section-sub">Enter Assignment ID once, then add marks for all students at once.</p></div>
+        <div class="form-card" style="margin-bottom:32px">
+          <form id="form-assignment-marks">
+            <div class="form-row" style="align-items:flex-end;margin-bottom:20px">
+              <div class="form-group">
+                <label for="am-assignment">Assignment ID</label>
+                <input class="form-input" id="am-assignment" type="number" min="1" placeholder="e.g. 2" required />
+              </div>
+            </div>
+            <div class="bulk-marks-header" style="display:grid;grid-template-columns:1fr 1fr auto;gap:12px;padding:0 4px 8px;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">
+              <span>#  Student ID</span><span>Marks Obtained</span><span></span>
+            </div>
+            <div id="am-entries">
+              <div class="bulk-mark-row" style="display:grid;grid-template-columns:1fr 1fr auto;gap:12px;margin-bottom:10px;align-items:center">
+                <input class="form-input bulk-student-id" type="number" min="1" placeholder="Student ID" required />
+                <input class="form-input bulk-marks" type="number" min="0" placeholder="Marks" required />
+                <button type="button" class="btn btn-reject btn-sm bulk-rm" title="Remove">✕</button>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;margin-top:12px;align-items:center">
+              <button type="button" class="btn btn-ghost btn-sm" id="btn-add-assign-row">+ Add Student</button>
+              <button type="submit" class="btn btn-primary">Submit All Marks →</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- VIEW EXAM MARKS -->
         <div class="section"><h3 class="section-title">View Exam Marks</h3></div>
         <div class="form-card" style="margin-bottom:16px"><div class="form-row"><div class="form-group"><label for="vm-exam">Exam ID</label><input class="form-input" id="vm-exam" type="number" min="1" /></div></div><button class="btn btn-ghost btn-sm" id="btn-view-exam-marks" style="margin-top:8px">Load →</button></div>
         <div class="table-wrap" style="margin-bottom:32px"><table><thead><tr><th>Student</th><th>Exam</th><th>Marks</th><th>Edit</th></tr></thead><tbody id="exam-marks-view-body"><tr><td colspan="4" class="empty-state">Enter exam ID</td></tr></tbody></table></div>
+
+        <!-- VIEW ASSIGNMENT MARKS -->
         <div class="section"><h3 class="section-title">View Assignment Marks</h3></div>
         <div class="form-card" style="margin-bottom:16px"><div class="form-row"><div class="form-group"><label for="vm-assignment">Assignment ID</label><input class="form-input" id="vm-assignment" type="number" min="1" /></div></div><button class="btn btn-ghost btn-sm" id="btn-view-assignment-marks" style="margin-top:8px">Load →</button></div>
         <div class="table-wrap"><table><thead><tr><th>Student</th><th>Assignment</th><th>Marks</th><th>Edit</th></tr></thead><tbody id="assignment-marks-view-body"><tr><td colspan="4" class="empty-state">Enter assignment ID</td></tr></tbody></table></div>
+
       </div>
 
       <!-- TIMETABLE -->
@@ -101,7 +156,8 @@
 
 <script src="js/api.js"></script>
 <script>
-if (!requireAuth(['TEACHER','ADMIN'])) throw new Error('Not authorized');
+(function () {
+if (!requireAuth(['TEACHER','ADMIN'])) return;
 document.getElementById('user-name').textContent = getUserName()||'Teacher';
 document.getElementById('user-initials').textContent = (getUserName()||'T').charAt(0).toUpperCase();
 document.getElementById('topbar-greeting').textContent = `Welcome, ${getUserName()||'Teacher'}`;
@@ -115,9 +171,9 @@ function showSuccess(msg) { const el=document.getElementById('alert-success'); d
 function showError(msg) { const el=document.getElementById('alert-error'); document.getElementById('alert-error-msg').textContent=msg; el.hidden=false; document.getElementById('alert-success').hidden=true; setTimeout(()=>el.hidden=true,8000); }
 
 /* ATTENDANCE */
-document.getElementById('form-create-session').addEventListener('submit', async e => { e.preventDefault(); try { const s = await API.post('/api/attendance/session', { courseId: Number(document.getElementById('s-course').value), teacherId: Number(document.getElementById('s-teacher').value), date: document.getElementById('s-date').value, period: Number(document.getElementById('s-period').value) }); showSuccess(`Session created! ID: ${s?.id??'N/A'}`); document.getElementById('m-session').value=s?.id??''; document.getElementById('session-result').innerHTML=`<div class="alert alert-success">Session ID: <strong>${s?.id}</strong></div>`; } catch(e) { showError(e.message); } });
+document.getElementById('form-create-session').addEventListener('submit', async e => { e.preventDefault(); try { const s = await API.post('/api/attendance/session', { courseId: Number(document.getElementById('s-course').value), teacherId: Number(document.getElementById('s-teacher').value), date: document.getElementById('s-date').value, period: Number(document.getElementById('s-period').value) }); showSuccess(`Session created! ID: ${s?.id??'N/A'}`); document.getElementById('m-session').value=s?.id??''; document.getElementById('session-result').innerHTML=`<div class="alert alert-success">Session ID: <strong>${s?.id}</strong></div>`; } catch(err) { showError(err.message); } });
 document.getElementById('btn-add-entry').addEventListener('click', () => { const c=document.getElementById('attendance-entries'); const r=document.createElement('div'); r.className='form-row attendance-entry'; r.innerHTML=`<div class="form-group"><label>Student ID</label><input class="form-input att-student" type="number" min="1" required /></div><div class="form-group"><label>Status</label><select class="form-select att-status"><option value="PRESENT">PRESENT</option><option value="ABSENT">ABSENT</option></select></div>`; c.appendChild(r); });
-document.getElementById('form-mark-attendance').addEventListener('submit', async e => { e.preventDefault(); const sid=Number(document.getElementById('m-session').value); if(!sid) return showError('Session ID required.'); const recs=[]; document.querySelectorAll('.attendance-entry').forEach(en=>{const s=Number(en.querySelector('.att-student').value); const st=en.querySelector('.att-status').value; if(s>0)recs.push({sessionId:sid,studentId:s,status:st});}); if(!recs.length) return showError('Add students.'); try { await API.post('/api/attendance/mark',recs); showSuccess(`Marked ${recs.length} student(s).`); } catch(e) { showError(e.message); } });
+document.getElementById('form-mark-attendance').addEventListener('submit', async e => { e.preventDefault(); const sid=Number(document.getElementById('m-session').value); if(!sid) return showError('Session ID required.'); const recs=[]; document.querySelectorAll('.attendance-entry').forEach(en=>{const s=Number(en.querySelector('.att-student').value); const st=en.querySelector('.att-status').value; if(s>0)recs.push({sessionId:sid,studentId:s,status:st});}); if(!recs.length) return showError('Add students.'); try { await API.post('/api/attendance/mark',recs); showSuccess(`Marked ${recs.length} student(s).`); } catch(err) { showError(err.message); } });
 
 /* CLAIMS */
 async function loadClaims() { const t=document.getElementById('claims-table-body'); t.innerHTML='<tr><td colspan="6" class="empty-state">Loading…</td></tr>'; try { const l=await API.get('/api/attendance/claims'); const a=Array.isArray(l)?l:[]; if(!a.length){t.innerHTML='<tr><td colspan="6" class="empty-state">No claims.</td></tr>';return;} t.innerHTML=a.map(c=>{const st=(c.status||'').toLowerCase(); return `<tr><td>${c.id}</td><td>${c.studentId}</td><td>${c.sessionId}</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis" title="${c.reason||''}">${c.reason||'—'}</td><td><span class="badge ${st==='pending'?'badge-pending':st==='approved'?'badge-approved':'badge-rejected'}">${c.status}</span></td><td>${st==='pending'?`<button class="btn btn-approve btn-sm" onclick="approveClaim(${c.id})">✓</button> <button class="btn btn-reject btn-sm" onclick="rejectClaim(${c.id})">✕</button>`:'Reviewed'}</td></tr>`;}).join(''); } catch(e) { t.innerHTML=`<tr><td colspan="6" class="empty-state" style="color:#f87171">${e.message}</td></tr>`; } }
@@ -126,32 +182,195 @@ window.rejectClaim = async function(id) { try { await API.put(`/api/attendance/c
 document.getElementById('btn-refresh-claims').addEventListener('click', loadClaims);
 
 /* EXAMS */
-document.getElementById('form-create-exam').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/exams', { courseId:Number(document.getElementById('ex-course').value), title:document.getElementById('ex-title').value.trim(), description:document.getElementById('ex-desc').value.trim(), maxMarks:Number(document.getElementById('ex-max').value), examDate:document.getElementById('ex-date').value }); showSuccess('Exam created.'); e.target.reset(); } catch(e) { showError(e.message); } });
+document.getElementById('form-create-exam').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/exams', { courseId:Number(document.getElementById('ex-course').value), title:document.getElementById('ex-title').value.trim(), description:document.getElementById('ex-desc').value.trim(), maxMarks:Number(document.getElementById('ex-max').value), examDate:document.getElementById('ex-date').value }); showSuccess('Exam created.'); e.target.reset(); } catch(err) { showError(err.message); } });
 document.getElementById('btn-load-exams').addEventListener('click', async()=>{const cid=Number(document.getElementById('ve-course').value);if(!cid)return showError('Enter course ID.');const t=document.getElementById('exams-table-body');t.innerHTML='<tr><td colspan="5" class="empty-state">Loading…</td></tr>';try{const l=await API.get(`/api/exams/course/${cid}`);const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="5" class="empty-state">No exams.</td></tr>';return;}t.innerHTML=a.map(e=>`<tr><td>${e.id}</td><td><strong>${e.title}</strong></td><td>${e.maxMarks}</td><td>${e.examDate||'—'}</td><td><button class="btn btn-reject btn-sm" onclick="deleteExam(${e.id})">🗑</button></td></tr>`).join('');}catch(e){t.innerHTML=`<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}});
 window.deleteExam = async function(id){if(!confirm(`Delete exam #${id}?`))return;try{await API.delete(`/api/exams/${id}`);showSuccess('Deleted.');document.getElementById('btn-load-exams').click();}catch(e){showError(e.message);}};
 
 /* ASSIGNMENTS */
-document.getElementById('form-create-assignment').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/assignments', { courseId:Number(document.getElementById('as-course').value), title:document.getElementById('as-title').value.trim(), description:document.getElementById('as-desc').value.trim(), maxMarks:Number(document.getElementById('as-max').value), dueDate:document.getElementById('as-due').value }); showSuccess('Assignment created.'); e.target.reset(); } catch(e) { showError(e.message); } });
+document.getElementById('form-create-assignment').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/assignments', { courseId:Number(document.getElementById('as-course').value), title:document.getElementById('as-title').value.trim(), description:document.getElementById('as-desc').value.trim(), maxMarks:Number(document.getElementById('as-max').value), dueDate:document.getElementById('as-due').value }); showSuccess('Assignment created.'); e.target.reset(); } catch(err) { showError(err.message); } });
 document.getElementById('btn-load-assignments').addEventListener('click', async()=>{const cid=Number(document.getElementById('va-course').value);if(!cid)return showError('Enter course ID.');const t=document.getElementById('assignments-table-body');t.innerHTML='<tr><td colspan="5" class="empty-state">Loading…</td></tr>';try{const l=await API.get(`/api/assignments/course/${cid}`);const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="5" class="empty-state">No assignments.</td></tr>';return;}t.innerHTML=a.map(x=>`<tr><td>${x.id}</td><td><strong>${x.title}</strong></td><td>${x.maxMarks}</td><td>${x.dueDate||'—'}</td><td><button class="btn btn-reject btn-sm" onclick="deleteAssignment(${x.id})">🗑</button></td></tr>`).join('');}catch(e){t.innerHTML=`<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}});
 window.deleteAssignment = async function(id){if(!confirm(`Delete assignment #${id}?`))return;try{await API.delete(`/api/assignments/${id}`);showSuccess('Deleted.');document.getElementById('btn-load-assignments').click();}catch(e){showError(e.message);}};
 
-/* MARKS */
-document.getElementById('form-exam-marks').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/marks/exam', { studentId:Number(document.getElementById('em-student').value), examId:Number(document.getElementById('em-exam').value), marksObtained:Number(document.getElementById('em-marks').value) }); showSuccess('Exam marks entered.'); e.target.reset(); } catch(e) { showError(e.message); } });
-document.getElementById('form-assignment-marks').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/marks/assignment', { studentId:Number(document.getElementById('am-student').value), assignmentId:Number(document.getElementById('am-assignment').value), marksObtained:Number(document.getElementById('am-marks').value) }); showSuccess('Assignment marks entered.'); e.target.reset(); } catch(e) { showError(e.message); } });
-window.updateExamMark = async function(sid,eid){const m=prompt(`New marks for student #${sid}, exam #${eid}:`);if(m===null)return;try{await API.put(`/api/marks/exam/${sid}/${eid}?marksObtained=${Number(m)}`);showSuccess('Updated.');document.getElementById('btn-view-exam-marks').click();}catch(e){showError(e.message);}};
-window.updateAssignmentMark = async function(sid,aid){const m=prompt(`New marks for student #${sid}, assignment #${aid}:`);if(m===null)return;try{await API.put(`/api/marks/assignment/${sid}/${aid}?marksObtained=${Number(m)}`);showSuccess('Updated.');document.getElementById('btn-view-assignment-marks').click();}catch(e){showError(e.message);}};
+/* MARKS — Bulk Entry */
+function makeBulkMarkRow() {
+  const row = document.createElement('div');
+  row.className = 'bulk-mark-row';
+  row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr auto;gap:12px;margin-bottom:10px;align-items:center';
+  row.innerHTML = `<input class="form-input bulk-student-id" type="number" min="1" placeholder="Student ID" required /><input class="form-input bulk-marks" type="number" min="0" placeholder="Marks" required /><button type="button" class="btn btn-reject btn-sm bulk-rm" title="Remove">✕</button>`;
+  row.querySelector('.bulk-rm').addEventListener('click', () => {
+    const container = row.parentElement;
+    if (container && container.querySelectorAll('.bulk-mark-row').length > 1) row.remove();
+  });
+  return row;
+}
+
+// Wire remove button on the initial rows
+document.querySelectorAll('.bulk-rm').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const row = btn.closest('.bulk-mark-row');
+    const container = row.parentElement;
+    if (container.querySelectorAll('.bulk-mark-row').length > 1) row.remove();
+  });
+});
+
+document.getElementById('btn-add-exam-row').addEventListener('click', () => {
+  const row = makeBulkMarkRow();
+  document.getElementById('em-entries').appendChild(row);
+  row.querySelector('.bulk-student-id').focus();
+});
+
+document.getElementById('btn-add-assign-row').addEventListener('click', () => {
+  const row = makeBulkMarkRow();
+  document.getElementById('am-entries').appendChild(row);
+  row.querySelector('.bulk-student-id').focus();
+});
+
+document.getElementById('form-exam-marks').addEventListener('submit', async e => {
+  e.preventDefault();
+  const examId = Number(document.getElementById('em-exam').value);
+  if (!examId) return showError('Enter Exam ID.');
+  const rows = document.querySelectorAll('#em-entries .bulk-mark-row');
+  const entries = [];
+  rows.forEach(row => {
+    const sid = Number(row.querySelector('.bulk-student-id').value);
+    const marks = row.querySelector('.bulk-marks').value;
+    entries.push({ studentId: sid, examId, marksObtained: Number(marks) });
+  });
+  if (!entries.length) return showError('Fill all student rows properly.');
+  const hasEmpty = [...document.querySelectorAll('#em-entries .bulk-mark-row')].some(row => {
+    const sid = row.querySelector('.bulk-student-id').value;
+    const marks = row.querySelector('.bulk-marks').value;
+    return !sid || marks === '';
+  });
+  if (hasEmpty) return showError('Fill all student rows properly — no empty fields allowed.');
+  try {
+    let successCount = 0, errors = [];
+    for (const entry of entries) {
+      try { await API.post('/api/marks/exam', entry); successCount++; }
+      catch(err) { errors.push(`Student ${entry.studentId}: ${err.message}`); }
+    }
+    if (successCount > 0) showSuccess(`✓ Marks saved for ${successCount} student(s).${errors.length ? ' Some failed.' : ''}`);
+    if (errors.length) showError(errors.join(' | '));
+    if (!errors.length) {
+      document.getElementById('em-entries').innerHTML = '';
+      document.getElementById('em-entries').appendChild(makeBulkMarkRow());
+    }
+  } catch(err) { showError(err.message); }
+});
+
+document.getElementById('form-assignment-marks').addEventListener('submit', async e => {
+  e.preventDefault();
+  const assignmentId = Number(document.getElementById('am-assignment').value);
+  if (!assignmentId) return showError('Enter Assignment ID.');
+  const rows = document.querySelectorAll('#am-entries .bulk-mark-row');
+  const entries = [];
+  rows.forEach(row => {
+    const sid = Number(row.querySelector('.bulk-student-id').value);
+    const marks = row.querySelector('.bulk-marks').value;
+    entries.push({ studentId: sid, assignmentId, marksObtained: Number(marks) });
+  });
+  if (!entries.length) return showError('Fill all student rows properly.');
+  const hasEmptyAm = [...document.querySelectorAll('#am-entries .bulk-mark-row')].some(row => {
+    const sid = row.querySelector('.bulk-student-id').value;
+    const marks = row.querySelector('.bulk-marks').value;
+    return !sid || marks === '';
+  });
+  if (hasEmptyAm) return showError('Fill all student rows properly — no empty fields allowed.');
+  try {
+    let successCount = 0, errors = [];
+    for (const entry of entries) {
+      try { await API.post('/api/marks/assignment', entry); successCount++; }
+      catch(err) { errors.push(`Student ${entry.studentId}: ${err.message}`); }
+    }
+    if (successCount > 0) showSuccess(`✓ Marks saved for ${successCount} student(s).${errors.length ? ' Some failed.' : ''}`);
+    if (errors.length) showError(errors.join(' | '));
+    if (!errors.length) {
+      document.getElementById('am-entries').innerHTML = '';
+      document.getElementById('am-entries').appendChild(makeBulkMarkRow());
+    }
+  } catch(err) { showError(err.message); }
+});
+window.updateExamMark = async function(sid,eid){const m=prompt(`New marks for student #${sid}, exam #${eid}:`);if(m===null)return;const parsed=Math.round(Number(m));if(isNaN(parsed)||String(m).trim()==='')return showError('Enter a valid whole number.');try{await API.put(`/api/marks/exam/${sid}/${eid}?marksObtained=${parsed}`);showSuccess('Updated.');document.getElementById('btn-view-exam-marks').click();}catch(e){showError(e.message);}};
+window.updateAssignmentMark = async function(sid,aid){const m=prompt(`New marks for student #${sid}, assignment #${aid}:`);if(m===null)return;const parsed=Math.round(Number(m));if(isNaN(parsed)||String(m).trim()==='')return showError('Enter a valid whole number.');try{await API.put(`/api/marks/assignment/${sid}/${aid}?marksObtained=${parsed}`);showSuccess('Updated.');document.getElementById('btn-view-assignment-marks').click();}catch(e){showError(e.message);}};
 document.getElementById('btn-view-exam-marks').addEventListener('click', async()=>{const eid=Number(document.getElementById('vm-exam').value);if(!eid)return showError('Enter exam ID.');const t=document.getElementById('exam-marks-view-body');t.innerHTML='<tr><td colspan="4" class="empty-state">Loading…</td></tr>';try{const l=await API.get(`/api/marks/exam/${eid}`);const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="4" class="empty-state">No marks.</td></tr>';return;}t.innerHTML=a.map(m=>`<tr><td>${m.studentId??'—'}</td><td>${m.examId??eid}</td><td><strong>${m.marksObtained??'—'}</strong></td><td><button class="btn btn-ghost btn-sm" onclick="updateExamMark(${m.studentId},${m.examId??eid})">✏</button></td></tr>`).join('');}catch(e){t.innerHTML=`<tr><td colspan="4" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}});
 document.getElementById('btn-view-assignment-marks').addEventListener('click', async()=>{const aid=Number(document.getElementById('vm-assignment').value);if(!aid)return showError('Enter assignment ID.');const t=document.getElementById('assignment-marks-view-body');t.innerHTML='<tr><td colspan="4" class="empty-state">Loading…</td></tr>';try{const l=await API.get(`/api/marks/assignment/${aid}`);const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="4" class="empty-state">No marks.</td></tr>';return;}t.innerHTML=a.map(m=>`<tr><td>${m.studentId??'—'}</td><td>${m.assignmentId??aid}</td><td><strong>${m.marksObtained??'—'}</strong></td><td><button class="btn btn-ghost btn-sm" onclick="updateAssignmentMark(${m.studentId},${m.assignmentId??aid})">✏</button></td></tr>`).join('');}catch(e){t.innerHTML=`<tr><td colspan="4" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}});
 
-/* REPORTS */
-document.getElementById('btn-load-reports').addEventListener('click', async()=>{
-  const cid=Number(document.getElementById('rpt-course').value);if(!cid)return showError('Enter course ID.');
-  const ab=document.getElementById('rpt-attendance-body');ab.innerHTML='<tr><td colspan="4" class="empty-state">Loading…</td></tr>';
-  try{const d=await API.get(`/api/reports/attendance/course/${cid}`);const l=Array.isArray(d)?d:[];if(!l.length)ab.innerHTML='<tr><td colspan="4" class="empty-state">No data.</td></tr>';else ab.innerHTML=l.map(r=>`<tr><td>${r.student_id??r.studentId??'—'}</td><td>${r.total_sessions??r.totalSessions??'—'}</td><td>${r.present_count??r.presentCount??'—'}</td><td><strong>${(r.attendance_percentage??r.attendancePercentage)!=null?(r.attendance_percentage??r.attendancePercentage).toFixed(1)+'%':'—'}</strong></td></tr>`).join('');}catch(e){ab.innerHTML=`<tr><td colspan="4" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}
-  const eb=document.getElementById('rpt-exam-body');eb.innerHTML='<tr><td colspan="5" class="empty-state">Loading…</td></tr>';
-  try{const d=await API.get(`/api/reports/exams/course/${cid}`);const l=Array.isArray(d)?d:[];if(!l.length)eb.innerHTML='<tr><td colspan="5" class="empty-state">No data.</td></tr>';else eb.innerHTML=l.map(r=>`<tr><td>${r.exam_title??r.examTitle??'—'}</td><td>${r.student_id??r.studentId??'—'}</td><td>${r.max_marks??r.maxMarks??'—'}</td><td><strong>${r.marks_obtained??r.marksObtained??'—'}</strong></td><td>${r.percentage!=null?r.percentage.toFixed(1)+'%':'—'}</td></tr>`).join('');}catch(e){eb.innerHTML=`<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}
-  const asb=document.getElementById('rpt-assignment-body');asb.innerHTML='<tr><td colspan="5" class="empty-state">Loading…</td></tr>';
-  try{const d=await API.get(`/api/reports/assignments/course/${cid}`);const l=Array.isArray(d)?d:[];if(!l.length)asb.innerHTML='<tr><td colspan="5" class="empty-state">No data.</td></tr>';else asb.innerHTML=l.map(r=>`<tr><td>${r.assignment_title??r.assignmentTitle??'—'}</td><td>${r.student_id??r.studentId??'—'}</td><td>${r.max_marks??r.maxMarks??'—'}</td><td><strong>${r.marks_obtained??r.marksObtained??'—'}</strong></td><td>${r.percentage!=null?r.percentage.toFixed(1)+'%':'—'}</td></tr>`).join('');}catch(e){asb.innerHTML=`<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}
+/* REPORTS — parallel load with per-table error isolation */
+document.getElementById('btn-load-reports').addEventListener('click', async () => {
+  const cid = Number(document.getElementById('rpt-course').value);
+  if (!cid) return showError('Enter course ID.');
+
+  const btn = document.getElementById('btn-load-reports');
+  btn.disabled = true;
+  btn.textContent = 'Loading…';
+
+  const ab  = document.getElementById('rpt-attendance-body');
+  const eb  = document.getElementById('rpt-exam-body');
+  const asb = document.getElementById('rpt-assignment-body');
+
+  // Set all tables to loading state immediately
+  const LOADING_4 = '<tr><td colspan="4" class="empty-state">Loading…</td></tr>';
+  const LOADING_5 = '<tr><td colspan="5" class="empty-state">Loading…</td></tr>';
+  ab.innerHTML = LOADING_4; eb.innerHTML = LOADING_5; asb.innerHTML = LOADING_5;
+
+  // Fire all 3 requests in parallel — don't block on each other
+  const [attRes, examRes, assignRes] = await Promise.allSettled([
+    API.get(`/api/reports/attendance/course/${cid}`),
+    API.get(`/api/reports/exams/course/${cid}`),
+    API.get(`/api/reports/assignments/course/${cid}`)
+  ]);
+
+  // Attendance
+  if (attRes.status === 'fulfilled') {
+    const l = Array.isArray(attRes.value) ? attRes.value : [];
+    ab.innerHTML = l.length === 0
+      ? '<tr><td colspan="4" class="empty-state">No attendance data.</td></tr>'
+      : l.map(r => `<tr>
+          <td>${r.student_id ?? r.studentId ?? '—'}</td>
+          <td>${r.total_sessions ?? r.totalSessions ?? '—'}</td>
+          <td>${r.present_count ?? r.presentCount ?? '—'}</td>
+          <td><strong>${(r.attendance_percentage ?? r.attendancePercentage) != null
+            ? Number(r.attendance_percentage ?? r.attendancePercentage).toFixed(1) + '%'
+            : '—'}</strong></td>
+        </tr>`).join('');
+  } else {
+    ab.innerHTML = `<tr><td colspan="4" class="empty-state" style="color:#f87171">⚠ ${attRes.reason?.message ?? 'Failed to load attendance'}</td></tr>`;
+  }
+
+  // Exams
+  if (examRes.status === 'fulfilled') {
+    const l = Array.isArray(examRes.value) ? examRes.value : [];
+    eb.innerHTML = l.length === 0
+      ? '<tr><td colspan="5" class="empty-state">No exam data.</td></tr>'
+      : l.map(r => `<tr>
+          <td>${r.exam_title ?? r.examTitle ?? '—'}</td>
+          <td>${r.student_id ?? r.studentId ?? '—'}</td>
+          <td>${r.max_marks ?? r.maxMarks ?? '—'}</td>
+          <td><strong>${r.marks_obtained ?? r.marksObtained ?? '—'}</strong></td>
+          <td>${r.percentage != null ? Number(r.percentage).toFixed(1) + '%' : '—'}</td>
+        </tr>`).join('');
+  } else {
+    eb.innerHTML = `<tr><td colspan="5" class="empty-state" style="color:#f87171">⚠ ${examRes.reason?.message ?? 'Failed to load exam report'}</td></tr>`;
+  }
+
+  // Assignments
+  if (assignRes.status === 'fulfilled') {
+    const l = Array.isArray(assignRes.value) ? assignRes.value : [];
+    asb.innerHTML = l.length === 0
+      ? '<tr><td colspan="5" class="empty-state">No assignment data.</td></tr>'
+      : l.map(r => `<tr>
+          <td>${r.assignment_title ?? r.assignmentTitle ?? '—'}</td>
+          <td>${r.student_id ?? r.studentId ?? '—'}</td>
+          <td>${r.max_marks ?? r.maxMarks ?? '—'}</td>
+          <td><strong>${r.marks_obtained ?? r.marksObtained ?? '—'}</strong></td>
+          <td>${r.percentage != null ? Number(r.percentage).toFixed(1) + '%' : '—'}</td>
+        </tr>`).join('');
+  } else {
+    asb.innerHTML = `<tr><td colspan="5" class="empty-state" style="color:#f87171">⚠ ${assignRes.reason?.message ?? 'Failed to load assignment report'}</td></tr>`;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Load Reports →';
 });
 
 /* TEACHER TIMETABLE */
@@ -196,6 +415,7 @@ async function loadTeacherTimetable() {
     </table>`;
   } catch(e) { wrap.innerHTML = `<div style="text-align:center;padding:32px;color:#f87171">${e.message}</div>`; }
 }
+})();
 </script>
 </body>
 </html>
