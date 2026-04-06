@@ -276,6 +276,8 @@ body {
 }
 
 /* ── Alerts ── */
+[hidden] { display: none !important; }
+
 .alert {
   padding: 12px 16px;
   border-radius: 10px;

@@ -34,8 +34,8 @@
   <div class="main">
     <header class="topbar"><h2 class="topbar-title">Admin Dashboard</h2><div class="topbar-right"><span id="topbar-greeting">Welcome back</span></div></header>
     <div class="content">
-      <div id="alert-success" class="alert alert-success" hidden><span>✓</span> <span id="alert-success-msg"></span></div>
-      <div id="alert-error" class="alert alert-error" hidden><span>⚠</span> <span id="alert-error-msg"></span></div>
+      <div id="alert-success" class="alert alert-success" style="display:none"><span>✓</span> <span id="alert-success-msg"></span></div>
+      <div id="alert-error" class="alert alert-error" style="display:none"><span>⚠</span> <span id="alert-error-msg"></span></div>
 
       <!-- TAB: ADD TEACHERS -->
       <div class="tab-panel active" id="panel-teachers">
@@ -185,35 +185,26 @@ document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => {
 function showSuccess(msg) {
   const s = document.getElementById('alert-success');
   const e = document.getElementById('alert-error');
-
-  // Always reset both first
   clearTimeout(s._timeout);
   clearTimeout(e._timeout);
-
-  e.hidden = true;
-  s.hidden = false;
-
+  e.style.display = 'none';
+  s.style.display = 'flex';
   document.getElementById('alert-success-msg').textContent = msg;
-
   s._timeout = setTimeout(() => {
-    s.hidden = true;
+    s.style.display = 'none';
     document.getElementById('alert-success-msg').textContent = '';
   }, 2500);
-}function showError(msg) {
+}
+function showError(msg) {
   const s = document.getElementById('alert-success');
   const e = document.getElementById('alert-error');
-
-  // Always reset both first
   clearTimeout(s._timeout);
   clearTimeout(e._timeout);
-
-  s.hidden = true;
-  e.hidden = false;
-
+  s.style.display = 'none';
+  e.style.display = 'flex';
   document.getElementById('alert-error-msg').textContent = msg;
-
   e._timeout = setTimeout(() => {
-    e.hidden = true;
+    e.style.display = 'none';
     document.getElementById('alert-error-msg').textContent = '';
   }, 3000);
 }
