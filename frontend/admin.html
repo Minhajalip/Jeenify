@@ -15,7 +15,7 @@
     </a>
     <nav class="sidebar-nav">
       <span class="sidebar-label">Management</span>
-      <a href="#teachers" class="sidebar-link active" data-tab="teachers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Add Teachers</a>
+      <a href="#teachers" class="sidebar-link active" data-tab="teachers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Add Staff</a>
       <a href="#students" class="sidebar-link" data-tab="students"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Approve Students</a>
       <a href="#courses" class="sidebar-link" data-tab="courses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Course Setup</a>
       <span class="sidebar-label">Academic</span>
@@ -39,15 +39,16 @@
 
       <!-- TAB: ADD TEACHERS -->
       <div class="tab-panel active" id="panel-teachers">
-        <div class="section"><h3 class="section-title">Register a New Teacher</h3><p class="section-sub">Creates a user account with TEACHER role via /api/auth/register/staff.</p></div>
+        <div class="section"><h3 class="section-title">Register Staff</h3><p class="section-sub">Creates a user account with TEACHER or ADMIN role</p></div>
         <div class="form-card">
           <form id="form-add-teacher">
             <div class="form-row">
               <div class="form-group"><label for="t-name">Full Name</label><input class="form-input" id="t-name" type="text" placeholder="e.g. Dr. Smith" required /></div>
               <div class="form-group"><label for="t-email">Email</label><input class="form-input" id="t-email" type="email" placeholder="smith@example.com" required /></div>
               <div class="form-group"><label for="t-password">Password</label><input class="form-input" id="t-password" type="password" placeholder="min. 6 chars" required /></div>
+              <div class="form-group"><label for="t-role">Role</label><select class="form-select" id="t-role"><option value="TEACHER">Teacher</option><option value="ADMIN">Admin</option></select></div>
             </div>
-            <button type="submit" class="btn btn-primary" id="btn-add-teacher">Register Teacher →</button>
+            <button type="submit" class="btn btn-primary" id="btn-add-teacher">Register Staff →</button>
           </form>
         </div>
       </div>
@@ -181,18 +182,51 @@ document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => {
   });
 });
 
-function showSuccess(msg) { const el = document.getElementById('alert-success'); document.getElementById('alert-success-msg').textContent = msg; el.hidden = false; document.getElementById('alert-error').hidden = true; setTimeout(() => el.hidden = true, 5000); }
-function showError(msg) { const el = document.getElementById('alert-error'); document.getElementById('alert-error-msg').textContent = msg; el.hidden = false; document.getElementById('alert-success').hidden = true; setTimeout(() => el.hidden = true, 8000); }
+function showSuccess(msg) {
+  const s = document.getElementById('alert-success');
+  const e = document.getElementById('alert-error');
 
-/* ADD TEACHERS — uses /api/auth/register/staff */
+  // Always reset both first
+  clearTimeout(s._timeout);
+  clearTimeout(e._timeout);
+
+  e.hidden = true;
+  s.hidden = false;
+
+  document.getElementById('alert-success-msg').textContent = msg;
+
+  s._timeout = setTimeout(() => {
+    s.hidden = true;
+    document.getElementById('alert-success-msg').textContent = '';
+  }, 2500);
+}function showError(msg) {
+  const s = document.getElementById('alert-success');
+  const e = document.getElementById('alert-error');
+
+  // Always reset both first
+  clearTimeout(s._timeout);
+  clearTimeout(e._timeout);
+
+  s.hidden = true;
+  e.hidden = false;
+
+  document.getElementById('alert-error-msg').textContent = msg;
+
+  e._timeout = setTimeout(() => {
+    e.hidden = true;
+    document.getElementById('alert-error-msg').textContent = '';
+  }, 3000);
+}
+/* ADD STAFF — uses /api/auth/register/staff */
 document.getElementById('form-add-teacher').addEventListener('submit', async e => {
   e.preventDefault();
   const btn = document.getElementById('btn-add-teacher'); btn.disabled = true; btn.textContent = 'Registering…';
+  const role = document.getElementById('t-role').value;
   try {
-    await API.post('/api/auth/register/staff', { name: document.getElementById('t-name').value.trim(), email: document.getElementById('t-email').value.trim(), password: document.getElementById('t-password').value, role: 'TEACHER' });
-    showSuccess('Teacher registered.'); e.target.reset();
+    await API.post('/api/auth/register/staff', { name: document.getElementById('t-name').value.trim(), email: document.getElementById('t-email').value.trim(), password: document.getElementById('t-password').value, role });
+    showSuccess(`${role === 'ADMIN' ? 'Admin' : 'Teacher'} registered successfully.`); e.target.reset();
   } catch (err) { showError(err.message); }
-  finally { btn.disabled = false; btn.textContent = 'Register Teacher →'; }
+  finally { btn.disabled = false; btn.textContent = 'Register Staff →'; }
 });
 
 /* APPROVE STUDENTS */
@@ -209,12 +243,130 @@ window.approveStudent = async function(id) { try { await API.put(`/api/students/
 document.getElementById('btn-refresh-students').addEventListener('click', loadPendingStudents);
 
 /* COURSE SETUP */
-document.getElementById('form-create-course').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/courses', { courseCode: document.getElementById('c-code').value.trim(), courseName: document.getElementById('c-name').value.trim(), departmentId: Number(document.getElementById('c-dept').value), mainTeacherId: Number(document.getElementById('c-teacher').value) }); showSuccess('Course created.'); e.target.reset(); loadCourses(); } catch(e) { showError(e.message); } });
-document.getElementById('btn-assign-teacher').addEventListener('click', async () => { const c = Number(document.getElementById('at-course').value), t = Number(document.getElementById('at-teacher').value); if(!c||!t) return showError('Both IDs required.'); try { await API.post(`/courses/${c}/assign-teacher/${t}`); showSuccess(`Teacher #${t} assigned.`); } catch(e) { showError(e.message); } });
-document.getElementById('btn-remove-teacher').addEventListener('click', async () => { const c = Number(document.getElementById('at-course').value), t = Number(document.getElementById('at-teacher').value); if(!c||!t) return showError('Both IDs required.'); try { await API.delete(`/courses/${c}/remove-teacher/${t}`); showSuccess(`Teacher #${t} removed.`); } catch(e) { showError(e.message); } });
-document.getElementById('form-assign-courses').addEventListener('submit', async e => { e.preventDefault(); const sid = Number(document.getElementById('ac-student').value); const cids = document.getElementById('ac-courses').value.split(',').map(s=>Number(s.trim())).filter(n=>n>0); if(!sid||!cids.length) return showError('Need student + courses.'); try { await API.post('/api/students/select-courses', { studentId: sid, courseIds: cids }); showSuccess('Courses assigned.'); e.target.reset(); } catch(e) { showError(e.message); } });
-async function loadCourses() { const tbody = document.getElementById('courses-table-body'); tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Loading…</td></tr>'; try { const list = await API.get('/courses'); const arr = Array.isArray(list)?list:[]; if(!arr.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No courses.</td></tr>'; return; } tbody.innerHTML = arr.map(c => `<tr><td>${c.id}</td><td><strong>${c.courseCode}</strong></td><td>${c.courseName}</td><td>${c.departmentId??'—'}</td><td>${c.mainTeacherId??'—'}</td></tr>`).join(''); } catch(e) { tbody.innerHTML = `<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`; } }
-document.getElementById('btn-refresh-courses').addEventListener('click', loadCourses);
+
+// Create course
+document.getElementById('form-create-course').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  try {
+    await API.post('/courses', {
+      courseCode: document.getElementById('c-code').value.trim(),
+      courseName: document.getElementById('c-name').value.trim(),
+      departmentId: Number(document.getElementById('c-dept').value),
+      mainTeacherId: Number(document.getElementById('c-teacher').value)
+    });
+
+    showSuccess('Course created.');
+    e.target.reset();
+    loadCourses();
+
+  } catch (e) {
+    let msg = e.message || 'Something went wrong';
+
+    if (msg.toLowerCase().includes('duplicate') || msg.toLowerCase().includes('unique')) {
+      msg = 'Course code already exists';
+    }
+
+    showError(msg);
+  }
+});
+
+
+// Assign teacher
+document.getElementById('btn-assign-teacher').addEventListener('click', async () => {
+  const c = Number(document.getElementById('at-course').value);
+  const t = Number(document.getElementById('at-teacher').value);
+
+  if (!c || !t) return showError('Both IDs required.');
+
+  try {
+    await API.post(`/courses/${c}/assign-teacher/${t}`);
+    showSuccess(`Teacher #${t} assigned.`);
+  } catch (e) {
+    showError(e.message);
+  }
+});
+
+
+// Remove teacher
+document.getElementById('btn-remove-teacher').addEventListener('click', async () => {
+  const c = Number(document.getElementById('at-course').value);
+  const t = Number(document.getElementById('at-teacher').value);
+
+  if (!c || !t) return showError('Both IDs required.');
+
+  try {
+    await API.delete(`/courses/${c}/remove-teacher/${t}`);
+    showSuccess(`Teacher #${t} removed.`);
+  } catch (e) {
+    showError(e.message);
+  }
+});
+
+
+// Assign courses to student
+document.getElementById('form-assign-courses').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const sid = Number(document.getElementById('ac-student').value);
+  const cids = document
+    .getElementById('ac-courses')
+    .value
+    .split(',')
+    .map(s => Number(s.trim()))
+    .filter(n => n > 0);
+
+  if (!sid || !cids.length) return showError('Need student + courses.');
+
+  try {
+    await API.post('/api/students/select-courses', {
+      studentId: sid,
+      courseIds: cids
+    });
+
+    showSuccess('Courses assigned.');
+    e.target.reset();
+
+  } catch (e) {
+    showError(e.message);
+  }
+});
+
+
+// Load courses
+async function loadCourses() {
+  const tbody = document.getElementById('courses-table-body');
+  tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Loading…</td></tr>';
+
+  try {
+    const list = await API.get('/courses');
+    const arr = Array.isArray(list) ? list : [];
+
+    if (!arr.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No courses.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = arr.map(c => `
+      <tr>
+        <td>${c.id}</td>
+        <td><strong>${c.courseCode}</strong></td>
+        <td>${c.courseName}</td>
+        <td>${c.departmentId ?? '—'}</td>
+        <td>${c.mainTeacherId ?? '—'}</td>
+      </tr>
+    `).join('');
+
+  } catch (e) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="empty-state" style="color:#f87171">
+          ${e.message}
+        </td>
+      </tr>
+    `;
+  }
+}
 
 /* EXAMS & ASSIGNMENTS */
 document.getElementById('form-create-exam').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/exams', { courseId: Number(document.getElementById('ex-course').value), title: document.getElementById('ex-title').value.trim(), description: document.getElementById('ex-desc').value.trim(), maxMarks: Number(document.getElementById('ex-max').value), examDate: document.getElementById('ex-date').value }); showSuccess('Exam created.'); e.target.reset(); } catch(e) { showError(e.message); } });

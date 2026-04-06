@@ -1,6 +1,9 @@
 package com.tracker.studentracker.repository;
 
 import com.tracker.studentracker.models.Student;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -58,5 +61,18 @@ public class StudentRepository {
             s.setStatus(Student.Status.valueOf(rs.getString("status").toUpperCase()));
             return s;
         }, userId);
+    }
+    public List<Student> findAll() {
+        String sql = "SELECT * FROM students";
+
+        return jdbc.query(sql, (rs, rowNum) -> {
+            Student s = new Student();
+            s.setStudentId(rs.getInt("id"));
+            s.setUserId(rs.getLong("user_id"));
+            s.setStudentNumber(rs.getString("student_number"));
+            s.setMajorCourseId(rs.getInt("major_course_id"));
+            s.setStatus(Student.Status.valueOf(rs.getString("status").toUpperCase()));
+            return s;
+        });
     }
 }
