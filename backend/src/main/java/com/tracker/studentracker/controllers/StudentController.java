@@ -95,4 +95,15 @@ public class StudentController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllStudents() {
+        try {
+            return ResponseEntity.ok(studentServices.getAllStudents());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                java.util.Map.of("error", e.getMessage())
+            );
+        }
+    }
 }

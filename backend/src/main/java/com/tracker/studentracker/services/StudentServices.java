@@ -94,4 +94,7 @@ public class StudentServices {
     public Student getStudentByUserId(Long userId){
         return studentRepo.findByUserId(userId);
     }
+    public List<Student> getAllStudents() {
+        return studentRepo.findAll();
+    }
 }
