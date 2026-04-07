@@ -1,96 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jeenify — Register</title>
   <link rel="stylesheet" href="css/auth.css" />
 </head>
+
 <body>
-<div class="auth-card">
-  <div class="auth-logo">
-    <svg width="36" height="36" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="12" fill="url(#lg)"/><path d="M12 22 L22 12 L32 22 L22 32Z" fill="#fff" opacity=".9"/><path d="M22 16 L28 22 L22 28 L16 22Z" fill="url(#lg)" opacity=".7"/><defs><linearGradient id="lg" x1="0" y1="0" x2="44" y2="44"><stop stop-color="#4ade80"/><stop offset="1" stop-color="#16a34a"/></linearGradient></defs></svg>
-    <span class="auth-logo-text">Jeenify</span>
+  <div class="auth-card">
+    <div class="auth-logo">
+      <svg width="36" height="36" viewBox="0 0 44 44" fill="none">
+        <rect width="44" height="44" rx="12" fill="url(#lg)" />
+        <path d="M12 22 L22 12 L32 22 L22 32Z" fill="#fff" opacity=".9" />
+        <path d="M22 16 L28 22 L22 28 L16 22Z" fill="url(#lg)" opacity=".7" />
+        <defs>
+          <linearGradient id="lg" x1="0" y1="0" x2="44" y2="44">
+            <stop stop-color="#4ade80" />
+            <stop offset="1" stop-color="#16a34a" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="auth-logo-text">Jeenify</span>
+    </div>
+
+    <h1 class="auth-title">Create Student Account</h1>
+    <p class="auth-sub">Already have an account? <a href="index.html">Sign in</a></p>
+
+    <div id="error-box" class="auth-error" hidden></div>
+    <div id="success-box"
+      style="background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);color:#4ade80;padding:10px 14px;border-radius:8px;font-size:0.85rem;margin-bottom:16px"
+      hidden></div>
+
+    <form id="register-form">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input class="form-input" id="name" type="text" placeholder="e.g. Keerthana" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input class="form-input" id="email" type="email" placeholder="you@example.com" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrap">
+          <input class="form-input" id="password" type="password" placeholder="6–12 characters" minlength="6"
+            maxlength="12" required />
+          <button type="button" class="toggle-password" id="toggle-pw">
+            <svg id="eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            <svg id="eye-closed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" style="display:none">
+              <path
+                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+              <line x1="1" y1="1" x2="23" y2="23" />
+            </svg>
+          </button>
+          <!-- Caution tooltip — shown on focus -->
+          <div class="pw-caution" id="pw-caution">
+            <div class="pw-caution-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+              <span>Password Requirements</span>
+            </div>
+            <ul class="pw-caution-list">
+              <li id="rule-length"><span class="pw-icon">✗</span> 6 – 12 characters</li>
+              <li id="rule-upper"><span class="pw-icon">✗</span> At least one uppercase letter</li>
+              <li id="rule-number"><span class="pw-icon">✗</span> At least one number</li>
+              <li id="rule-symbol"><span class="pw-icon">✗</span> At least one symbol (!@#$…)</li>
+            </ul>
+            <div class="pw-success-banner" id="pw-success-banner">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+              <span>Password looks good!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="student-number">Student Number</label>
+        <input class="form-input" id="student-number" type="text" placeholder="e.g. STU2024001" required />
+      </div>
+      <div class="form-group">
+        <label for="major-course">Major Course ID</label>
+        <input class="form-input" id="major-course" type="number" placeholder="e.g. 1" min="1" required />
+      </div>
+      <button type="submit" class="btn-submit" id="btn-register">Create Account →</button>
+    </form>
   </div>
 
-  <h1 class="auth-title">Create Student Account</h1>
-  <p class="auth-sub">Already have an account? <a href="index.html">Sign in</a></p>
+  <script src="js/api.js"></script>
+  <script>
+    // ── Password validation ──
+    const pwInput = document.getElementById('password');
+    const pwCaution = document.getElementById('pw-caution');
+    const rules = {
+      length: { el: document.getElementById('rule-length'), test: v => v.length >= 6 && v.length <= 12 },
+      upper: { el: document.getElementById('rule-upper'), test: v => /[A-Z]/.test(v) },
+      number: { el: document.getElementById('rule-number'), test: v => /[0-9]/.test(v) },
+      symbol: { el: document.getElementById('rule-symbol'), test: v => /[^A-Za-z0-9]/.test(v) },
+    };
 
-  <div id="error-box" class="auth-error" hidden></div>
-  <div id="success-box" style="background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);color:#4ade80;padding:10px 14px;border-radius:8px;font-size:0.85rem;margin-bottom:16px" hidden></div>
+    let hideTimer = null;
 
-  <form id="register-form">
-    <div class="form-group">
-      <label for="name">Full Name</label>
-      <input class="form-input" id="name" type="text" placeholder="e.g. Keerthana" required />
-    </div>
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input class="form-input" id="email" type="email" placeholder="you@example.com" required />
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <div class="password-wrap">
-        <input class="form-input" id="password" type="password" placeholder="min. 6 characters" required />
-        <button type="button" class="toggle-password" id="toggle-pw">
-          <svg id="eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          <svg id="eye-closed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-        </button>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="student-number">Student Number</label>
-      <input class="form-input" id="student-number" type="text" placeholder="e.g. STU2024001" required />
-    </div>
-    <div class="form-group">
-      <label for="major-course">Major Course ID</label>
-      <input class="form-input" id="major-course" type="number" placeholder="e.g. 1" min="1" required />
-    </div>
-    <button type="submit" class="btn-submit" id="btn-register">Create Account →</button>
-  </form>
-</div>
+    function checkPassword() {
+      const val = pwInput.value;
+      let allPassed = true;
+      for (const key in rules) {
+        const passed = rules[key].test(val);
+        const li = rules[key].el;
+        const icon = li.querySelector('.pw-icon');
+        if (passed) {
+          li.classList.add('pass'); li.classList.remove('fail');
+          icon.textContent = '✓';
+        } else {
+          li.classList.add('fail'); li.classList.remove('pass');
+          icon.textContent = '✗';
+          allPassed = false;
+        }
+      }
 
-<script src="js/api.js"></script>
-<script>
-// Password toggle
-document.getElementById('toggle-pw').addEventListener('click', () => {
-  const pw = document.getElementById('password');
-  const open = document.getElementById('eye-open');
-  const closed = document.getElementById('eye-closed');
-  if (pw.type === 'password') {
-    pw.type = 'text'; open.style.display = 'none'; closed.style.display = 'block';
-  } else {
-    pw.type = 'password'; open.style.display = 'block'; closed.style.display = 'none';
-  }
-});
+      // Toggle success state on tooltip & input
+      if (allPassed && val.length > 0) {
+        pwCaution.classList.add('all-good');
+        pwInput.classList.add('pw-valid');
+        // Auto-hide the tooltip after 1.5s
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => {
+          pwCaution.classList.remove('visible');
+        }, 1500);
+      } else {
+        pwCaution.classList.remove('all-good');
+        pwInput.classList.remove('pw-valid');
+        clearTimeout(hideTimer);
+      }
 
-// Register — uses POST /api/students/register
-document.getElementById('register-form').addEventListener('submit', async e => {
-  e.preventDefault();
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  const studentNumber = document.getElementById('student-number').value.trim();
-  const majorCourseId = Number(document.getElementById('major-course').value);
+      return allPassed;
+    }
+    pwInput.addEventListener('input', checkPassword);
 
-  const btn = document.getElementById('btn-register');
-  const errBox = document.getElementById('error-box');
-  const okBox = document.getElementById('success-box');
-  errBox.hidden = true; okBox.hidden = true;
+    // Show / hide caution tooltip on focus / blur
+    pwInput.addEventListener('focus', () => {
+      pwCaution.classList.add('visible');
+      checkPassword();
+    });
+    pwInput.addEventListener('blur', () => {
+      pwCaution.classList.remove('visible');
+    });
 
-  btn.disabled = true; btn.textContent = 'Creating…';
-  try {
-    await API.post('/api/students/register', { name, email, password, studentNumber, majorCourseId });
-    okBox.textContent = 'Account created! Your account is pending admin approval. You can now sign in.';
-    okBox.hidden = false;
-    e.target.reset();
-  } catch (err) {
-    errBox.textContent = err.message || 'Registration failed';
-    errBox.hidden = false;
-  } finally {
-    btn.disabled = false; btn.textContent = 'Create Account →';
-  }
-});
-</script>
+    // Password toggle
+    document.getElementById('toggle-pw').addEventListener('click', () => {
+      const open = document.getElementById('eye-open');
+      const closed = document.getElementById('eye-closed');
+      if (pwInput.type === 'password') {
+        pwInput.type = 'text'; open.style.display = 'none'; closed.style.display = 'block';
+      } else {
+        pwInput.type = 'password'; open.style.display = 'block'; closed.style.display = 'none';
+      }
+    });
+
+    // Register — uses POST /api/students/register
+    document.getElementById('register-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const errBox = document.getElementById('error-box');
+      const okBox = document.getElementById('success-box');
+      errBox.hidden = true; okBox.hidden = true;
+
+      // Validate password before submission
+      if (!checkPassword()) {
+        errBox.textContent = 'Password does not meet the requirements.';
+        errBox.hidden = false;
+        pwInput.focus();
+        return;
+      }
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = pwInput.value;
+      const studentNumber = document.getElementById('student-number').value.trim();
+      const majorCourseId = Number(document.getElementById('major-course').value);
+
+      const btn = document.getElementById('btn-register');
+      btn.disabled = true; btn.textContent = 'Creating…';
+      try {
+        await API.post('/api/students/register', { name, email, password, studentNumber, majorCourseId });
+        okBox.textContent = 'Account created! Your account is pending admin approval. You can now sign in.';
+        okBox.hidden = false;
+        e.target.reset();
+        // Reset rule icons after form reset
+        document.querySelectorAll('.pw-caution-list li').forEach(li => {
+          li.classList.remove('pass'); li.classList.add('fail');
+          li.querySelector('.pw-icon').textContent = '✗';
+        });
+        pwCaution.classList.remove('all-good', 'visible');
+        pwInput.classList.remove('pw-valid');
+      } catch (err) {
+        errBox.textContent = err.message || 'Registration failed';
+        errBox.hidden = false;
+      } finally {
+        btn.disabled = false; btn.textContent = 'Create Account →';
+      }
+    });
+  </script>
 </body>
+
 </html>

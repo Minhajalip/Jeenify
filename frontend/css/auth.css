@@ -165,3 +165,131 @@ body {
   font-size: 0.85rem;
   margin-bottom: 16px;
 }
+
+/* ── Password Caution Tooltip ── */
+.pw-caution {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: rgba(30, 41, 59, 0.95);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  backdrop-filter: blur(16px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+.pw-caution::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 24px;
+  width: 12px;
+  height: 12px;
+  background: rgba(30, 41, 59, 0.95);
+  border-left: 1px solid rgba(251, 191, 36, 0.3);
+  border-top: 1px solid rgba(251, 191, 36, 0.3);
+  transform: rotate(45deg);
+}
+.pw-caution.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.pw-caution-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fbbf24;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.pw-caution-header svg {
+  stroke: #fbbf24;
+  flex-shrink: 0;
+}
+.pw-caution-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pw-caution-list li {
+  font-size: 0.8rem;
+  color: var(--slate-400);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.25s;
+}
+.pw-caution-list li .pw-icon {
+  font-weight: 700;
+  font-size: 0.85rem;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: color 0.25s;
+}
+.pw-caution-list li.pass {
+  color: var(--green-400);
+}
+.pw-caution-list li.pass .pw-icon {
+  color: var(--green-400);
+}
+.pw-caution-list li.fail {
+  color: var(--red-400);
+}
+.pw-caution-list li.fail .pw-icon {
+  color: var(--red-400);
+}
+
+/* ── Success state — when all rules pass ── */
+.pw-valid {
+  border-color: var(--green-400) !important;
+  box-shadow: 0 0 0 3px rgba(74,222,128,0.18) !important;
+}
+.pw-caution.all-good {
+  border-color: rgba(74,222,128,0.4);
+}
+.pw-caution.all-good::before {
+  border-left-color: rgba(74,222,128,0.4);
+  border-top-color: rgba(74,222,128,0.4);
+}
+.pw-success-banner {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(74,222,128,0.1);
+  border: 1px solid rgba(74,222,128,0.25);
+  border-radius: 8px;
+  color: var(--green-400);
+  font-size: 0.85rem;
+  font-weight: 600;
+  animation: bannerPop 0.3s ease;
+}
+.pw-success-banner svg {
+  stroke: var(--green-400);
+  flex-shrink: 0;
+}
+.pw-caution.all-good .pw-success-banner {
+  display: flex;
+}
+@keyframes bannerPop {
+  0%   { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
