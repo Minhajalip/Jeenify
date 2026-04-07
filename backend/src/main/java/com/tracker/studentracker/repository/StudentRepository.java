@@ -75,4 +75,17 @@ public class StudentRepository {
             return s;
         });
     }
+
+    public List<Student> findByCourseId(int courseId) {
+        String sql = "SELECT s.* FROM students s JOIN course_enrollments ce ON s.id = ce.student_id WHERE ce.course_id = ?";
+        return jdbc.query(sql, (rs, rowNum) -> {
+            Student s = new Student();
+            s.setStudentId(rs.getInt("id"));
+            s.setUserId(rs.getLong("user_id"));
+            s.setStudentNumber(rs.getString("student_number"));
+            s.setMajorCourseId(rs.getInt("major_course_id"));
+            s.setStatus(Student.Status.valueOf(rs.getString("status").toUpperCase()));
+            return s;
+        }, courseId);
+    }
 }

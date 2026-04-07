@@ -75,6 +75,20 @@ public class ExamController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+    @GetMapping("/{examId}")
+    public ResponseEntity<?> getExamById(@PathVariable int examId) {
+        try {
+            String role = authHelper.getCurrentRole();
+            if (role.equals("STUDENT")) {
+                return ResponseEntity.status(403).body("Access denied");
+            }
+            Long currentUserId = authHelper.getCurrentUserId();
+            Exam exam = examService.getExamById(examId, role, currentUserId);
+            return ResponseEntity.ok(exam);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
 
     @GetMapping("/student/{studentId}")
     public ResponseEntity<?> getExamsForStudent(@PathVariable int studentId) {

@@ -79,4 +79,12 @@ public class ExamService {
                 .filter(exam -> enrolledCourseIds.contains(exam.getCourseId()))
                 .toList();
     }
+    public Exam getExamById(int examId, String role, Long currentUserId) {
+        Exam exam = examRepository.findById(examId)
+                .orElseThrow(() -> new RuntimeException("Exam not found"));
+        if (role.equals("TEACHER")) {
+            checkTeacherOwnership(exam.getCourseId(), currentUserId);
+        }
+        return exam;
+    }
 }

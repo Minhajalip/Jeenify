@@ -97,4 +97,15 @@ public class StudentServices {
     public List<Student> getAllStudents() {
         return studentRepo.findAll();
     }
+
+    public List<Student> getStudentsForCourse(int courseId, String role, Long currentUserId) {
+        if (role.equals("TEACHER")) {
+            Teacher teacher = teacherRepository.findByUserId(currentUserId);
+            if (teacher == null) throw new RuntimeException("Teacher profile not found");
+            if (!courseTeacherRepository.existsByCourseIdAndTeacherId(courseId, teacher.getId().intValue())) {
+                throw new RuntimeException("Access denied: you are not assigned to course " + courseId);
+            }
+        }
+        return studentRepo.findByCourseId(courseId);
+    }
 }

@@ -95,6 +95,20 @@ public class StudentController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+    @GetMapping("/course/{courseId}")
+    public ResponseEntity<?> getStudentsByCourse(@PathVariable int courseId) {
+        try {
+            String role = authHelper.getCurrentRole();
+            if (role.equals("STUDENT")) {
+                return ResponseEntity.status(403).body("Access denied");
+            }
+            Long currentUserId = authHelper.getCurrentUserId();
+            return ResponseEntity.ok(studentServices.getStudentsForCourse(courseId, role, currentUserId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllStudents() {
