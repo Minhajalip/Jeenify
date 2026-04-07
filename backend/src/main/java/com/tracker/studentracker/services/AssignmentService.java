@@ -79,4 +79,13 @@ public class AssignmentService {
                 .filter(assignment -> enrolledCourseIds.contains(assignment.getCourseId()))
                 .toList();
     }
+
+    public Assignment getAssignmentById(int assignmentId, String role, Long currentUserId) {
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new RuntimeException("Assignment not found"));
+        if (role.equals("TEACHER")) {
+            checkTeacherOwnership(assignment.getCourseId(), currentUserId);
+        }
+        return assignment;
+    }
 }

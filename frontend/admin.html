@@ -119,6 +119,8 @@
                     type="email" placeholder="smith@example.com" required /></div>
                 <div class="form-group"><label for="t-password">Password</label><input class="form-input"
                     id="t-password" type="password" placeholder="min. 6 chars" required /></div>
+                <div class="form-group"><label for="t-number">Staff Number</label><input class="form-input"
+                    id="t-number" type="text" placeholder="e.g. TEA-001" required /></div>
                 <div class="form-group"><label for="t-role">Role</label><select class="form-select" id="t-role">
                     <option value="TEACHER">Teacher</option>
                     <option value="ADMIN">Admin</option>
@@ -174,8 +176,11 @@
                     type="text" placeholder="Data Structures" required /></div>
                 <div class="form-group"><label for="c-dept">Department ID</label><input class="form-input" id="c-dept"
                     type="number" placeholder="1" min="1" required /></div>
-                <div class="form-group"><label for="c-teacher">Main Teacher ID</label><input class="form-input"
-                    id="c-teacher" type="number" placeholder="1" min="1" required /></div>
+                <div class="form-group"><label for="c-teacher">Main Teacher</label>
+                  <select class="form-select" id="c-teacher" required>
+                    <option value="">Select Staff...</option>
+                  </select>
+                </div>
               </div><button type="submit" class="btn btn-primary">Create Course →</button>
             </form>
           </div>
@@ -186,8 +191,11 @@
             <div class="form-row">
               <div class="form-group"><label for="at-course">Course ID</label><input class="form-input" id="at-course"
                   type="number" min="1" /></div>
-              <div class="form-group"><label for="at-teacher">Teacher ID</label><input class="form-input"
-                  id="at-teacher" type="number" min="1" /></div>
+              <div class="form-group"><label for="at-teacher">Teacher</label>
+                <select class="form-select" id="at-teacher">
+                  <option value="">Select Staff...</option>
+                </select>
+              </div>
             </div>
             <div style="display:flex;gap:12px;margin-top:12px"><button class="btn btn-approve" id="btn-assign-teacher">✓
                 Assign</button><button class="btn btn-reject" id="btn-remove-teacher">✕ Remove</button></div>
@@ -198,8 +206,11 @@
           <div class="form-card" style="margin-bottom:32px">
             <form id="form-assign-courses">
               <div class="form-row">
-                <div class="form-group"><label for="ac-student">Student ID</label><input class="form-input"
-                    id="ac-student" type="number" min="1" required /></div>
+                <div class="form-group"><label for="ac-student">Student</label>
+                  <select class="form-select" id="ac-student" required>
+                    <option value="">Select Student...</option>
+                  </select>
+                </div>
                 <div class="form-group"><label for="ac-courses">Course IDs (comma-separated)</label><input
                     class="form-input" id="ac-courses" type="text" placeholder="1, 2, 3" required /></div>
               </div><button type="submit" class="btn btn-primary">Assign Courses →</button>
@@ -592,11 +603,16 @@
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
         document.getElementById(`panel-${tab}`).classList.add('active');
         if (tab === 'students') loadPendingStudents();
-        if (tab === 'courses') loadCourses();
+        if (tab === 'courses') { loadCourses(); loadStaffDropdowns(); loadStudentDropdowns(); }
         if (tab === 'calendar') loadEvents();
         if (tab === 'timetable') loadTimetable();
       });
     });
+
+    // Initial load
+    if (document.getElementById('panel-courses').classList.contains('active')) {
+      loadCourses(); loadStaffDropdowns(); loadStudentDropdowns();
+    }
 
     function showSuccess(msg) {
       const s = document.getElementById('alert-success');
@@ -629,9 +645,11 @@
       e.preventDefault();
       const btn = document.getElementById('btn-add-teacher'); btn.disabled = true; btn.textContent = 'Registering…';
       const role = document.getElementById('t-role').value;
+      const tNum = document.getElementById('t-number').value.trim();
       try {
-        await API.post('/api/auth/register/staff', { name: document.getElementById('t-name').value.trim(), email: document.getElementById('t-email').value.trim(), password: document.getElementById('t-password').value, role });
+        await API.post('/api/auth/register/staff', { name: document.getElementById('t-name').value.trim(), email: document.getElementById('t-email').value.trim(), password: document.getElementById('t-password').value, teacherNumber: tNum, role });
         showSuccess(`${role === 'ADMIN' ? 'Admin' : 'Teacher'} registered successfully.`); e.target.reset();
+        loadStaffDropdowns();
       } catch (err) { showError(err.message); }
       finally { btn.disabled = false; btn.textContent = 'Register Staff →'; }
     });
@@ -648,6 +666,26 @@
     }
     window.approveStudent = async function (id) { try { await API.put(`/api/students/approve/${id}`); showSuccess(`Student #${id} approved.`); loadPendingStudents(); } catch (e) { showError(e.message); } };
     document.getElementById('btn-refresh-students').addEventListener('click', loadPendingStudents);
+
+    /* DROPDOWNS SETUP */
+    async function loadStaffDropdowns() {
+      try {
+        const staff = await API.get('/api/auth/staff');
+        if (!Array.isArray(staff)) return;
+        const options = '<option value="">Select Staff...</option>' + staff.filter(s => s.role === 'TEACHER').map(s => `<option value="${s.teacherId}">[${s.teacherNumber || 'T-' + s.id}] ${s.name}</option>`).join('');
+        document.getElementById('c-teacher').innerHTML = options;
+        document.getElementById('at-teacher').innerHTML = options;
+      } catch (e) { console.error('Failed to load staff dropdowns', e); }
+    }
+    
+    async function loadStudentDropdowns() {
+      try {
+        const students = await API.get('/api/students');
+        if (!Array.isArray(students)) return;
+        const options = '<option value="">Select Student...</option>' + students.filter(s => s.status === 'APPROVED').map(s => `<option value="${s.studentId ?? s.id}">[${s.studentNumber}] User #${s.userId}</option>`).join('');
+        document.getElementById('ac-student').innerHTML = options;
+      } catch(e) { console.error('Failed to load student dropdowns', e); }
+    }
 
     /* COURSE SETUP */
 
@@ -681,62 +719,50 @@
 
     // Assign teacher
     document.getElementById('btn-assign-teacher').addEventListener('click', async () => {
-      const c = Number(document.getElementById('at-course').value);
-      const t = Number(document.getElementById('at-teacher').value);
-
-      if (!c || !t) return showError('Both IDs required.');
-
+      const btn = document.getElementById('btn-assign-teacher');
+      const cid = Number(document.getElementById('at-course').value);
+      const tid = Number(document.getElementById('at-teacher').value);
+      if (!cid || !tid) return showError('Select Course and Staff');
+      btn.disabled = true;
       try {
-        await API.post(`/courses/${c}/assign-teacher/${t}`);
-        showSuccess(`Teacher #${t} assigned.`);
-      } catch (e) {
-        showError(e.message);
-      }
+        await API.post(`/courses/${cid}/assign-teacher/${tid}`);
+        showSuccess('Assigned.'); 
+        loadCourses(); // refresh table
+      } catch (err) { showError(err.message); }
+      finally { btn.disabled = false; }
     });
 
 
     // Remove teacher
     document.getElementById('btn-remove-teacher').addEventListener('click', async () => {
-      const c = Number(document.getElementById('at-course').value);
-      const t = Number(document.getElementById('at-teacher').value);
-
-      if (!c || !t) return showError('Both IDs required.');
-
+      const btn = document.getElementById('btn-remove-teacher');
+      const cid = Number(document.getElementById('at-course').value);
+      const tid = Number(document.getElementById('at-teacher').value);
+      if (!cid || !tid) return showError('Select Course and Staff');
+      btn.disabled = true;
       try {
-        await API.delete(`/courses/${c}/remove-teacher/${t}`);
-        showSuccess(`Teacher #${t} removed.`);
-      } catch (e) {
-        showError(e.message);
-      }
+        await API.delete(`/courses/${cid}/remove-teacher/${tid}`);
+        showSuccess('Removed.');
+        loadCourses();
+      } catch (err) { showError(err.message); }
+      finally { btn.disabled = false; }
     });
 
 
     // Assign courses to student
     document.getElementById('form-assign-courses').addEventListener('submit', async (e) => {
       e.preventDefault();
-
+      const btn = e.target.querySelector('button');
       const sid = Number(document.getElementById('ac-student').value);
-      const cids = document
-        .getElementById('ac-courses')
-        .value
-        .split(',')
-        .map(s => Number(s.trim()))
-        .filter(n => n > 0);
-
-      if (!sid || !cids.length) return showError('Need student + courses.');
-
+      const cids = document.getElementById('ac-courses').value.split(',').map(s => Number(s.trim())).filter(n => n);
+      if (!sid || !cids.length) return showError('Select a Student and provide Course IDs.');
+      btn.disabled = true;
       try {
-        await API.post('/api/students/select-courses', {
-          studentId: sid,
-          courseIds: cids
-        });
-
+        await API.post('/api/students/select-courses', { studentId: sid, courseIds: cids });
         showSuccess('Courses assigned.');
         e.target.reset();
-
-      } catch (e) {
-        showError(e.message);
-      }
+      } catch (err) { showError(err.message); }
+      finally { btn.disabled = false; }
     });
 
 

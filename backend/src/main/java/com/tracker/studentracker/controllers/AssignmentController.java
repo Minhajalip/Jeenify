@@ -93,4 +93,19 @@ public class AssignmentController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
+    @GetMapping("/{assignmentId}")
+    public ResponseEntity<?> getAssignmentById(@PathVariable int assignmentId) {
+        try {
+            String role = authHelper.getCurrentRole();
+            if (role.equals("STUDENT")) {
+                return ResponseEntity.status(403).body("Access denied");
+            }
+            Long currentUserId = authHelper.getCurrentUserId();
+            Assignment assignment = assignmentService.getAssignmentById(assignmentId, role, currentUserId);
+            return ResponseEntity.ok(assignment);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
 }

@@ -6,12 +6,17 @@ import com.tracker.studentracker.dto.RegisterRequest;
 import com.tracker.studentracker.dto.StaffRegisterRequest;
 import com.tracker.studentracker.models.Role;
 import com.tracker.studentracker.models.User;
+import com.tracker.studentracker.models.Teacher;
+import com.tracker.studentracker.repository.TeacherRepository;
 import com.tracker.studentracker.repository.UserRepository;
 import com.tracker.studentracker.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -23,6 +28,9 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
@@ -73,6 +81,16 @@ public class AuthController {
             user.setPasswordHash(authService.hashPassword(request.getPassword()));
             user.setRole(request.getRole());
             userRepository.save(user);
+
+            if (request.getRole() == Role.TEACHER) {
+                Teacher teacher = new Teacher();
+                teacher.setUserId(user.getId());
+                teacher.setTeacherNumber(request.getTeacherNumber());
+                // Default department to 1, since there's no UI for it right now on create staff
+                teacher.setDepartmentId(1);
+                teacherRepository.save(teacher);
+            }
+
             return ResponseEntity.ok(request.getRole().name() + " registered successfully");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -82,5 +100,31 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
         return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @GetMapping("/staff")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getStaff() {
+        try {
+            List<User> staff = userRepository.findAllByRoleIn(List.of(Role.ADMIN, Role.TEACHER));
+            List<java.util.Map<String, Object>> response = new ArrayList<>();
+            for (User u : staff) {
+                java.util.Map<String, Object> map = new java.util.HashMap<>();
+                map.put("id", u.getId());
+                map.put("name", u.getName());
+                map.put("role", u.getRole().name());
+                if (u.getRole() == Role.TEACHER) {
+                    Teacher t = teacherRepository.findByUserId(u.getId());
+                    if (t != null) {
+                        map.put("teacherNumber", t.getTeacherNumber());
+                        map.put("teacherId", t.getId());
+                    }
+                }
+                response.add(map);
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

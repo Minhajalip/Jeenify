@@ -16,6 +16,9 @@ public class Teacher {
     @Column(name = "department_id")
     private int departmentId;
 
+    @Column(name = "teacher_number")
+    private String teacherNumber;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -24,4 +27,7 @@ public class Teacher {
 
     public int getDepartmentId() { return departmentId; }
     public void setDepartmentId(int departmentId) { this.departmentId = departmentId; }
+
+    public String getTeacherNumber() { return teacherNumber; }
+    public void setTeacherNumber(String teacherNumber) { this.teacherNumber = teacherNumber; }
 }
