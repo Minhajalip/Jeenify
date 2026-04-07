@@ -9,6 +9,13 @@ CREATE TABLE teachers (
     department_id INT,
     FOREIGN KEY (department_id) REFERENCES departments(id)
 );
+CREATE TABLE courses (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    course_code VARCHAR(20) UNIQUE NOT NULL,
+    course_name VARCHAR(100) NOT NULL,
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES departments(id)
+);
 CREATE TABLE students (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
@@ -16,13 +23,6 @@ CREATE TABLE students (
     major_course_id INT,
     FOREIGN KEY (department_id) REFERENCES departments(id),
     FOREIGN KEY (major_course_id) REFERENCES courses(id)
-);
-CREATE TABLE courses (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    course_code VARCHAR(20) UNIQUE NOT NULL,
-    course_name VARCHAR(100) NOT NULL,
-    department_id INT,
-    FOREIGN KEY (department_id) REFERENCES departments(id)
 );
 CREATE TABLE course_teachers (
     course_id INT,
