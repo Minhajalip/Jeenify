@@ -413,6 +413,17 @@ database/schema.sql
 
 Deploy the backend using **Apache Tomcat**.
 
+Run
+```bash
+cp src/main/resources/application-local.properties.example src/main/resources/application-local.properties
+```
+Then update application-local.properties with your db credentials.
+
+Then from Jeenify/backend run
+
+```bash
+mvn spring-boot:run
+```
 ---
 
 # 📚 Documentation

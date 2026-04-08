@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeenify — Admin Dashboard</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <a class="sidebar-logo" href="admin.html">
+        <svg width="36" height="36" viewBox="0 0 44 44" fill="none">
+          <rect width="44" height="44" rx="12" fill="url(#lg)" />
+          <path d="M12 22 L22 12 L32 22 L22 32Z" fill="#fff" opacity=".9" />
+          <path d="M22 16 L28 22 L22 28 L16 22Z" fill="url(#lg)" opacity=".7" />
+          <defs>
+            <linearGradient id="lg" x1="0" y1="0" x2="44" y2="44">
+              <stop stop-color="#4ade80" />
+              <stop offset="1" stop-color="#16a34a" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="sidebar-logo-text">Jeenify</span>
+      </a>
+      <nav class="sidebar-nav">
+        <span class="sidebar-label">Management</span>
+        <a href="#teachers" class="sidebar-link active" data-tab="teachers"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>Add Staff</a>
+        <a href="#students" class="sidebar-link" data-tab="students"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+          </svg>Approve Students</a>
+        <a href="#courses" class="sidebar-link" data-tab="courses"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+          </svg>Course Setup</a>
+        <span class="sidebar-label">Academic</span>
+        <a href="#exams" class="sidebar-link" data-tab="exams"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>Exams & Assignments</a>
+        <a href="#marks" class="sidebar-link" data-tab="marks"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+          </svg>Enter Marks</a>
+        <a href="#timetable" class="sidebar-link" data-tab="timetable"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>Timetable</a>
+        <a href="#calendar" class="sidebar-link" data-tab="calendar"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" />
+          </svg>Calendar</a>
+        <a href="#reports" class="sidebar-link" data-tab="reports"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>Reports</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar" id="user-initials">A</div>
+          <div class="user-info">
+            <div class="user-name" id="user-name">Admin</div>
+            <div class="user-role">Administrator</div>
+          </div>
+        </div>
+        <button class="btn-logout" id="btn-logout"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>Logout</button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <h2 class="topbar-title">Admin Dashboard</h2>
+        <div class="topbar-right"><span id="topbar-greeting">Welcome back</span></div>
+      </header>
+      <div class="content">
+        <div id="alert-success" class="alert alert-success" style="display:none"><span>✓</span> <span
+            id="alert-success-msg"></span></div>
+        <div id="alert-error" class="alert alert-error" style="display:none"><span>⚠</span> <span
+            id="alert-error-msg"></span></div>
+
+        <!-- TAB: ADD TEACHERS -->
+        <div class="tab-panel active" id="panel-teachers">
+          <div class="section">
+            <h3 class="section-title">Register Staff</h3>
+            <p class="section-sub">Creates a user account with TEACHER or ADMIN role</p>
+          </div>
+          <div class="form-card">
+            <form id="form-add-teacher">
+              <div class="form-row">
+                <div class="form-group"><label for="t-name">Full Name</label><input class="form-input" id="t-name"
+                    type="text" placeholder="e.g. Dr. Smith" required /></div>
+                <div class="form-group"><label for="t-email">Email</label><input class="form-input" id="t-email"
+                    type="email" placeholder="smith@example.com" required /></div>
+                <div class="form-group"><label for="t-password">Password</label><input class="form-input"
+                    id="t-password" type="password" placeholder="min. 6 chars" required /></div>
+                <div class="form-group"><label for="t-number">Staff Number</label><input class="form-input"
+                    id="t-number" type="text" placeholder="e.g. TEA-001" required /></div>
+                <div class="form-group"><label for="t-role">Role</label><select class="form-select" id="t-role">
+                    <option value="TEACHER">Teacher</option>
+                    <option value="ADMIN">Admin</option>
+                  </select></div>
+              </div>
+              <button type="submit" class="btn btn-primary" id="btn-add-teacher">Register Staff →</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- TAB: APPROVE STUDENTS -->
+        <div class="tab-panel" id="panel-students">
+          <div class="section">
+            <div class="section-header">
+              <div>
+                <h3 class="section-title">Pending Student Approvals</h3>
+                <p class="section-sub">Students registered and waiting for approval.</p>
+              </div><button class="btn btn-ghost btn-sm" id="btn-refresh-students">↻ Refresh</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student ID</th>
+                  <th>User ID</th>
+                  <th>Student Number</th>
+                  <th>Major Course</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="students-table-body">
+                <tr>
+                  <td colspan="6" class="empty-state">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB: COURSE SETUP -->
+        <div class="tab-panel" id="panel-courses">
+          <div class="section">
+            <h3 class="section-title">Create a Course</h3>
+          </div>
+          <div class="form-card" style="margin-bottom:32px">
+            <form id="form-create-course">
+              <div class="form-row">
+                <div class="form-group"><label for="c-code">Course Code</label><input class="form-input" id="c-code"
+                    type="text" placeholder="CS101" required /></div>
+                <div class="form-group"><label for="c-name">Course Name</label><input class="form-input" id="c-name"
+                    type="text" placeholder="Data Structures" required /></div>
+                <div class="form-group"><label for="c-dept">Department ID</label><input class="form-input" id="c-dept"
+                    type="number" placeholder="1" min="1" required /></div>
+                <div class="form-group"><label for="c-teacher">Main Teacher</label>
+                  <select class="form-select" id="c-teacher" required>
+                    <option value="">Select Staff...</option>
+                  </select>
+                </div>
+              </div><button type="submit" class="btn btn-primary">Create Course →</button>
+            </form>
+          </div>
+          <div class="section">
+            <h3 class="section-title">Assign / Remove Teacher</h3>
+          </div>
+          <div class="form-card" style="margin-bottom:32px">
+            <div class="form-row">
+              <div class="form-group"><label for="at-course">Course ID</label><input class="form-input" id="at-course"
+                  type="number" min="1" /></div>
+              <div class="form-group"><label for="at-teacher">Teacher</label>
+                <select class="form-select" id="at-teacher">
+                  <option value="">Select Staff...</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;margin-top:12px"><button class="btn btn-approve" id="btn-assign-teacher">✓
+                Assign</button><button class="btn btn-reject" id="btn-remove-teacher">✕ Remove</button></div>
+          </div>
+          <div class="section">
+            <h3 class="section-title">Assign Courses to Student</h3>
+          </div>
+          <div class="form-card" style="margin-bottom:32px">
+            <form id="form-assign-courses">
+              <div class="form-row">
+                <div class="form-group"><label for="ac-student">Student</label>
+                  <select class="form-select" id="ac-student" required>
+                    <option value="">Select Student...</option>
+                  </select>
+                </div>
+                <div class="form-group"><label for="ac-courses">Course IDs (comma-separated)</label><input
+                    class="form-input" id="ac-courses" type="text" placeholder="1, 2, 3" required /></div>
+              </div><button type="submit" class="btn btn-primary">Assign Courses →</button>
+            </form>
+          </div>
+          <div class="section">
+            <div class="section-header">
+              <h3 class="section-title">All Courses</h3><button class="btn btn-ghost btn-sm" id="btn-refresh-courses">↻
+                Refresh</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Code</th>
+                  <th>Name</th>
+                  <th>Dept</th>
+                  <th>Teacher</th>
+                </tr>
+              </thead>
+              <tbody id="courses-table-body">
+                <tr>
+                  <td colspan="5" class="empty-state">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB: EXAMS & ASSIGNMENTS -->
+        <div class="tab-panel" id="panel-exams">
+          <div class="section">
+            <h3 class="section-title">Create Exam</h3>
+          </div>
+          <div class="form-card" style="margin-bottom:32px">
+            <form id="form-create-exam">
+              <div class="form-row">
+                <div class="form-group"><label for="ex-course">Course ID</label><input class="form-input" id="ex-course"
+                    type="number" min="1" required /></div>
+                <div class="form-group"><label for="ex-title">Title</label><input class="form-input" id="ex-title"
+                    type="text" placeholder="Midterm" required /></div>
+                <div class="form-group"><label for="ex-desc">Description</label><input class="form-input" id="ex-desc"
+                    type="text" /></div>
+                <div class="form-group"><label for="ex-max">Max Marks</label><input class="form-input" id="ex-max"
+                    type="number" min="1" required /></div>
+                <div class="form-group"><label for="ex-date">Date</label><input class="form-input" id="ex-date"
+                    type="date" required /></div>
+              </div><button type="submit" class="btn btn-primary">Create Exam →</button>
+            </form>
+          </div>
+          <div class="section">
+            <h3 class="section-title">Create Assignment</h3>
+          </div>
+          <div class="form-card" style="margin-bottom:32px">
+            <form id="form-create-assignment">
+              <div class="form-row">
+                <div class="form-group"><label for="as-course">Course ID</label><input class="form-input" id="as-course"
+                    type="number" min="1" required /></div>
+                <div class="form-group"><label for="as-title">Title</label><input class="form-input" id="as-title"
+                    type="text" placeholder="Assignment 1" required /></div>
+                <div class="form-group"><label for="as-desc">Description</label><input class="form-input" id="as-desc"
+                    type="text" /></div>
+                <div class="form-group"><label for="as-max">Max Marks</label><input class="form-input" id="as-max"
+                    type="number" min="1" required /></div>
+                <div class="form-group"><label for="as-due">Due Date</label><input class="form-input" id="as-due"
+                    type="date" required /></div>
+              </div><button type="submit" class="btn btn-primary">Create Assignment →</button>
+            </form>
+          </div>
+          <div class="section">
+            <h3 class="section-title">View Exams by Course</h3>
+          </div>
+          <div class="form-card" style="margin-bottom:16px">
+            <div class="form-row">
+              <div class="form-group"><label for="ve-course">Course ID</label><input class="form-input" id="ve-course"
+                  type="number" min="1" /></div>
+            </div><button class="btn btn-ghost btn-sm" id="btn-load-exams" style="margin-top:8px">Load Exams →</button>
+          </div>
+          <div class="table-wrap" style="margin-bottom:32px">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Max</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="exams-table-body">
+                <tr>
+                  <td colspan="5" class="empty-state">Enter course ID</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="section">
+            <h3 class="section-title">View Assignments by Course</h3>
+          </div>
+          <div class="form-card" style="margin-bottom:16px">
+            <div class="form-row">
+              <div class="form-group"><label for="va-course">Course ID</label><input class="form-input" id="va-course"
+                  type="number" min="1" /></div>
+            </div><button class="btn btn-ghost btn-sm" id="btn-load-assignments" style="margin-top:8px">Load Assignments
+              →</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Max</th>
+                  <th>Due</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="assignments-table-body">
+                <tr>
+                  <td colspan="5" class="empty-state">Enter course ID</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB: ENTER MARKS -->
+        <div class="tab-panel" id="panel-marks">
+
+          <!-- BULK EXAM MARKS -->
+          <div class="section"><h3 class="section-title">Enter Exam Marks</h3><p class="section-sub">Enter Exam ID and click "Load Students" — the entire class list will appear automatically.</p></div>
+          <div class="form-card" style="margin-bottom:32px">
+            <form id="form-exam-marks">
+              <div class="form-row" style="align-items:flex-end;margin-bottom:16px;gap:12px">
+                <div class="form-group" style="flex:0 0 200px">
+                  <label for="em-exam">Exam ID <span style="font-size:12px;font-weight:normal;color:var(--text-muted)">(See 'Exams & Assignments' tab)</span></label>
+                  <input class="form-input" id="em-exam" type="number" min="1" placeholder="e.g. 3" required />
+                </div>
+                <div style="padding-bottom:2px">
+                  <button type="button" class="btn btn-ghost btn-sm" id="btn-load-exam-students">⬇ Load Students</button>
+                </div>
+                <div id="em-exam-info" style="font-size:13px;color:var(--text-muted);padding-bottom:4px"></div>
+              </div>
+              <div id="em-student-table-wrap" style="display:none">
+                <div style="display:grid;grid-template-columns:60px 1fr 180px;gap:12px;padding:0 4px 8px;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">
+                  <span>#</span><span>Student</span><span>Marks Obtained</span>
+                </div>
+                <div id="em-entries"></div>
+                <div style="display:flex;gap:12px;margin-top:16px;align-items:center">
+                  <button type="submit" class="btn btn-primary">Submit All Marks →</button>
+                  <span id="em-submit-info" style="font-size:13px;color:var(--text-muted)"></span>
+                </div>
+              </div>
+              <div id="em-placeholder" style="text-align:center;padding:24px;color:var(--text-muted);font-size:14px">Enter an Exam ID above and click ⬇ Load Students</div>
+            </form>
+          </div>
+
+          <!-- BULK ASSIGNMENT MARKS -->
+          <div class="section"><h3 class="section-title">Enter Assignment Marks</h3><p class="section-sub">Enter Assignment ID and click "Load Students" — the entire class list will appear automatically.</p></div>
+          <div class="form-card" style="margin-bottom:32px">
+            <form id="form-assignment-marks">
+              <div class="form-row" style="align-items:flex-end;margin-bottom:16px;gap:12px">
+                <div class="form-group" style="flex:0 0 200px">
+                  <label for="am-assignment">Assignment ID <span style="font-size:12px;font-weight:normal;color:var(--text-muted)">(See 'Exams & Assignments' tab)</span></label>
+                  <input class="form-input" id="am-assignment" type="number" min="1" placeholder="e.g. 2" required />
+                </div>
+                <div style="padding-bottom:2px">
+                  <button type="button" class="btn btn-ghost btn-sm" id="btn-load-assign-students">⬇ Load Students</button>
+                </div>
+                <div id="am-assign-info" style="font-size:13px;color:var(--text-muted);padding-bottom:4px"></div>
+              </div>
+              <div id="am-student-table-wrap" style="display:none">
+                <div style="display:grid;grid-template-columns:60px 1fr 180px;gap:12px;padding:0 4px 8px;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">
+                  <span>#</span><span>Student</span><span>Marks Obtained</span>
+                </div>
+                <div id="am-entries"></div>
+                <div style="display:flex;gap:12px;margin-top:16px;align-items:center">
+                  <button type="submit" class="btn btn-primary">Submit All Marks →</button>
+                  <span id="am-submit-info" style="font-size:13px;color:var(--text-muted)"></span>
+                </div>
+              </div>
+              <div id="am-placeholder" style="text-align:center;padding:24px;color:var(--text-muted);font-size:14px">Enter an Assignment ID above and click ⬇ Load Students</div>
+            </form>
+          </div>
+
+          <!-- VIEW EXAM MARKS -->
+          <div class="section"><h3 class="section-title">View Exam Marks</h3></div>
+          <div class="form-card" style="margin-bottom:16px">
+            <div class="form-row">
+              <div class="form-group"><label for="vm-exam">Exam ID <span style="font-size:12px;font-weight:normal;color:var(--text-muted)">(See 'Exams & Assignments' tab)</span></label><input class="form-input" id="vm-exam" type="number" min="1" /></div>
+            </div><button class="btn btn-ghost btn-sm" id="btn-view-exam-marks" style="margin-top:8px">Load →</button>
+          </div>
+          <div class="table-wrap" style="margin-bottom:32px">
+            <table><thead><tr><th>Student</th><th>Exam</th><th>Marks</th></tr></thead>
+            <tbody id="exam-marks-view-body"><tr><td colspan="3" class="empty-state">Enter exam ID</td></tr></tbody></table>
+          </div>
+
+          <!-- VIEW ASSIGNMENT MARKS -->
+          <div class="section"><h3 class="section-title">View Assignment Marks</h3></div>
+          <div class="form-card" style="margin-bottom:16px">
+            <div class="form-row">
+              <div class="form-group"><label for="vm-assignment">Assignment ID <span style="font-size:12px;font-weight:normal;color:var(--text-muted)">(See 'Exams & Assignments' tab)</span></label><input class="form-input" id="vm-assignment" type="number" min="1" /></div>
+            </div><button class="btn btn-ghost btn-sm" id="btn-view-assignment-marks" style="margin-top:8px">Load →</button>
+          </div>
+          <div class="table-wrap">
+            <table><thead><tr><th>Student</th><th>Assignment</th><th>Marks</th></tr></thead>
+            <tbody id="assignment-marks-view-body"><tr><td colspan="3" class="empty-state">Enter assignment ID</td></tr></tbody></table>
+          </div>
+
+        </div>
+
+        <!-- TAB: TIMETABLE -->
+        <div class="tab-panel" id="panel-timetable">
+          <div class="section">
+            <h3 class="section-title">Add Timetable Slot</h3>
+            <p class="section-sub">Create a weekly recurring class slot.</p>
+          </div>
+          <div class="form-card" style="margin-bottom:32px">
+            <form id="form-add-timetable">
+              <div class="form-row">
+                <div class="form-group"><label for="tt-course">Course ID</label><input class="form-input" id="tt-course"
+                    type="number" min="1" required /></div>
+                <div class="form-group"><label for="tt-teacher">Teacher ID</label><input class="form-input"
+                    id="tt-teacher" type="number" min="1" required /></div>
+                <div class="form-group"><label for="tt-day">Day</label><select class="form-select" id="tt-day">
+                    <option>MONDAY</option>
+                    <option>TUESDAY</option>
+                    <option>WEDNESDAY</option>
+                    <option>THURSDAY</option>
+                    <option>FRIDAY</option>
+                    <option>SATURDAY</option>
+                  </select></div>
+                <div class="form-group"><label for="tt-period">Period</label><input class="form-input" id="tt-period"
+                    type="number" min="1" max="8" required /></div>
+                <div class="form-group"><label for="tt-room">Room</label><input class="form-input" id="tt-room"
+                    type="text" placeholder="A-301" /></div>
+              </div><button type="submit" class="btn btn-primary">Add Slot →</button>
+            </form>
+          </div>
+          <div class="section">
+            <div class="section-header">
+              <h3 class="section-title">Class Timetable</h3><button class="btn btn-ghost btn-sm"
+                id="btn-refresh-timetable">↻ Refresh</button>
+            </div>
+          </div>
+          <div class="tt-grid-wrap" id="timetable-grid-wrap">
+            <div id="timetable-grid-placeholder" style="text-align:center;padding:32px;color:var(--text-muted)">Click
+              Refresh to load the timetable grid</div>
+          </div>
+        </div>
+
+        <!-- TAB: CALENDAR -->
+        <div class="tab-panel" id="panel-calendar">
+          <div class="section">
+            <h3 class="section-title">Create Calendar Event</h3>
+            <p class="section-sub">Holiday, exam schedule, or announcement.</p>
+          </div>
+          <div class="form-card" style="margin-bottom:28px">
+            <form id="form-add-event">
+              <div class="form-row">
+                <div class="form-group"><label for="ev-title">Title</label><input class="form-input" id="ev-title"
+                    type="text" placeholder="Mid-sem Break" required /></div>
+                <div class="form-group"><label for="ev-desc">Description</label><input class="form-input" id="ev-desc"
+                    type="text" /></div>
+                <div class="form-group"><label for="ev-date">Date</label><input class="form-input" id="ev-date"
+                    type="date" required /></div>
+              </div><button type="submit" class="btn btn-primary">Create Event →</button>
+            </form>
+          </div>
+          <div class="section">
+            <div class="section-header">
+              <h3 class="section-title">📅 Calendar</h3><button class="btn btn-ghost btn-sm" id="btn-refresh-events">↻
+                Refresh</button>
+            </div>
+          </div>
+          <div class="cal-layout">
+            <div class="cal-widget">
+              <div class="cal-header">
+                <button class="cal-nav" id="cal-prev">‹</button>
+                <span class="cal-month-label" id="cal-month-label">Loading…</span>
+                <button class="cal-nav" id="cal-next">›</button>
+              </div>
+              <div class="cal-grid" id="cal-grid"></div>
+            </div>
+            <div class="cal-events-panel">
+              <div class="cal-events-title" id="cal-side-title">All Events</div>
+              <div id="cal-side-list">
+                <div class="empty-state" style="padding:12px">Click Refresh to load events</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: REPORTS -->
+        <div class="tab-panel" id="panel-reports">
+          <div class="section">
+            <h3 class="section-title">Course Reports</h3>
+          </div>
+          <div class="form-card" style="margin-bottom:24px">
+            <div class="form-row">
+              <div class="form-group"><label for="rpt-course">Course ID</label><input class="form-input" id="rpt-course"
+                  type="number" min="1" /></div>
+            </div><button class="btn btn-primary" id="btn-load-reports" style="margin-top:8px">Load Reports →</button>
+          </div>
+          <div class="section">
+            <h3 class="section-title">📊 Attendance</h3>
+          </div>
+          <div class="table-wrap" style="margin-bottom:32px">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Sessions</th>
+                  <th>Present</th>
+                  <th>%</th>
+                </tr>
+              </thead>
+              <tbody id="rpt-attendance-body">
+                <tr>
+                  <td colspan="4" class="empty-state">Select course</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="section">
+            <h3 class="section-title">📝 Exams</h3>
+          </div>
+          <div class="table-wrap" style="margin-bottom:32px">
+            <table>
+              <thead>
+                <tr>
+                  <th>Exam</th>
+                  <th>Student</th>
+                  <th>Max</th>
+                  <th>Got</th>
+                  <th>%</th>
+                </tr>
+              </thead>
+              <tbody id="rpt-exam-body">
+                <tr>
+                  <td colspan="5" class="empty-state">Select course</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="section">
+            <h3 class="section-title">📋 Assignments</h3>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Assignment</th>
+                  <th>Student</th>
+                  <th>Max</th>
+                  <th>Got</th>
+                  <th>%</th>
+                </tr>
+              </thead>
+              <tbody id="rpt-assignment-body">
+                <tr>
+                  <td colspan="5" class="empty-state">Select course</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    if (!requireAuth(['ADMIN'])) throw new Error('Not authorized');
+    document.getElementById('user-name').textContent = getUserName() || 'Admin';
+    document.getElementById('user-initials').textContent = (getUserName() || 'A').charAt(0).toUpperCase();
+    document.getElementById('topbar-greeting').textContent = `Welcome, ${getUserName() || 'Admin'}`;
+    document.getElementById('btn-logout').addEventListener('click', logout);
+
+    /* Tab Switching */
+    document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const tab = link.dataset.tab;
+        document.querySelectorAll('.sidebar-link[data-tab]').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(`panel-${tab}`).classList.add('active');
+        if (tab === 'students') loadPendingStudents();
+        if (tab === 'courses') { loadCourses(); loadStaffDropdowns(); loadStudentDropdowns(); }
+        if (tab === 'calendar') loadEvents();
+        if (tab === 'timetable') loadTimetable();
+      });
+    });
+
+    // Initial load
+    if (document.getElementById('panel-courses').classList.contains('active')) {
+      loadCourses(); loadStaffDropdowns(); loadStudentDropdowns();
+    }
+
+    function showSuccess(msg) {
+      const s = document.getElementById('alert-success');
+      const e = document.getElementById('alert-error');
+      clearTimeout(s._timeout);
+      clearTimeout(e._timeout);
+      e.style.display = 'none';
+      s.style.display = 'flex';
+      document.getElementById('alert-success-msg').textContent = msg;
+      s._timeout = setTimeout(() => {
+        s.style.display = 'none';
+        document.getElementById('alert-success-msg').textContent = '';
+      }, 2500);
+    }
+    function showError(msg) {
+      const s = document.getElementById('alert-success');
+      const e = document.getElementById('alert-error');
+      clearTimeout(s._timeout);
+      clearTimeout(e._timeout);
+      s.style.display = 'none';
+      e.style.display = 'flex';
+      document.getElementById('alert-error-msg').textContent = msg;
+      e._timeout = setTimeout(() => {
+        e.style.display = 'none';
+        document.getElementById('alert-error-msg').textContent = '';
+      }, 3000);
+    }
+    /* ADD STAFF — uses /api/auth/register/staff */
+    document.getElementById('form-add-teacher').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-add-teacher'); btn.disabled = true; btn.textContent = 'Registering…';
+      const role = document.getElementById('t-role').value;
+      const tNum = document.getElementById('t-number').value.trim();
+      try {
+        await API.post('/api/auth/register/staff', { name: document.getElementById('t-name').value.trim(), email: document.getElementById('t-email').value.trim(), password: document.getElementById('t-password').value, teacherNumber: tNum, role });
+        showSuccess(`${role === 'ADMIN' ? 'Admin' : 'Teacher'} registered successfully.`); e.target.reset();
+        loadStaffDropdowns();
+      } catch (err) { showError(err.message); }
+      finally { btn.disabled = false; btn.textContent = 'Register Staff →'; }
+    });
+
+    /* APPROVE STUDENTS */
+    async function loadPendingStudents() {
+      const tbody = document.getElementById('students-table-body');
+      tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Loading…</td></tr>';
+      try {
+        const list = await API.get('/api/students'); const arr = Array.isArray(list) ? list : [];
+        if (!arr.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No students.</td></tr>'; return; }
+        tbody.innerHTML = arr.map(s => `<tr><td>${s.studentId ?? s.id ?? '—'}</td><td>${s.userId ?? '—'}</td><td>${s.studentNumber ?? '—'}</td><td>${s.majorCourseId ?? '—'}</td><td><span class="badge ${s.status === 'PENDING' ? 'badge-pending' : 'badge-approved'}">${s.status || '—'}</span></td><td>${s.status === 'PENDING' ? `<button class="btn btn-approve btn-sm" onclick="approveStudent(${s.studentId ?? s.id})">✓ Approve</button>` : '<span style="color:#475569">Approved</span>'}</td></tr>`).join('');
+      } catch (err) { tbody.innerHTML = `<tr><td colspan="6" class="empty-state" style="color:#f87171">${err.message}</td></tr>`; }
+    }
+    window.approveStudent = async function (id) { try { await API.put(`/api/students/approve/${id}`); showSuccess(`Student #${id} approved.`); loadPendingStudents(); } catch (e) { showError(e.message); } };
+    document.getElementById('btn-refresh-students').addEventListener('click', loadPendingStudents);
+
+    /* DROPDOWNS SETUP */
+    async function loadStaffDropdowns() {
+      try {
+        const staff = await API.get('/api/auth/staff');
+        if (!Array.isArray(staff)) return;
+        const options = '<option value="">Select Staff...</option>' + staff.filter(s => s.role === 'TEACHER').map(s => `<option value="${s.teacherId}">[${s.teacherNumber || 'T-' + s.id}] ${s.name}</option>`).join('');
+        document.getElementById('c-teacher').innerHTML = options;
+        document.getElementById('at-teacher').innerHTML = options;
+      } catch (e) { console.error('Failed to load staff dropdowns', e); }
+    }
+    
+    async function loadStudentDropdowns() {
+      try {
+        const students = await API.get('/api/students');
+        if (!Array.isArray(students)) return;
+        const options = '<option value="">Select Student...</option>' + students.filter(s => s.status === 'APPROVED').map(s => `<option value="${s.studentId ?? s.id}">[${s.studentNumber}] User #${s.userId}</option>`).join('');
+        document.getElementById('ac-student').innerHTML = options;
+      } catch(e) { console.error('Failed to load student dropdowns', e); }
+    }
+
+    /* COURSE SETUP */
+
+    // Create course
+    document.getElementById('form-create-course').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      try {
+        await API.post('/courses', {
+          courseCode: document.getElementById('c-code').value.trim(),
+          courseName: document.getElementById('c-name').value.trim(),
+          departmentId: Number(document.getElementById('c-dept').value),
+          mainTeacherId: Number(document.getElementById('c-teacher').value)
+        });
+
+        showSuccess('Course created.');
+        e.target.reset();
+        loadCourses();
+
+      } catch (e) {
+        let msg = e.message || 'Something went wrong';
+
+        if (msg.toLowerCase().includes('duplicate') || msg.toLowerCase().includes('unique')) {
+          msg = 'Course code already exists';
+        }
+
+        showError(msg);
+      }
+    });
+
+
+    // Assign teacher
+    document.getElementById('btn-assign-teacher').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-assign-teacher');
+      const cid = Number(document.getElementById('at-course').value);
+      const tid = Number(document.getElementById('at-teacher').value);
+      if (!cid || !tid) return showError('Select Course and Staff');
+      btn.disabled = true;
+      try {
+        await API.post(`/courses/${cid}/assign-teacher/${tid}`);
+        showSuccess('Assigned.'); 
+        loadCourses(); // refresh table
+      } catch (err) { showError(err.message); }
+      finally { btn.disabled = false; }
+    });
+
+
+    // Remove teacher
+    document.getElementById('btn-remove-teacher').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-remove-teacher');
+      const cid = Number(document.getElementById('at-course').value);
+      const tid = Number(document.getElementById('at-teacher').value);
+      if (!cid || !tid) return showError('Select Course and Staff');
+      btn.disabled = true;
+      try {
+        await API.delete(`/courses/${cid}/remove-teacher/${tid}`);
+        showSuccess('Removed.');
+        loadCourses();
+      } catch (err) { showError(err.message); }
+      finally { btn.disabled = false; }
+    });
+
+
+    // Assign courses to student
+    document.getElementById('form-assign-courses').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      const sid = Number(document.getElementById('ac-student').value);
+      const cids = document.getElementById('ac-courses').value.split(',').map(s => Number(s.trim())).filter(n => n);
+      if (!sid || !cids.length) return showError('Select a Student and provide Course IDs.');
+      btn.disabled = true;
+      try {
+        await API.post('/api/students/select-courses', { studentId: sid, courseIds: cids });
+        showSuccess('Courses assigned.');
+        e.target.reset();
+      } catch (err) { showError(err.message); }
+      finally { btn.disabled = false; }
+    });
+
+
+    // Load courses
+    async function loadCourses() {
+      const tbody = document.getElementById('courses-table-body');
+      tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Loading…</td></tr>';
+
+      try {
+        const list = await API.get('/courses');
+        const arr = Array.isArray(list) ? list : [];
+
+        if (!arr.length) {
+          tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No courses.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = arr.map(c => `
+      <tr>
+        <td>${c.id}</td>
+        <td><strong>${c.courseCode}</strong></td>
+        <td>${c.courseName}</td>
+        <td>${c.departmentId ?? '—'}</td>
+        <td>${c.mainTeacherId ?? '—'}</td>
+      </tr>
+    `).join('');
+
+      } catch (e) {
+        tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="empty-state" style="color:#f87171">
+          ${e.message}
+        </td>
+      </tr>
+    `;
+      }
+    }
+
+    /* EXAMS & ASSIGNMENTS */
+    document.getElementById('form-create-exam').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/exams', { courseId: Number(document.getElementById('ex-course').value), title: document.getElementById('ex-title').value.trim(), description: document.getElementById('ex-desc').value.trim(), maxMarks: Number(document.getElementById('ex-max').value), examDate: document.getElementById('ex-date').value }); showSuccess('Exam created.'); e.target.reset(); } catch (e) { showError(e.message); } });
+    document.getElementById('form-create-assignment').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/assignments', { courseId: Number(document.getElementById('as-course').value), title: document.getElementById('as-title').value.trim(), description: document.getElementById('as-desc').value.trim(), maxMarks: Number(document.getElementById('as-max').value), dueDate: document.getElementById('as-due').value }); showSuccess('Assignment created.'); e.target.reset(); } catch (e) { showError(e.message); } });
+    document.getElementById('btn-load-exams').addEventListener('click', async () => { const cid = Number(document.getElementById('ve-course').value); if (!cid) return showError('Enter course ID.'); const t = document.getElementById('exams-table-body'); t.innerHTML = '<tr><td colspan="5" class="empty-state">Loading…</td></tr>'; try { const l = await API.get(`/api/exams/course/${cid}`); const a = Array.isArray(l) ? l : []; if (!a.length) { t.innerHTML = '<tr><td colspan="5" class="empty-state">No exams.</td></tr>'; return; } t.innerHTML = a.map(e => `<tr><td>${e.id}</td><td><strong>${e.title}</strong></td><td>${e.maxMarks}</td><td>${e.examDate || '—'}</td><td><button class="btn btn-reject btn-sm" onclick="deleteExam(${e.id})">🗑</button></td></tr>`).join(''); } catch (e) { t.innerHTML = `<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`; } });
+    document.getElementById('btn-load-assignments').addEventListener('click', async () => { const cid = Number(document.getElementById('va-course').value); if (!cid) return showError('Enter course ID.'); const t = document.getElementById('assignments-table-body'); t.innerHTML = '<tr><td colspan="5" class="empty-state">Loading…</td></tr>'; try { const l = await API.get(`/api/assignments/course/${cid}`); const a = Array.isArray(l) ? l : []; if (!a.length) { t.innerHTML = '<tr><td colspan="5" class="empty-state">No assignments.</td></tr>'; return; } t.innerHTML = a.map(x => `<tr><td>${x.id}</td><td><strong>${x.title}</strong></td><td>${x.maxMarks}</td><td>${x.dueDate || '—'}</td><td><button class="btn btn-reject btn-sm" onclick="deleteAssignment(${x.id})">🗑</button></td></tr>`).join(''); } catch (e) { t.innerHTML = `<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`; } });
+    window.deleteExam = async function (id) { if (!confirm(`Delete exam #${id}?`)) return; try { await API.delete(`/api/exams/${id}`); showSuccess('Deleted.'); document.getElementById('btn-load-exams').click(); } catch (e) { showError(e.message); } };
+    window.deleteAssignment = async function (id) { if (!confirm(`Delete assignment #${id}?`)) return; try { await API.delete(`/api/assignments/${id}`); showSuccess('Deleted.'); document.getElementById('btn-load-assignments').click(); } catch (e) { showError(e.message); } };
+
+    /* ── MARKS — Auto-load students by Exam / Assignment ID ── */
+    function makeStudentMarkRow(idx, studentId, name, prefix) {
+      const row = document.createElement('div');
+      row.className = 'bulk-mark-row';
+      row.dataset.studentId = studentId;
+      row.style.cssText = 'display:grid;grid-template-columns:60px 1fr 180px;gap:12px;margin-bottom:10px;align-items:center';
+      row.innerHTML = `
+        <span style="font-size:13px;color:var(--text-muted);font-weight:600">${idx}</span>
+        <div style="line-height:1.3">
+          <div style="font-weight:600;font-size:14px">${name}</div>
+          <div style="font-size:12px;color:var(--text-muted)">ID: ${studentId}</div>
+        </div>
+        <input class="form-input bulk-marks" id="${prefix}-marks-${studentId}" type="number" min="0" placeholder="Marks" required />
+      `;
+      return row;
+    }
+
+    /* EXAM: Load students */
+    document.getElementById('btn-load-exam-students').addEventListener('click', async () => {
+      const examId = Number(document.getElementById('em-exam').value);
+      if (!examId) return showError('Enter an Exam ID first.');
+      const infoEl  = document.getElementById('em-exam-info');
+      const wrap    = document.getElementById('em-student-table-wrap');
+      const ph      = document.getElementById('em-placeholder');
+      const entries = document.getElementById('em-entries');
+      infoEl.textContent = 'Loading…';
+      wrap.style.display = 'none';
+      ph.style.display   = 'none';
+      try {
+        const exam = await API.get(`/api/exams/${examId}`);
+        if (!exam || !exam.courseId) throw new Error('Exam not found or has no course.');
+        infoEl.textContent = `📝 ${exam.title || 'Exam'} — Max: ${exam.maxMarks ?? '?'} marks`;
+        const students = await API.get(`/api/students/course/${exam.courseId}`);
+        const list = Array.isArray(students) ? students : [];
+        if (!list.length) { infoEl.textContent += ' — No students found.'; ph.style.display='block'; ph.textContent='No students enrolled in this course.'; return; }
+        entries.innerHTML = '';
+        list.forEach((s, i) => {
+          const name = [s.firstName, s.lastName].filter(Boolean).join(' ') || s.name || `Student #${s.id ?? s.studentId}`;
+          const sid  = s.id ?? s.studentId;
+          entries.appendChild(makeStudentMarkRow(i + 1, sid, name, 'em'));
+        });
+        document.getElementById('em-submit-info').textContent = `${list.length} student(s) loaded`;
+        wrap.style.display = 'block';
+        const first = entries.querySelector('.bulk-marks'); if (first) first.focus();
+      } catch (err) {
+        infoEl.textContent = ''; ph.style.display = 'block'; ph.textContent = `⚠ ${err.message}`; showError(err.message);
+      }
+    });
+
+    document.getElementById('form-exam-marks').addEventListener('submit', async e => {
+      e.preventDefault();
+      const examId = Number(document.getElementById('em-exam').value);
+      if (!examId) return showError('Enter Exam ID.');
+      const rows = document.querySelectorAll('#em-entries .bulk-mark-row');
+      if (!rows.length) return showError('Load students first.');
+      const entries = []; let hasEmpty = false;
+      rows.forEach(row => {
+        const sid = Number(row.dataset.studentId); const marks = row.querySelector('.bulk-marks').value;
+        if (!sid || marks === '') { hasEmpty = true; return; }
+        entries.push({ studentId: sid, examId, marksObtained: Number(marks) });
+      });
+      if (hasEmpty) return showError('Fill in marks for every student — no empty fields allowed.');
+      if (!entries.length) return showError('No valid entries.');
+      try {
+        let ok = 0, errs = [];
+        for (const entry of entries) { try { await API.post('/api/marks/exam', entry); ok++; } catch(err) { errs.push(`Student ${entry.studentId}: ${err.message}`); } }
+        if (ok > 0) showSuccess(`✓ Marks saved for ${ok} student(s).${errs.length ? ' Some failed.' : ''}`);
+        if (errs.length) showError(errs.join(' | '));
+      } catch(err) { showError(err.message); }
+    });
+
+    /* ASSIGNMENT: Load students */
+    document.getElementById('btn-load-assign-students').addEventListener('click', async () => {
+      const assignId = Number(document.getElementById('am-assignment').value);
+      if (!assignId) return showError('Enter an Assignment ID first.');
+      const infoEl  = document.getElementById('am-assign-info');
+      const wrap    = document.getElementById('am-student-table-wrap');
+      const ph      = document.getElementById('am-placeholder');
+      const entries = document.getElementById('am-entries');
+      infoEl.textContent = 'Loading…';
+      wrap.style.display = 'none';
+      ph.style.display   = 'none';
+      try {
+        const assign = await API.get(`/api/assignments/${assignId}`);
+        if (!assign || !assign.courseId) throw new Error('Assignment not found or has no course.');
+        infoEl.textContent = `📋 ${assign.title || 'Assignment'} — Max: ${assign.maxMarks ?? '?'} marks`;
+        const students = await API.get(`/api/students/course/${assign.courseId}`);
+        const list = Array.isArray(students) ? students : [];
+        if (!list.length) { infoEl.textContent += ' — No students found.'; ph.style.display='block'; ph.textContent='No students enrolled in this course.'; return; }
+        entries.innerHTML = '';
+        list.forEach((s, i) => {
+          const name = [s.firstName, s.lastName].filter(Boolean).join(' ') || s.name || `Student #${s.id ?? s.studentId}`;
+          const sid  = s.id ?? s.studentId;
+          entries.appendChild(makeStudentMarkRow(i + 1, sid, name, 'am'));
+        });
+        document.getElementById('am-submit-info').textContent = `${list.length} student(s) loaded`;
+        wrap.style.display = 'block';
+        const first = entries.querySelector('.bulk-marks'); if (first) first.focus();
+      } catch (err) {
+        infoEl.textContent = ''; ph.style.display = 'block'; ph.textContent = `⚠ ${err.message}`; showError(err.message);
+      }
+    });
+
+    document.getElementById('form-assignment-marks').addEventListener('submit', async e => {
+      e.preventDefault();
+      const assignmentId = Number(document.getElementById('am-assignment').value);
+      if (!assignmentId) return showError('Enter Assignment ID.');
+      const rows = document.querySelectorAll('#am-entries .bulk-mark-row');
+      if (!rows.length) return showError('Load students first.');
+      const entries = []; let hasEmpty = false;
+      rows.forEach(row => {
+        const sid = Number(row.dataset.studentId); const marks = row.querySelector('.bulk-marks').value;
+        if (!sid || marks === '') { hasEmpty = true; return; }
+        entries.push({ studentId: sid, assignmentId, marksObtained: Number(marks) });
+      });
+      if (hasEmpty) return showError('Fill in marks for every student — no empty fields allowed.');
+      if (!entries.length) return showError('No valid entries.');
+      try {
+        let ok = 0, errs = [];
+        for (const entry of entries) { try { await API.post('/api/marks/assignment', entry); ok++; } catch(err) { errs.push(`Student ${entry.studentId}: ${err.message}`); } }
+        if (ok > 0) showSuccess(`✓ Marks saved for ${ok} student(s).${errs.length ? ' Some failed.' : ''}`);
+        if (errs.length) showError(errs.join(' | '));
+      } catch(err) { showError(err.message); }
+    });
+
+    /* View marks (read-only tables) */
+    document.getElementById('btn-view-exam-marks').addEventListener('click', async () => { const eid = Number(document.getElementById('vm-exam').value); if (!eid) return showError('Enter exam ID.'); const t = document.getElementById('exam-marks-view-body'); t.innerHTML = '<tr><td colspan="3" class="empty-state">Loading…</td></tr>'; try { const l = await API.get(`/api/marks/exam/${eid}`); const a = Array.isArray(l) ? l : []; if (!a.length) { t.innerHTML = '<tr><td colspan="3" class="empty-state">No marks.</td></tr>'; return; } t.innerHTML = a.map(m => `<tr><td>${m.studentId ?? '—'}</td><td>${m.examId ?? eid}</td><td><strong>${m.marksObtained ?? '—'}</strong></td></tr>`).join(''); } catch (e) { t.innerHTML = `<tr><td colspan="3" class="empty-state" style="color:#f87171">${e.message}</td></tr>`; } });
+    document.getElementById('btn-view-assignment-marks').addEventListener('click', async () => { const aid = Number(document.getElementById('vm-assignment').value); if (!aid) return showError('Enter assignment ID.'); const t = document.getElementById('assignment-marks-view-body'); t.innerHTML = '<tr><td colspan="3" class="empty-state">Loading…</td></tr>'; try { const l = await API.get(`/api/marks/assignment/${aid}`); const a = Array.isArray(l) ? l : []; if (!a.length) { t.innerHTML = '<tr><td colspan="3" class="empty-state">No marks.</td></tr>'; return; } t.innerHTML = a.map(m => `<tr><td>${m.studentId ?? '—'}</td><td>${m.assignmentId ?? aid}</td><td><strong>${m.marksObtained ?? '—'}</strong></td></tr>`).join(''); } catch (e) { t.innerHTML = `<tr><td colspan="3" class="empty-state" style="color:#f87171">${e.message}</td></tr>`; } });
+
+    /* TIMETABLE */
+    document.getElementById('form-add-timetable').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/timetable', { courseId: Number(document.getElementById('tt-course').value), teacherId: Number(document.getElementById('tt-teacher').value), dayOfWeek: document.getElementById('tt-day').value, period: Number(document.getElementById('tt-period').value), room: document.getElementById('tt-room').value.trim() }); showSuccess('Timetable slot added.'); e.target.reset(); loadTimetable(); } catch (e) { showError(e.message); } });
+    async function loadTimetable() {
+      const wrap = document.getElementById('timetable-grid-wrap');
+      wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Loading…</div>';
+      try {
+        const l = await API.get('/api/timetable');
+        const slots = Array.isArray(l) ? l : [];
+        if (!slots.length) { wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">No timetable slots yet. Add one above.</div>'; return; }
+        const DAYS = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+        const maxPeriod = Math.max(...slots.map(s => s.period), 6);
+        const periods = Array.from({ length: maxPeriod }, (_, i) => i + 1);
+        const map = {};
+        slots.forEach(s => { if (!map[s.dayOfWeek]) map[s.dayOfWeek] = {}; if (!map[s.dayOfWeek][s.period]) map[s.dayOfWeek][s.period] = []; map[s.dayOfWeek][s.period].push(s); });
+        const activeDays = DAYS.filter(d => map[d] || slots.some(s => s.dayOfWeek === d));
+        const daysToShow = activeDays.length ? activeDays : DAYS.slice(0, 5);
+        wrap.innerHTML = `<table class="tt-grid">
+      <thead><tr>
+        <th>Day / Period</th>
+        ${periods.map(p => `<th>Period ${p}</th>`).join('')}
+      </tr></thead>
+      <tbody>
+        ${daysToShow.map(day => `
+          <tr>
+            <td><div class="tt-day-label">${day.charAt(0) + day.slice(1).toLowerCase()}</div></td>
+            ${periods.map(p => {
+          const cell = map[day] && map[day][p];
+          if (!cell) return `<td><div class="tt-cell-empty">—</div></td>`;
+          return `<td>${cell.map(s => `
+                <div class="tt-cell">
+                  <span class="tt-cell-course">Course #${s.courseId}</span>
+                  <span class="tt-cell-teacher">Teacher #${s.teacherId}</span>
+                  <span class="tt-cell-room">${s.room || ''}</span>
+                  <div class="tt-cell-actions"><button class="btn btn-reject btn-sm" onclick="deleteTimetable(${s.id})">🗑 Delete</button></div>
+                </div>`).join('')}</td>`;
+        }).join('')}
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+      } catch (e) { wrap.innerHTML = `<div style="text-align:center;padding:32px;color:#f87171">${e.message}</div>`; }
+    }
+    window.deleteTimetable = async function (id) { try { await API.delete(`/api/timetable/${id}`); showSuccess('Slot deleted.'); loadTimetable(); } catch (e) { showError(e.message); } };
+    document.getElementById('btn-refresh-timetable').addEventListener('click', loadTimetable);
+
+    /* CALENDAR EVENTS */
+    document.getElementById('form-add-event').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/calendar', { title: document.getElementById('ev-title').value.trim(), description: document.getElementById('ev-desc').value.trim(), eventDate: document.getElementById('ev-date').value }); showSuccess('Event created.'); e.target.reset(); loadEvents(); } catch (e) { showError(e.message); } });
+
+    let _calEvents = [];
+    let _calYear = new Date().getFullYear();
+    let _calMonth = new Date().getMonth();
+    let _calSelected = null;
+
+    // Helper: offset a date string by N days
+    function offsetDateStr(dateStr, days) {
+      const d = new Date(dateStr + 'T00:00:00');
+      d.setDate(d.getDate() + days);
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function renderCalendar() {
+      const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+      document.getElementById('cal-month-label').textContent = `${MONTHS[_calMonth]} ${_calYear}`;
+      const today = new Date();
+      const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+      // Build event map (event dates)
+      const eventMap = {};
+      _calEvents.forEach(ev => { if (ev.eventDate) { if (!eventMap[ev.eventDate]) eventMap[ev.eventDate] = []; eventMap[ev.eventDate].push(ev); } });
+
+      // Build reminder maps: for each event, mark 1 and 2 days BEFORE as reminders
+      const remind2 = new Set(); // 2 days before an event
+      const remind1 = new Set(); // 1 day before an event
+      _calEvents.forEach(ev => {
+        if (ev.eventDate) {
+          remind2.add(offsetDateStr(ev.eventDate, -2));
+          remind1.add(offsetDateStr(ev.eventDate, -1));
+        }
+      });
+
+      const firstDay = new Date(_calYear, _calMonth, 1).getDay();
+      const daysInMonth = new Date(_calYear, _calMonth + 1, 0).getDate();
+      let html = DAYS.map(d => `<div class="cal-dow">${d}</div>`).join('');
+      for (let i = 0; i < firstDay; i++) html += `<div class="cal-day cal-empty"></div>`;
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateStr = `${_calYear}-${String(_calMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const evts = eventMap[dateStr] || [];
+        const isToday = dateStr === todayStr;
+        const isSel = dateStr === _calSelected;
+        const hasEv = evts.length > 0;
+        const isR2 = remind2.has(dateStr) && !hasEv;
+        const isR1 = remind1.has(dateStr) && !hasEv;
+        const cls = ['cal-day',
+          isToday ? 'cal-today' : '',
+          hasEv ? 'cal-has-event' : '',
+          isSel ? 'cal-selected' : '',
+          isR2 ? 'cal-remind-2' : '',
+          isR1 ? 'cal-remind-1' : ''
+        ].filter(Boolean).join(' ');
+        let dots = '';
+        if (hasEv) dots = `<div class="cal-dot-row">${evts.slice(0, 3).map(() => '<span class="cal-dot"></span>').join('')}</div>`;
+        else if (isR1) dots = `<div class="cal-dot-row"><span class="cal-dot orange"></span></div>`;
+        else if (isR2) dots = `<div class="cal-dot-row"><span class="cal-dot amber"></span></div>`;
+        html += `<div class="${cls}" data-date="${dateStr}" onclick="calSelectDay('${dateStr}')">${d}${dots}</div>`;
+      }
+      document.getElementById('cal-grid').innerHTML = html;
+      updateCalSidePanel();
+    }
+
+    function updateCalSidePanel() {
+      const list = document.getElementById('cal-side-list');
+      const title = document.getElementById('cal-side-title');
+      const today = new Date();
+      const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+      let eventsToShow = _calSelected
+        ? _calEvents.filter(e => e.eventDate === _calSelected)
+        : _calEvents;
+      title.textContent = _calSelected ? `Events on ${_calSelected}` : 'All Events';
+
+      // Build reminder banners for today's view (only when showing all events)
+      let banners = '';
+      if (!_calSelected) {
+        _calEvents.forEach(ev => {
+          if (!ev.eventDate) return;
+          const in1 = offsetDateStr(ev.eventDate, -1) === todayStr; // event is tomorrow
+          const in2 = offsetDateStr(ev.eventDate, -2) === todayStr; // event is in 2 days
+          if (in1) banners += `<div class="cal-reminder-banner remind-1">🔔 Tomorrow: <span class="remind-event-name">${ev.title}</span></div>`;
+          else if (in2) banners += `<div class="cal-reminder-banner remind-2">📌 In 2 days: <span class="remind-event-name">${ev.title}</span></div>`;
+        });
+      }
+
+      if (!eventsToShow.length && !banners) {
+        list.innerHTML = `<div class="empty-state" style="padding:12px">${_calSelected ? 'No events on this day' : 'No events yet'}</div>`;
+        return;
+      }
+      list.innerHTML = banners + eventsToShow.map(e => {
+        const in1 = offsetDateStr(e.eventDate, -1) === todayStr;
+        const in2 = offsetDateStr(e.eventDate, -2) === todayStr;
+        const extra = in1 ? 'remind-1-item' : in2 ? 'remind-2-item' : '';
+        return `<div class="cal-event-item ${extra}"><span class="cal-event-date-badge">${e.eventDate}</span><span class="cal-event-name">${e.title}</span>${e.description ? `<span class="cal-event-desc">${e.description}</span>` : ''}<div style="margin-top:4px"><button class="btn btn-reject btn-sm" style="font-size:0.68rem;padding:2px 8px" onclick="window._deleteEvent(${e.id})">🗑 Delete</button></div></div>`;
+      }).join('');
+    }
+
+    window.calSelectDay = function (dateStr) {
+      _calSelected = _calSelected === dateStr ? null : dateStr;
+      renderCalendar();
+    };
+
+    document.getElementById('cal-prev').addEventListener('click', () => { _calMonth--; if (_calMonth < 0) { _calMonth = 11; _calYear--; } renderCalendar(); });
+    document.getElementById('cal-next').addEventListener('click', () => { _calMonth++; if (_calMonth > 11) { _calMonth = 0; _calYear++; } renderCalendar(); });
+
+    // Define delete BEFORE any render, accessible globally
+    window._deleteEvent = async function (id) {
+      if (!confirm(`Delete event #${id}?`)) return;
+      try {
+        await API.delete(`/api/calendar/${id}`);
+        showSuccess(`Event #${id} deleted.`);
+        loadEvents();
+      } catch (e) { showError(e.message); }
+    };
+    window.deleteEvent = window._deleteEvent;
+
+    async function loadEvents() {
+      // Always reset to current month when loading fresh
+      _calYear = new Date().getFullYear();
+      _calMonth = new Date().getMonth();
+      _calSelected = null;
+      try {
+        const l = await API.get('/api/calendar');
+        _calEvents = Array.isArray(l) ? l : [];
+        _calEvents.sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
+        renderCalendar();
+      } catch (e) { showError(e.message); }
+    }
+    document.getElementById('btn-refresh-events').addEventListener('click', loadEvents);
+
+    /* REPORTS */
+    document.getElementById('btn-load-reports').addEventListener('click', async () => {
+      const cid = Number(document.getElementById('rpt-course').value); if (!cid) return showError('Enter course ID.');
+      // Attendance
+      const ab = document.getElementById('rpt-attendance-body'); ab.innerHTML = '<tr><td colspan="4" class="empty-state">Loading…</td></tr>';
+      try { const d = await API.get(`/api/reports/attendance/course/${cid}`); const l = Array.isArray(d) ? d : []; if (!l.length) ab.innerHTML = '<tr><td colspan="4" class="empty-state">No data.</td></tr>'; else ab.innerHTML = l.map(r => `<tr><td>${r.student_id ?? r.studentId ?? '—'}</td><td>${r.total_sessions ?? r.totalSessions ?? '—'}</td><td>${r.present_count ?? r.presentCount ?? '—'}</td><td><strong>${(r.attendance_percentage ?? r.attendancePercentage) != null ? (r.attendance_percentage ?? r.attendancePercentage).toFixed(1) + '%' : '—'}</strong></td></tr>`).join(''); } catch (e) { ab.innerHTML = `<tr><td colspan="4" class="empty-state" style="color:#f87171">${e.message}</td></tr>`; }
+      // Exams
+      const eb = document.getElementById('rpt-exam-body'); eb.innerHTML = '<tr><td colspan="5" class="empty-state">Loading…</td></tr>';
+      try { const d = await API.get(`/api/reports/exams/course/${cid}`); const l = Array.isArray(d) ? d : []; if (!l.length) eb.innerHTML = '<tr><td colspan="5" class="empty-state">No data.</td></tr>'; else eb.innerHTML = l.map(r => `<tr><td>${r.exam_title ?? r.examTitle ?? '—'}</td><td>${r.student_id ?? r.studentId ?? '—'}</td><td>${r.max_marks ?? r.maxMarks ?? '—'}</td><td><strong>${r.marks_obtained ?? r.marksObtained ?? '—'}</strong></td><td>${r.percentage != null ? r.percentage.toFixed(1) + '%' : '—'}</td></tr>`).join(''); } catch (e) { eb.innerHTML = `<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`; }
+      // Assignments
+      const asb = document.getElementById('rpt-assignment-body'); asb.innerHTML = '<tr><td colspan="5" class="empty-state">Loading…</td></tr>';
+      try { const d = await API.get(`/api/reports/assignments/course/${cid}`); const l = Array.isArray(d) ? d : []; if (!l.length) asb.innerHTML = '<tr><td colspan="5" class="empty-state">No data.</td></tr>'; else asb.innerHTML = l.map(r => `<tr><td>${r.assignment_title ?? r.assignmentTitle ?? '—'}</td><td>${r.student_id ?? r.studentId ?? '—'}</td><td>${r.max_marks ?? r.maxMarks ?? '—'}</td><td><strong>${r.marks_obtained ?? r.marksObtained ?? '—'}</strong></td><td>${r.percentage != null ? r.percentage.toFixed(1) + '%' : '—'}</td></tr>`).join(''); } catch (e) { asb.innerHTML = `<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`; }
+    });
+  </script>
+</body>
+
+</html>
