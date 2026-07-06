@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeenify — Attendance Tracker Demo</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <style>
+    body { padding: 0; background: var(--bg); }
+    .demo-wrap { margin-left: 0; padding: 32px; max-width: 1100px; margin: 0 auto; }
+    .demo-banner {
+      background: linear-gradient(135deg, rgba(74,222,128,0.12), rgba(96,165,250,0.08));
+      border: 1px solid rgba(74,222,128,0.25);
+      border-radius: 14px;
+      padding: 14px 22px;
+      margin-bottom: 28px;
+      font-size: 0.85rem;
+      color: var(--green-400);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .demo-banner span { color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+<div class="demo-wrap">
+
+  <div class="demo-banner">
+    🎓 Jeenify &mdash; Attendance Tracker <span style="margin-left:8px">· Demo with mock course data · No backend needed</span>
+  </div>
+
+  <!-- SECTION HEADER -->
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <h3 class="section-title">📊 Attendance Tracker</h3>
+        <p class="section-sub">Your attendance per course. Minimum required is <strong>75%</strong>.</p>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="renderDemo()">↻ Refresh</button>
+    </div>
+  </div>
+
+  <!-- SUMMARY BAR -->
+  <div class="att-summary-bar">
+    <div class="att-sum-card">
+      <span class="att-sum-label">Overall Attendance</span>
+      <span class="att-sum-value green" id="att-summary-pct">—</span>
+    </div>
+    <div class="att-sum-card">
+      <span class="att-sum-label">Enrolled Courses</span>
+      <span class="att-sum-value blue" id="att-summary-courses">—</span>
+    </div>
+    <div class="att-sum-card att-sum-warn-card">
+      <span class="att-sum-label">⚠ Below 75%</span>
+      <span class="att-sum-value" id="att-summary-warning" style="color:var(--text-muted)">—</span>
+    </div>
+  </div>
+
+  <!-- CARDS GRID -->
+  <div class="att-grid" id="att-grid">
+    <div class="att-empty">Loading…</div>
+  </div>
+
+</div>
+
+<script>
+// ── Mock course attendance data ──────────────────────────────────────────────
+const MOCK_COURSES = [
+  { courseCode: 'MATH301', courseName: 'Advanced Calculus',         present: 18, total: 22 },
+  { courseCode: 'PHY201',  courseName: 'Mechanics & Waves',         present: 11, total: 20 },
+  { courseCode: 'CS101',   courseName: 'Data Structures',           present: 24, total: 26 },
+  { courseCode: 'CHEM102', courseName: 'Organic Chemistry',         present:  8, total: 20 },
+  { courseCode: 'ENG401',  courseName: 'Technical Writing',         present: 16, total: 18 },
+  { courseCode: 'BIO201',  courseName: 'Molecular Biology',         present:  6, total: 16 },
+];
+
+function renderDemo() {
+  const grid   = document.getElementById('att-grid');
+  const pctEl  = document.getElementById('att-summary-pct');
+  const crsEl  = document.getElementById('att-summary-courses');
+  const warnEl = document.getElementById('att-summary-warning');
+
+  // ── Compute summary ──────────────────────────────────────────────────────
+  let totalPresent = 0, totalSessions = 0, warnCount = 0;
+  MOCK_COURSES.forEach(c => {
+    c.pct = c.total > 0 ? (c.present / c.total * 100) : 0;
+    totalPresent  += c.present;
+    totalSessions += c.total;
+    if (c.pct < 75) warnCount++;
+  });
+  const overallPct = totalSessions > 0 ? (totalPresent / totalSessions * 100) : 0;
+
+  pctEl.textContent  = overallPct.toFixed(1) + '%';
+  crsEl.textContent  = MOCK_COURSES.length;
+  warnEl.textContent = warnCount;
+  warnEl.style.color = warnCount > 0 ? 'var(--red-400)' : 'var(--green-400)';
+
+  // ── Render cards ─────────────────────────────────────────────────────────
+  grid.innerHTML = MOCK_COURSES.map((c, i) => {
+    const isLow    = c.pct < 75;
+    const cardCls  = isLow ? 'att-card att-card-warn' : 'att-card att-card-ok';
+    const fillCls  = c.pct < 50 ? 'att-fill-red' : c.pct < 75 ? 'att-fill-amber' : 'att-fill-green';
+    const pctCls   = isLow ? 'att-pct-num att-pct-red' : 'att-pct-num att-pct-green';
+    const barWidth = Math.min(c.pct, 100).toFixed(2);
+
+    // Days needed: (present + x)/(total + x) >= 0.75  →  x = ceil((0.75·total − present)/0.25)
+    const daysNeeded = (isLow && c.total > 0)
+      ? Math.max(0, Math.ceil((0.75 * c.total - c.present) / 0.25))
+      : 0;
+
+    return `
+      <div class="${cardCls}" style="animation-delay:${i * 0.07}s">
+        <div class="att-card-header">
+          <div class="att-course-meta">
+            <span class="att-code">${c.courseCode}</span>
+            <span class="att-name">${c.courseName}</span>
+          </div>
+          ${isLow
+            ? `<div class="att-badge-warn">⚠ Low</div>`
+            : `<div class="att-badge-ok">✓ Good</div>`}
+        </div>
+
+        <div class="att-pct-display">
+          <span class="${pctCls}">${c.pct.toFixed(1)}</span>
+          <span class="att-pct-sym">%</span>
+        </div>
+
+        <div class="att-progress-wrap">
+          <div class="att-progress-track">
+            <div class="att-progress-fill ${fillCls}" data-w="${barWidth}"></div>
+          </div>
+          <span class="att-threshold-label">75%</span>
+        </div>
+
+        <div class="att-sessions">
+          <strong>${c.present}</strong> present &nbsp;/&nbsp; <strong>${c.total}</strong> total sessions
+        </div>
+
+        ${isLow ? `
+        <div class="att-need-box">
+          <span class="att-need-icon">📅</span>
+          <span>Attend <strong>${daysNeeded}</strong> consecutive class${daysNeeded !== 1 ? 'es' : ''} more to reach 75%</span>
+        </div>` : ''}
+      </div>`;
+  }).join('');
+
+  // Animate bars
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.querySelectorAll('.att-progress-fill[data-w]').forEach(el => {
+      el.style.width = el.getAttribute('data-w') + '%';
+    });
+  }));
+}
+
+renderDemo();
+</script>
+</body>
+</html>

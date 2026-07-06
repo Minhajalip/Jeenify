@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeenify — Student Dashboard</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="sidebar-logo" href="student.html"><svg width="36" height="36" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="12" fill="url(#lg)"/><path d="M12 22 L22 12 L32 22 L22 32Z" fill="#fff" opacity=".9"/><path d="M22 16 L28 22 L22 28 L16 22Z" fill="url(#lg)" opacity=".7"/><defs><linearGradient id="lg" x1="0" y1="0" x2="44" y2="44"><stop stop-color="#4ade80"/><stop offset="1" stop-color="#16a34a"/></linearGradient></defs></svg><span class="sidebar-logo-text">Jeenify</span></a>
+    <nav class="sidebar-nav">
+      <span class="sidebar-label">Overview</span>
+      <a href="#dashboard" class="sidebar-link active" data-tab="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <a href="#timetable" class="sidebar-link" data-tab="timetable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Timetable</a>
+      <a href="#calendar" class="sidebar-link" data-tab="calendar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>Calendar</a>
+      <span class="sidebar-label">Academic</span>
+      <a href="#courses" class="sidebar-link" data-tab="courses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>My Courses</a>
+      <a href="#marks" class="sidebar-link" data-tab="marks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>My Marks</a>
+      <a href="#claims" class="sidebar-link" data-tab="claims"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>Attendance Claims</a>
+    </nav>
+    <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar" id="user-initials">S</div><div class="user-info"><div class="user-name" id="user-name">Student</div><div class="user-role">Student</div></div></div><button class="btn-logout" id="btn-logout"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</button></div>
+  </aside>
+  <div class="main">
+    <header class="topbar"><h2 class="topbar-title">Student Dashboard</h2><div class="topbar-right"><span id="topbar-greeting">Welcome</span></div></header>
+    <div class="content">
+      <div id="alert-success" class="alert alert-success" hidden><span>✓</span> <span id="alert-success-msg"></span></div>
+      <div id="alert-error" class="alert alert-error" hidden><span>⚠</span> <span id="alert-error-msg"></span></div>
+
+      <!-- DASHBOARD -->
+      <div class="tab-panel active" id="panel-dashboard">
+        <div class="stat-cards">
+          <div class="stat-card"><span class="stat-label">Student ID</span><span class="stat-value green" id="stat-student-id">—</span><div class="stat-accent green"></div></div>
+          <div class="stat-card"><span class="stat-label">Student Number</span><span class="stat-value" id="stat-student-num">—</span><div class="stat-accent blue"></div></div>
+          <div class="stat-card"><span class="stat-label">Status</span><span class="stat-value" id="status-badge">—</span><div class="stat-accent amber"></div></div>
+        </div>
+        <div id="donut-section"><div class="donut-grid" id="donut-grid">
+          <div class="donut-card"><div class="donut-ring-wrap"><svg class="donut-svg" viewBox="0 0 120 120"><circle class="donut-bg" cx="60" cy="60" r="52"/><circle class="donut-progress green" id="donut-attendance" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="326.73"/></svg><div class="donut-center"><span class="donut-percent" id="donut-attendance-pct">—</span><span class="donut-unit">%</span></div></div><div class="donut-label">Attendance</div><div class="donut-sub" id="donut-attendance-sub">Across all courses</div></div>
+          <div class="donut-card"><div class="donut-ring-wrap"><svg class="donut-svg" viewBox="0 0 120 120"><circle class="donut-bg" cx="60" cy="60" r="52"/><circle class="donut-progress blue" id="donut-exams" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="326.73"/></svg><div class="donut-center"><span class="donut-percent" id="donut-exams-pct">—</span><span class="donut-unit">%</span></div></div><div class="donut-label">Exam Avg</div><div class="donut-sub">Average exam score</div></div>
+          <div class="donut-card"><div class="donut-ring-wrap"><svg class="donut-svg" viewBox="0 0 120 120"><circle class="donut-bg" cx="60" cy="60" r="52"/><circle class="donut-progress amber" id="donut-assignments" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="326.73"/></svg><div class="donut-center"><span class="donut-percent" id="donut-assignments-pct">—</span><span class="donut-unit">%</span></div></div><div class="donut-label">Assignment Avg</div><div class="donut-sub">Average assignment score</div></div>
+        </div></div>
+        <div id="pending-notice" class="form-card" hidden><h3 style="color:var(--amber-400)">⏳ Account Pending Approval</h3><p style="color:var(--text-secondary);margin-top:8px">Your account is being reviewed. Once approved, your data will appear.</p></div>
+      </div>
+
+      <!-- TIMETABLE -->
+      <div class="tab-panel" id="panel-timetable">
+        <div class="section"><h3 class="section-title">📅 My Timetable</h3><p class="section-sub">Your weekly class schedule.</p></div>
+        <div class="tt-grid-wrap" id="timetable-grid-wrap">
+          <div style="text-align:center;padding:32px;color:var(--text-muted)">Loading…</div>
+        </div>
+      </div>
+
+      <!-- CALENDAR -->
+      <div class="tab-panel" id="panel-calendar">
+        <div class="section"><h3 class="section-title">📅 Academic Calendar</h3><p class="section-sub">Events and announcements from your institution.</p></div>
+        <div class="cal-layout">
+          <div class="cal-widget">
+            <div class="cal-header">
+              <button class="cal-nav" id="cal-prev">‹</button>
+              <span class="cal-month-label" id="cal-month-label">Loading…</span>
+              <button class="cal-nav" id="cal-next">›</button>
+            </div>
+            <div class="cal-grid" id="cal-grid"></div>
+          </div>
+          <div class="cal-events-panel">
+            <div class="cal-events-title" id="cal-side-title">All Events</div>
+            <div id="cal-side-list"><div class="empty-state" style="padding:12px">Loading…</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MY COURSES -->
+      <div class="tab-panel" id="panel-courses">
+        <div class="section"><div class="section-header"><div><h3 class="section-title">📚 My Enrolled Courses</h3><p class="section-sub">Your courses and attendance breakdown.</p></div><button class="btn btn-ghost btn-sm" id="btn-refresh-courses">↻ Refresh</button></div></div>
+        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Code</th><th>Course Name</th><th>Dept</th><th>Attendance</th></tr></thead><tbody id="courses-table-body"><tr><td colspan="5" class="empty-state">Loading…</td></tr></tbody></table></div>
+      </div>
+
+      <!-- MY MARKS -->
+      <div class="tab-panel" id="panel-marks">
+        <div class="section"><h3 class="section-title">📊 Exam Marks</h3></div>
+        <div class="table-wrap" style="margin-bottom:32px"><table><thead><tr><th>Exam</th><th>Max Marks</th><th>Obtained</th><th>%</th></tr></thead><tbody id="exam-marks-body"><tr><td colspan="4" class="empty-state">Loading…</td></tr></tbody></table></div>
+        <div class="section"><h3 class="section-title">📝 Assignment Marks</h3></div>
+        <div class="table-wrap"><table><thead><tr><th>Assignment</th><th>Max Marks</th><th>Obtained</th><th>%</th></tr></thead><tbody id="assignment-marks-body"><tr><td colspan="4" class="empty-state">Loading…</td></tr></tbody></table></div>
+      </div>
+
+      <!-- CLAIMS -->
+      <div class="tab-panel" id="panel-claims">
+        <div class="section"><h3 class="section-title">Submit Attendance Claim</h3><p class="section-sub">Request a review if you were marked absent incorrectly.</p></div>
+        <div class="form-card" style="margin-bottom:32px"><form id="form-submit-claim"><div class="form-row"><div class="form-group"><label for="cl-session">Session ID</label><input class="form-input" id="cl-session" type="number" min="1" required /></div><div class="form-group" style="grid-column: span 2"><label for="cl-reason">Reason</label><textarea class="form-input" id="cl-reason" placeholder="Explain why…" rows="2" required></textarea></div></div><button type="submit" class="btn btn-primary">Submit Claim →</button></form></div>
+        <div class="section"><div class="section-header"><h3 class="section-title">My Claims</h3><button class="btn btn-ghost btn-sm" id="btn-refresh-claims">↻ Refresh</button></div></div>
+        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Session</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead><tbody id="claims-table-body"><tr><td colspan="5" class="empty-state">Loading…</td></tr></tbody></table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+if (!requireAuth(['STUDENT'])) throw new Error('Not authorized');
+const userId = getUserId();
+const userName = getUserName()||'Student';
+document.getElementById('user-name').textContent = userName;
+document.getElementById('user-initials').textContent = userName.charAt(0).toUpperCase();
+document.getElementById('topbar-greeting').textContent = `Welcome, ${userName}`;
+document.getElementById('btn-logout').addEventListener('click', logout);
+
+document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => { link.addEventListener('click', e => { e.preventDefault(); const tab=link.dataset.tab; document.querySelectorAll('.sidebar-link[data-tab]').forEach(l=>l.classList.remove('active')); link.classList.add('active'); document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`panel-${tab}`).classList.add('active'); if(tab==='timetable')loadTimetable(); if(tab==='calendar')loadCalendar(); if(tab==='marks')loadMarks(); if(tab==='claims')loadClaims(); if(tab==='courses')loadMyCourses(); }); });
+
+function showSuccess(msg){const el=document.getElementById('alert-success');document.getElementById('alert-success-msg').textContent=msg;el.hidden=false;document.getElementById('alert-error').hidden=true;setTimeout(()=>el.hidden=true,5000);}
+function showError(msg){const el=document.getElementById('alert-error');document.getElementById('alert-error-msg').textContent=msg;el.hidden=false;document.getElementById('alert-success').hidden=true;setTimeout(()=>el.hidden=true,8000);}
+
+/* PROFILE */
+async function loadProfile(){try{const p=await API.get(`/api/students/me/${userId}`);const sid=p.studentId??p.id;if(sid)localStorage.setItem('jfy_studentId',String(sid));document.getElementById('stat-student-id').textContent=sid??'—';document.getElementById('stat-student-num').textContent=p.studentNumber??'—';const status=p.status||'UNKNOWN';const badge=document.getElementById('status-badge');badge.textContent=status;if(status==='PENDING'){badge.style.color='var(--amber-400)';document.getElementById('pending-notice').hidden=false;}else{badge.style.color='var(--green-400)';document.getElementById('pending-notice').hidden=true;}}catch(e){showError('Profile: '+e.message);}}
+loadProfile().then(()=>loadDonutData());
+
+/* DONUTS */
+async function loadDonutData(){const sid=getStudentId();if(!sid)return;const C=326.73;
+function setDonutValue(id,val){const f=typeof val==='number'&&!isNaN(val)?val:0;const t=document.getElementById(id+'-pct');if(t)t.textContent=typeof val==='number'&&!isNaN(val)?f.toFixed(1):'—';const c=document.getElementById(id);if(c){const o=Math.max(0,C-(f/100)*C);setTimeout(()=>c.style.strokeDashoffset=o,100);}}
+try{const[examMarks,assignmentMarks]=await Promise.all([API.get(`/api/reports/exams/student/${sid}`).catch(()=>[]),API.get(`/api/reports/assignments/student/${sid}`).catch(()=>[])]);
+let examAvg=null;const ve=(Array.isArray(examMarks)?examMarks:[]).filter(m=>typeof m.percentage==='number');if(ve.length>0)examAvg=ve.reduce((a,c)=>a+c.percentage,0)/ve.length;setDonutValue('donut-exams',examAvg);
+let assignAvg=null;const va=(Array.isArray(assignmentMarks)?assignmentMarks:[]).filter(m=>typeof m.percentage==='number');if(va.length>0)assignAvg=va.reduce((a,c)=>a+c.percentage,0)/va.length;setDonutValue('donut-assignments',assignAvg);
+try{const courses=await API.get('/courses').catch(()=>[]);const cl=Array.isArray(courses)?courses:[];let tp=0,cc=0;for(const c of cl){try{const r=await API.get(`/api/reports/attendance/student/${sid}/course/${c.id}`);const p=r?.attendance_percentage??r?.attendancePercentage;if(p!=null){tp+=p;cc++;}}catch(_){}}setDonutValue('donut-attendance',cc>0?tp/cc:null);}catch(_){setDonutValue('donut-attendance',null);}
+}catch(e){console.error('Donut error:',e);}}
+
+/* TIMETABLE */
+async function loadTimetable(){
+  const wrap = document.getElementById('timetable-grid-wrap');
+  wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Loading…</div>';
+  try {
+    const l = await API.get('/api/timetable');
+    const slots = Array.isArray(l) ? l : [];
+    if (!slots.length) { wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">No timetable data yet.</div>'; return; }
+    const DAYS = ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+    const maxPeriod = Math.max(...slots.map(s => s.period), 6);
+    const periods = Array.from({length: maxPeriod}, (_, i) => i + 1);
+    const map = {};
+    slots.forEach(s => { if (!map[s.dayOfWeek]) map[s.dayOfWeek] = {}; if (!map[s.dayOfWeek][s.period]) map[s.dayOfWeek][s.period] = []; map[s.dayOfWeek][s.period].push(s); });
+    const daysToShow = DAYS.filter(d => map[d]);
+    if (!daysToShow.length) { wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">No timetable data yet.</div>'; return; }
+    wrap.innerHTML = `<table class="tt-grid">
+      <thead><tr>
+        <th>Day / Period</th>
+        ${periods.map(p => `<th>Period ${p}</th>`).join('')}
+      </tr></thead>
+      <tbody>
+        ${daysToShow.map(day => `
+          <tr>
+            <td><div class="tt-day-label">${day.charAt(0) + day.slice(1).toLowerCase()}</div></td>
+            ${periods.map(p => {
+              const cell = map[day] && map[day][p];
+              if (!cell) return `<td><div class="tt-cell-empty">—</div></td>`;
+              return `<td>${cell.map(s => `
+                <div class="tt-cell">
+                  <span class="tt-cell-course">Course #${s.courseId}</span>
+                  <span class="tt-cell-teacher">Teacher #${s.teacherId}</span>
+                  <span class="tt-cell-room">${s.room || ''}</span>
+                </div>`).join('')}</td>`;
+            }).join('')}
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+  } catch(e) { wrap.innerHTML = `<div style="text-align:center;padding:32px;color:#f87171">${e.message}</div>`; }
+}
+
+/* CALENDAR */
+let _calEvents = [];
+let _calYear = new Date().getFullYear();
+let _calMonth = new Date().getMonth();
+let _calSelected = null;
+
+// Helper: offset a date string by N days
+function offsetDateStr(dateStr, days) {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + days);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function renderCalendar() {
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DAYS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  document.getElementById('cal-month-label').textContent = `${MONTHS[_calMonth]} ${_calYear}`;
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  const eventMap = {};
+  _calEvents.forEach(ev => { if (ev.eventDate) { if (!eventMap[ev.eventDate]) eventMap[ev.eventDate] = []; eventMap[ev.eventDate].push(ev); } });
+
+  const remind2 = new Set();
+  const remind1 = new Set();
+  _calEvents.forEach(ev => {
+    if (ev.eventDate) {
+      remind2.add(offsetDateStr(ev.eventDate, -2));
+      remind1.add(offsetDateStr(ev.eventDate, -1));
+    }
+  });
+
+  const firstDay = new Date(_calYear, _calMonth, 1).getDay();
+  const daysInMonth = new Date(_calYear, _calMonth + 1, 0).getDate();
+  let html = DAYS.map(d => `<div class="cal-dow">${d}</div>`).join('');
+  for (let i = 0; i < firstDay; i++) html += `<div class="cal-day cal-empty"></div>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${_calYear}-${String(_calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const evts = eventMap[dateStr] || [];
+    const isToday = dateStr === todayStr;
+    const isSel = dateStr === _calSelected;
+    const hasEv = evts.length > 0;
+    const isR2 = remind2.has(dateStr) && !hasEv;
+    const isR1 = remind1.has(dateStr) && !hasEv;
+    const cls = ['cal-day',
+      isToday ? 'cal-today' : '',
+      hasEv   ? 'cal-has-event' : '',
+      isSel   ? 'cal-selected' : '',
+      isR2    ? 'cal-remind-2' : '',
+      isR1    ? 'cal-remind-1' : ''
+    ].filter(Boolean).join(' ');
+    let dots = '';
+    if (hasEv) dots = `<div class="cal-dot-row">${evts.slice(0,3).map(()=>'<span class="cal-dot"></span>').join('')}</div>`;
+    else if (isR1) dots = `<div class="cal-dot-row"><span class="cal-dot orange"></span></div>`;
+    else if (isR2) dots = `<div class="cal-dot-row"><span class="cal-dot amber"></span></div>`;
+    html += `<div class="${cls}" onclick="calSelectDay('${dateStr}')">${d}${dots}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML = html;
+  updateCalSidePanel();
+}
+
+function updateCalSidePanel() {
+  const list = document.getElementById('cal-side-list');
+  const title = document.getElementById('cal-side-title');
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  const eventsToShow = _calSelected ? _calEvents.filter(e => e.eventDate === _calSelected) : _calEvents;
+  title.textContent = _calSelected ? `Events on ${_calSelected}` : 'All Events';
+
+  let banners = '';
+  if (!_calSelected) {
+    _calEvents.forEach(ev => {
+      if (!ev.eventDate) return;
+      const in1 = offsetDateStr(ev.eventDate, -1) === todayStr; // tomorrow
+      const in2 = offsetDateStr(ev.eventDate, -2) === todayStr; // in 2 days
+      if (in1) banners += `<div class="cal-reminder-banner remind-1">🔔 Tomorrow: <span class="remind-event-name">${ev.title}</span></div>`;
+      else if (in2) banners += `<div class="cal-reminder-banner remind-2">📌 In 2 days: <span class="remind-event-name">${ev.title}</span></div>`;
+    });
+  }
+
+  if (!eventsToShow.length && !banners) { list.innerHTML = `<div class="empty-state" style="padding:12px">${_calSelected ? 'No events on this day' : 'No events yet'}</div>`; return; }
+  list.innerHTML = banners + eventsToShow.map(e => {
+    const in1 = offsetDateStr(e.eventDate, -1) === todayStr;
+    const in2 = offsetDateStr(e.eventDate, -2) === todayStr;
+    const extra = in1 ? 'remind-1-item' : in2 ? 'remind-2-item' : '';
+    return `<div class="cal-event-item ${extra}"><span class="cal-event-date-badge">${e.eventDate}</span><span class="cal-event-name">${e.title}</span>${e.description?`<span class="cal-event-desc">${e.description}</span>`:''}</div>`;
+  }).join('');
+}
+
+window.calSelectDay = function(dateStr) {
+  _calSelected = _calSelected === dateStr ? null : dateStr;
+  renderCalendar();
+};
+
+document.getElementById('cal-prev').addEventListener('click', () => { _calMonth--; if (_calMonth < 0) { _calMonth = 11; _calYear--; } renderCalendar(); });
+document.getElementById('cal-next').addEventListener('click', () => { _calMonth++; if (_calMonth > 11) { _calMonth = 0; _calYear++; } renderCalendar(); });
+
+async function loadCalendar() {
+  _calYear = new Date().getFullYear();
+  _calMonth = new Date().getMonth();
+  _calSelected = null;
+  try {
+    const l = await API.get('/api/calendar');
+    _calEvents = Array.isArray(l) ? l : [];
+    _calEvents.sort((a,b) => new Date(a.eventDate) - new Date(b.eventDate));
+    renderCalendar();
+  } catch(e) { document.getElementById('cal-side-list').innerHTML = `<div class="empty-state" style="padding:12px;color:#f87171">${e.message}</div>`; }
+}
+
+/* MY COURSES */
+async function loadMyCourses(){const t=document.getElementById('courses-table-body');const sid=getStudentId();if(!sid){t.innerHTML='<tr><td colspan="5" class="empty-state" style="color:#f87171">Student ID not found.</td></tr>';return;}t.innerHTML='<tr><td colspan="5" class="empty-state">Loading…</td></tr>';try{const l=await API.get('/courses');const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="5" class="empty-state">No courses.</td></tr>';return;}const rows=[];for(const c of a){let att='—';try{const r=await API.get(`/api/reports/attendance/student/${sid}/course/${c.id}`);const p=r?.attendance_percentage??r?.attendancePercentage;if(p!=null){const color=p>=75?'#4ade80':p>=50?'#fbbf24':'#f87171';att=`<strong style="color:${color}">${p.toFixed(1)}%</strong> <span style="color:#64748b;font-size:.85em">(${r?.present_count??r?.presentCount??'?'}/${r?.total_sessions??r?.totalSessions??'?'})</span>`;}}catch(_){att='<span style="color:#64748b">Not enrolled</span>';}rows.push(`<tr><td>${c.id}</td><td><strong>${c.courseCode}</strong></td><td>${c.courseName}</td><td>${c.departmentId??'—'}</td><td>${att}</td></tr>`);}t.innerHTML=rows.join('');}catch(e){t.innerHTML=`<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}}
+document.getElementById('btn-refresh-courses').addEventListener('click', loadMyCourses);
+
+/* MARKS */
+async function loadMarks(){const sid=getStudentId();if(!sid)return;
+const eb=document.getElementById('exam-marks-body');eb.innerHTML='<tr><td colspan="4" class="empty-state">Loading…</td></tr>';try{const l=await API.get(`/api/reports/exams/student/${sid}`);const a=Array.isArray(l)?l:[];if(!a.length)eb.innerHTML='<tr><td colspan="4" class="empty-state">No exam marks yet.</td></tr>';else eb.innerHTML=a.map(m=>`<tr><td>${m.exam_title??m.examTitle??'—'}</td><td>${m.max_marks??m.maxMarks??'—'}</td><td><strong>${m.marks_obtained??m.marksObtained??'—'}</strong></td><td>${m.percentage!=null?m.percentage.toFixed(1)+'%':'—'}</td></tr>`).join('');}catch(e){eb.innerHTML=`<tr><td colspan="4" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}
+const ab=document.getElementById('assignment-marks-body');ab.innerHTML='<tr><td colspan="4" class="empty-state">Loading…</td></tr>';try{const l=await API.get(`/api/reports/assignments/student/${sid}`);const a=Array.isArray(l)?l:[];if(!a.length)ab.innerHTML='<tr><td colspan="4" class="empty-state">No assignment marks yet.</td></tr>';else ab.innerHTML=a.map(m=>`<tr><td>${m.assignment_title??m.assignmentTitle??'—'}</td><td>${m.max_marks??m.maxMarks??'—'}</td><td><strong>${m.marks_obtained??m.marksObtained??'—'}</strong></td><td>${m.percentage!=null?m.percentage.toFixed(1)+'%':'—'}</td></tr>`).join('');}catch(e){ab.innerHTML=`<tr><td colspan="4" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}}
+
+/* CLAIMS */
+document.getElementById('form-submit-claim').addEventListener('submit', async e=>{e.preventDefault();const sid=getStudentId();if(!sid)return showError('Student ID not found.');const sessionId=Number(document.getElementById('cl-session').value);const reason=document.getElementById('cl-reason').value.trim();if(!sessionId||!reason)return showError('Session ID and reason required.');try{await API.post('/api/attendance/claims',{studentId:Number(sid),sessionId,reason});showSuccess('Claim submitted!');e.target.reset();loadClaims();}catch(e){showError(e.message);}});
+async function loadClaims(){const t=document.getElementById('claims-table-body');const sid=getStudentId();if(!sid){t.innerHTML='<tr><td colspan="5" class="empty-state" style="color:#f87171">Student ID not found.</td></tr>';return;}t.innerHTML='<tr><td colspan="5" class="empty-state">Loading…</td></tr>';try{const l=await API.get(`/api/attendance/claims/student/${sid}`);const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="5" class="empty-state">No claims submitted.</td></tr>';return;}t.innerHTML=a.map(c=>{const st=(c.status||'').toLowerCase();const badge=st==='pending'?'badge-pending':st==='approved'?'badge-approved':'badge-rejected';return `<tr><td>${c.id}</td><td>${c.sessionId}</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis" title="${c.reason||''}">${c.reason||'—'}</td><td><span class="badge ${badge}">${c.status}</span></td><td>${st==='pending'?`<button class="btn btn-reject btn-sm" onclick="deleteClaim(${c.id})">🗑 Delete</button>`:'—'}</td></tr>`;}).join('');}catch(e){t.innerHTML=`<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}}
+window.deleteClaim = async function(id){const sid=getStudentId();if(!sid)return;try{await API.delete(`/api/attendance/claims/${id}/student/${sid}`);showSuccess(`Claim #${id} deleted.`);loadClaims();}catch(e){showError(e.message);}};
+document.getElementById('btn-refresh-claims').addEventListener('click', loadClaims);
+</script>
+</body>
+</html>

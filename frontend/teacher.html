@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeenify — Teacher Dashboard</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="sidebar-logo" href="teacher.html"><svg width="36" height="36" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="12" fill="url(#lg)"/><path d="M12 22 L22 12 L32 22 L22 32Z" fill="#fff" opacity=".9"/><path d="M22 16 L28 22 L22 28 L16 22Z" fill="url(#lg)" opacity=".7"/><defs><linearGradient id="lg" x1="0" y1="0" x2="44" y2="44"><stop stop-color="#4ade80"/><stop offset="1" stop-color="#16a34a"/></linearGradient></defs></svg><span class="sidebar-logo-text">Jeenify</span></a>
+    <nav class="sidebar-nav">
+      <span class="sidebar-label">Daily</span>
+      <a href="#attendance" class="sidebar-link active" data-tab="attendance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Attendance</a>
+      <a href="#claims" class="sidebar-link" data-tab="claims"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Claims</a>
+      <span class="sidebar-label">Academic</span>
+      <a href="#exams" class="sidebar-link" data-tab="exams"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Exams</a>
+      <a href="#assignments" class="sidebar-link" data-tab="assignments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>Assignments</a>
+      <a href="#marks" class="sidebar-link" data-tab="marks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Marks</a>
+      <a href="#timetable" class="sidebar-link" data-tab="timetable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>My Timetable</a>
+      <a href="#reports" class="sidebar-link" data-tab="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Reports</a>
+    </nav>
+    <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar" id="user-initials">T</div><div class="user-info"><div class="user-name" id="user-name">Teacher</div><div class="user-role">Teacher</div></div></div><button class="btn-logout" id="btn-logout"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</button></div>
+  </aside>
+  <div class="main">
+    <header class="topbar"><h2 class="topbar-title">Teacher Dashboard</h2><div class="topbar-right"><span id="topbar-greeting">Welcome back</span></div></header>
+    <div class="content">
+      <div id="alert-success" class="alert alert-success" hidden><span>✓</span> <span id="alert-success-msg"></span></div>
+      <div id="alert-error" class="alert alert-error" hidden><span>⚠</span> <span id="alert-error-msg"></span></div>
+
+      <!-- ATTENDANCE -->
+      <div class="tab-panel active" id="panel-attendance">
+        <div class="section"><h3 class="section-title">Create Session</h3></div>
+        <div class="form-card" style="margin-bottom:32px"><form id="form-create-session"><div class="form-row"><div class="form-group"><label for="s-course">Course ID</label><input class="form-input" id="s-course" type="number" min="1" required /></div><div class="form-group"><label for="s-teacher">Teacher ID</label><input class="form-input" id="s-teacher" type="number" min="1" required /></div><div class="form-group"><label for="s-date">Date</label><input class="form-input" id="s-date" type="date" required /></div><div class="form-group"><label for="s-period">Period</label><input class="form-input" id="s-period" type="number" min="1" max="8" required /></div></div><button type="submit" class="btn btn-primary">Create Session →</button></form></div>
+        <div class="section"><h3 class="section-title">Mark Attendance</h3></div>
+        <div class="form-card"><form id="form-mark-attendance"><div class="form-row"><div class="form-group"><label for="m-session">Session ID</label><input class="form-input" id="m-session" type="number" min="1" required /></div></div><div id="attendance-entries"><div class="form-row attendance-entry"><div class="form-group"><label>Student ID</label><input class="form-input att-student" type="number" min="1" required /></div><div class="form-group"><label>Status</label><select class="form-select att-status"><option value="PRESENT">PRESENT</option><option value="ABSENT">ABSENT</option></select></div></div></div><div style="display:flex;gap:12px;margin-top:16px"><button type="button" class="btn btn-ghost btn-sm" id="btn-add-entry">+ Add Student</button><button type="submit" class="btn btn-primary">Mark →</button></div></form></div>
+        <div id="session-result" style="margin-top:16px"></div>
+      </div>
+
+      <!-- CLAIMS -->
+      <div class="tab-panel" id="panel-claims">
+        <div class="section"><div class="section-header"><div><h3 class="section-title">Attendance Claims</h3></div><button class="btn btn-ghost btn-sm" id="btn-refresh-claims">↻ Refresh</button></div></div>
+        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Student</th><th>Session</th><th>Reason</th><th>Status</th><th>Actions</th></tr></thead><tbody id="claims-table-body"><tr><td colspan="6" class="empty-state">Click Refresh</td></tr></tbody></table></div>
+      </div>
+
+      <!-- EXAMS -->
+      <div class="tab-panel" id="panel-exams">
+        <div class="section"><h3 class="section-title">Create Exam</h3></div>
+        <div class="form-card" style="margin-bottom:32px"><form id="form-create-exam"><div class="form-row"><div class="form-group"><label for="ex-course">Course ID</label><input class="form-input" id="ex-course" type="number" min="1" required /></div><div class="form-group"><label for="ex-title">Title</label><input class="form-input" id="ex-title" type="text" required /></div><div class="form-group"><label for="ex-desc">Description</label><input class="form-input" id="ex-desc" type="text" /></div><div class="form-group"><label for="ex-max">Max Marks</label><input class="form-input" id="ex-max" type="number" min="1" required /></div><div class="form-group"><label for="ex-date">Date</label><input class="form-input" id="ex-date" type="date" required /></div></div><button type="submit" class="btn btn-primary">Create Exam →</button></form></div>
+        <div class="section"><h3 class="section-title">View Exams</h3></div>
+        <div class="form-card" style="margin-bottom:16px"><div class="form-row"><div class="form-group"><label for="ve-course">Course ID</label><input class="form-input" id="ve-course" type="number" min="1" /></div></div><button class="btn btn-ghost btn-sm" id="btn-load-exams" style="margin-top:8px">Load →</button></div>
+        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Title</th><th>Max</th><th>Date</th><th>Action</th></tr></thead><tbody id="exams-table-body"><tr><td colspan="5" class="empty-state">Enter course ID</td></tr></tbody></table></div>
+      </div>
+
+      <!-- ASSIGNMENTS -->
+      <div class="tab-panel" id="panel-assignments">
+        <div class="section"><h3 class="section-title">Create Assignment</h3></div>
+        <div class="form-card" style="margin-bottom:32px"><form id="form-create-assignment"><div class="form-row"><div class="form-group"><label for="as-course">Course ID</label><input class="form-input" id="as-course" type="number" min="1" required /></div><div class="form-group"><label for="as-title">Title</label><input class="form-input" id="as-title" type="text" required /></div><div class="form-group"><label for="as-desc">Description</label><input class="form-input" id="as-desc" type="text" /></div><div class="form-group"><label for="as-max">Max Marks</label><input class="form-input" id="as-max" type="number" min="1" required /></div><div class="form-group"><label for="as-due">Due Date</label><input class="form-input" id="as-due" type="date" required /></div></div><button type="submit" class="btn btn-primary">Create Assignment →</button></form></div>
+        <div class="section"><h3 class="section-title">View Assignments</h3></div>
+        <div class="form-card" style="margin-bottom:16px"><div class="form-row"><div class="form-group"><label for="va-course">Course ID</label><input class="form-input" id="va-course" type="number" min="1" /></div></div><button class="btn btn-ghost btn-sm" id="btn-load-assignments" style="margin-top:8px">Load →</button></div>
+        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Title</th><th>Max</th><th>Due</th><th>Action</th></tr></thead><tbody id="assignments-table-body"><tr><td colspan="5" class="empty-state">Enter course ID</td></tr></tbody></table></div>
+      </div>
+
+      <!-- MARKS -->
+      <div class="tab-panel" id="panel-marks">
+
+        <!-- BULK EXAM MARKS -->
+        <div class="section"><h3 class="section-title">Enter Exam Marks</h3><p class="section-sub">Enter Exam ID and click "Load Students" — the entire class list will appear automatically.</p></div>
+        <div class="form-card" style="margin-bottom:32px">
+          <form id="form-exam-marks">
+            <div class="form-row" style="align-items:flex-end;margin-bottom:16px;gap:12px">
+              <div class="form-group" style="flex:0 0 200px">
+                <label for="em-exam">Exam ID <span style="font-size:12px;font-weight:normal;color:var(--text-muted)">(See 'View Exams')</span></label>
+                <input class="form-input" id="em-exam" type="number" min="1" placeholder="e.g. 3" required />
+              </div>
+              <div style="padding-bottom:2px">
+                <button type="button" class="btn btn-ghost btn-sm" id="btn-load-exam-students">⬇ Load Students</button>
+              </div>
+              <div id="em-exam-info" style="font-size:13px;color:var(--text-muted);padding-bottom:4px"></div>
+            </div>
+            <div id="em-student-table-wrap" style="display:none">
+              <div style="display:grid;grid-template-columns:60px 1fr 180px;gap:12px;padding:0 4px 8px;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">
+                <span>#</span><span>Student</span><span>Marks Obtained</span>
+              </div>
+              <div id="em-entries"></div>
+              <div style="display:flex;gap:12px;margin-top:16px;align-items:center">
+                <button type="submit" class="btn btn-primary">Submit All Marks →</button>
+                <span id="em-submit-info" style="font-size:13px;color:var(--text-muted)"></span>
+              </div>
+            </div>
+            <div id="em-placeholder" style="text-align:center;padding:24px;color:var(--text-muted);font-size:14px">Enter an Exam ID above and click ⬇ Load Students</div>
+          </form>
+        </div>
+
+        <!-- BULK ASSIGNMENT MARKS -->
+        <div class="section"><h3 class="section-title">Enter Assignment Marks</h3><p class="section-sub">Enter Assignment ID and click "Load Students" — the entire class list will appear automatically.</p></div>
+        <div class="form-card" style="margin-bottom:32px">
+          <form id="form-assignment-marks">
+            <div class="form-row" style="align-items:flex-end;margin-bottom:16px;gap:12px">
+              <div class="form-group" style="flex:0 0 200px">
+                <label for="am-assignment">Assignment ID <span style="font-size:12px;font-weight:normal;color:var(--text-muted)">(See 'View Assignments')</span></label>
+                <input class="form-input" id="am-assignment" type="number" min="1" placeholder="e.g. 2" required />
+              </div>
+              <div style="padding-bottom:2px">
+                <button type="button" class="btn btn-ghost btn-sm" id="btn-load-assign-students">⬇ Load Students</button>
+              </div>
+              <div id="am-assign-info" style="font-size:13px;color:var(--text-muted);padding-bottom:4px"></div>
+            </div>
+            <div id="am-student-table-wrap" style="display:none">
+              <div style="display:grid;grid-template-columns:60px 1fr 180px;gap:12px;padding:0 4px 8px;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">
+                <span>#</span><span>Student</span><span>Marks Obtained</span>
+              </div>
+              <div id="am-entries"></div>
+              <div style="display:flex;gap:12px;margin-top:16px;align-items:center">
+                <button type="submit" class="btn btn-primary">Submit All Marks →</button>
+                <span id="am-submit-info" style="font-size:13px;color:var(--text-muted)"></span>
+              </div>
+            </div>
+            <div id="am-placeholder" style="text-align:center;padding:24px;color:var(--text-muted);font-size:14px">Enter an Assignment ID above and click ⬇ Load Students</div>
+          </form>
+        </div>
+
+        <!-- VIEW EXAM MARKS -->
+        <div class="section"><h3 class="section-title">View Exam Marks</h3></div>
+        <div class="form-card" style="margin-bottom:16px"><div class="form-row"><div class="form-group"><label for="vm-exam">Exam ID <span style="font-size:12px;font-weight:normal;color:var(--text-muted)">(See 'View Exams')</span></label><input class="form-input" id="vm-exam" type="number" min="1" /></div></div><button class="btn btn-ghost btn-sm" id="btn-view-exam-marks" style="margin-top:8px">Load →</button></div>
+        <div class="table-wrap" style="margin-bottom:32px"><table><thead><tr><th>Student</th><th>Exam</th><th>Marks</th><th>Edit</th></tr></thead><tbody id="exam-marks-view-body"><tr><td colspan="4" class="empty-state">Enter exam ID</td></tr></tbody></table></div>
+
+        <!-- VIEW ASSIGNMENT MARKS -->
+        <div class="section"><h3 class="section-title">View Assignment Marks</h3></div>
+        <div class="form-card" style="margin-bottom:16px"><div class="form-row"><div class="form-group"><label for="vm-assignment">Assignment ID <span style="font-size:12px;font-weight:normal;color:var(--text-muted)">(See 'View Assignments')</span></label><input class="form-input" id="vm-assignment" type="number" min="1" /></div></div><button class="btn btn-ghost btn-sm" id="btn-view-assignment-marks" style="margin-top:8px">Load →</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Student</th><th>Assignment</th><th>Marks</th><th>Edit</th></tr></thead><tbody id="assignment-marks-view-body"><tr><td colspan="4" class="empty-state">Enter assignment ID</td></tr></tbody></table></div>
+
+      </div>
+
+      <!-- TIMETABLE -->
+      <div class="tab-panel" id="panel-timetable">
+        <div class="section"><h3 class="section-title">📅 My Timetable</h3><p class="section-sub">Your assigned classes this week.</p></div>
+        <div class="tt-grid-wrap" id="teacher-timetable-grid-wrap">
+          <div style="text-align:center;padding:32px;color:var(--text-muted)">Loading…</div>
+        </div>
+      </div>
+
+      <!-- REPORTS -->
+      <div class="tab-panel" id="panel-reports">
+        <div class="section"><h3 class="section-title">Course Reports</h3></div>
+        <div class="form-card" style="margin-bottom:24px"><div class="form-row"><div class="form-group"><label for="rpt-course">Course ID</label><input class="form-input" id="rpt-course" type="number" min="1" /></div></div><button class="btn btn-primary" id="btn-load-reports" style="margin-top:8px">Load Reports →</button></div>
+        <div class="section"><h3 class="section-title">📊 Attendance</h3></div>
+        <div class="table-wrap" style="margin-bottom:32px"><table><thead><tr><th>Student</th><th>Sessions</th><th>Present</th><th>%</th></tr></thead><tbody id="rpt-attendance-body"><tr><td colspan="4" class="empty-state">Select course</td></tr></tbody></table></div>
+        <div class="section"><h3 class="section-title">📝 Exams</h3></div>
+        <div class="table-wrap" style="margin-bottom:32px"><table><thead><tr><th>Exam</th><th>Student</th><th>Max</th><th>Got</th><th>%</th></tr></thead><tbody id="rpt-exam-body"><tr><td colspan="5" class="empty-state">Select course</td></tr></tbody></table></div>
+        <div class="section"><h3 class="section-title">📋 Assignments</h3></div>
+        <div class="table-wrap"><table><thead><tr><th>Assignment</th><th>Student</th><th>Max</th><th>Got</th><th>%</th></tr></thead><tbody id="rpt-assignment-body"><tr><td colspan="5" class="empty-state">Select course</td></tr></tbody></table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+(function () {
+if (!requireAuth(['TEACHER','ADMIN'])) return;
+document.getElementById('user-name').textContent = getUserName()||'Teacher';
+document.getElementById('user-initials').textContent = (getUserName()||'T').charAt(0).toUpperCase();
+document.getElementById('topbar-greeting').textContent = `Welcome, ${getUserName()||'Teacher'}`;
+document.getElementById('btn-logout').addEventListener('click', logout);
+document.getElementById('s-date').valueAsDate = new Date();
+document.getElementById('s-teacher').value = getUserId()||'';
+
+document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => { link.addEventListener('click', e => { e.preventDefault(); const tab=link.dataset.tab; document.querySelectorAll('.sidebar-link[data-tab]').forEach(l=>l.classList.remove('active')); link.classList.add('active'); document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`panel-${tab}`).classList.add('active'); if(tab==='timetable') loadTeacherTimetable(); }); });
+
+function showSuccess(msg) { const el=document.getElementById('alert-success'); document.getElementById('alert-success-msg').textContent=msg; el.hidden=false; document.getElementById('alert-error').hidden=true; setTimeout(()=>el.hidden=true,5000); }
+function showError(msg) { const el=document.getElementById('alert-error'); document.getElementById('alert-error-msg').textContent=msg; el.hidden=false; document.getElementById('alert-success').hidden=true; setTimeout(()=>el.hidden=true,8000); }
+
+/* ATTENDANCE */
+document.getElementById('form-create-session').addEventListener('submit', async e => { e.preventDefault(); try { const s = await API.post('/api/attendance/session', { courseId: Number(document.getElementById('s-course').value), teacherId: Number(document.getElementById('s-teacher').value), date: document.getElementById('s-date').value, period: Number(document.getElementById('s-period').value) }); showSuccess(`Session created! ID: ${s?.id??'N/A'}`); document.getElementById('m-session').value=s?.id??''; document.getElementById('session-result').innerHTML=`<div class="alert alert-success">Session ID: <strong>${s?.id}</strong></div>`; } catch(err) { showError(err.message); } });
+document.getElementById('btn-add-entry').addEventListener('click', () => { const c=document.getElementById('attendance-entries'); const r=document.createElement('div'); r.className='form-row attendance-entry'; r.innerHTML=`<div class="form-group"><label>Student ID</label><input class="form-input att-student" type="number" min="1" required /></div><div class="form-group"><label>Status</label><select class="form-select att-status"><option value="PRESENT">PRESENT</option><option value="ABSENT">ABSENT</option></select></div>`; c.appendChild(r); });
+document.getElementById('form-mark-attendance').addEventListener('submit', async e => { e.preventDefault(); const sid=Number(document.getElementById('m-session').value); if(!sid) return showError('Session ID required.'); const recs=[]; document.querySelectorAll('.attendance-entry').forEach(en=>{const s=Number(en.querySelector('.att-student').value); const st=en.querySelector('.att-status').value; if(s>0)recs.push({sessionId:sid,studentId:s,status:st});}); if(!recs.length) return showError('Add students.'); try { await API.post('/api/attendance/mark',recs); showSuccess(`Marked ${recs.length} student(s).`); } catch(err) { showError(err.message); } });
+
+/* CLAIMS */
+async function loadClaims() { const t=document.getElementById('claims-table-body'); t.innerHTML='<tr><td colspan="6" class="empty-state">Loading…</td></tr>'; try { const l=await API.get('/api/attendance/claims'); const a=Array.isArray(l)?l:[]; if(!a.length){t.innerHTML='<tr><td colspan="6" class="empty-state">No claims.</td></tr>';return;} t.innerHTML=a.map(c=>{const st=(c.status||'').toLowerCase(); return `<tr><td>${c.id}</td><td>${c.studentId}</td><td>${c.sessionId}</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis" title="${c.reason||''}">${c.reason||'—'}</td><td><span class="badge ${st==='pending'?'badge-pending':st==='approved'?'badge-approved':'badge-rejected'}">${c.status}</span></td><td>${st==='pending'?`<button class="btn btn-approve btn-sm" onclick="approveClaim(${c.id})">✓</button> <button class="btn btn-reject btn-sm" onclick="rejectClaim(${c.id})">✕</button>`:'Reviewed'}</td></tr>`;}).join(''); } catch(e) { t.innerHTML=`<tr><td colspan="6" class="empty-state" style="color:#f87171">${e.message}</td></tr>`; } }
+window.approveClaim = async function(id) { try { await API.put(`/api/attendance/claims/${id}/approve`); showSuccess(`Claim #${id} approved.`); loadClaims(); } catch(e) { showError(e.message); } };
+window.rejectClaim = async function(id) { try { await API.put(`/api/attendance/claims/${id}/reject`); showSuccess(`Claim #${id} rejected.`); loadClaims(); } catch(e) { showError(e.message); } };
+document.getElementById('btn-refresh-claims').addEventListener('click', loadClaims);
+
+/* EXAMS */
+document.getElementById('form-create-exam').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/exams', { courseId:Number(document.getElementById('ex-course').value), title:document.getElementById('ex-title').value.trim(), description:document.getElementById('ex-desc').value.trim(), maxMarks:Number(document.getElementById('ex-max').value), examDate:document.getElementById('ex-date').value }); showSuccess('Exam created.'); e.target.reset(); } catch(err) { showError(err.message); } });
+document.getElementById('btn-load-exams').addEventListener('click', async()=>{const cid=Number(document.getElementById('ve-course').value);if(!cid)return showError('Enter course ID.');const t=document.getElementById('exams-table-body');t.innerHTML='<tr><td colspan="5" class="empty-state">Loading…</td></tr>';try{const l=await API.get(`/api/exams/course/${cid}`);const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="5" class="empty-state">No exams.</td></tr>';return;}t.innerHTML=a.map(e=>`<tr><td>${e.id}</td><td><strong>${e.title}</strong></td><td>${e.maxMarks}</td><td>${e.examDate||'—'}</td><td><button class="btn btn-reject btn-sm" onclick="deleteExam(${e.id})">🗑</button></td></tr>`).join('');}catch(e){t.innerHTML=`<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}});
+window.deleteExam = async function(id){if(!confirm(`Delete exam #${id}?`))return;try{await API.delete(`/api/exams/${id}`);showSuccess('Deleted.');document.getElementById('btn-load-exams').click();}catch(e){showError(e.message);}};
+
+/* ASSIGNMENTS */
+document.getElementById('form-create-assignment').addEventListener('submit', async e => { e.preventDefault(); try { await API.post('/api/assignments', { courseId:Number(document.getElementById('as-course').value), title:document.getElementById('as-title').value.trim(), description:document.getElementById('as-desc').value.trim(), maxMarks:Number(document.getElementById('as-max').value), dueDate:document.getElementById('as-due').value }); showSuccess('Assignment created.'); e.target.reset(); } catch(err) { showError(err.message); } });
+document.getElementById('btn-load-assignments').addEventListener('click', async()=>{const cid=Number(document.getElementById('va-course').value);if(!cid)return showError('Enter course ID.');const t=document.getElementById('assignments-table-body');t.innerHTML='<tr><td colspan="5" class="empty-state">Loading…</td></tr>';try{const l=await API.get(`/api/assignments/course/${cid}`);const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="5" class="empty-state">No assignments.</td></tr>';return;}t.innerHTML=a.map(x=>`<tr><td>${x.id}</td><td><strong>${x.title}</strong></td><td>${x.maxMarks}</td><td>${x.dueDate||'—'}</td><td><button class="btn btn-reject btn-sm" onclick="deleteAssignment(${x.id})">🗑</button></td></tr>`).join('');}catch(e){t.innerHTML=`<tr><td colspan="5" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}});
+window.deleteAssignment = async function(id){if(!confirm(`Delete assignment #${id}?`))return;try{await API.delete(`/api/assignments/${id}`);showSuccess('Deleted.');document.getElementById('btn-load-assignments').click();}catch(e){showError(e.message);}};
+
+/* ── MARKS — Auto-load students by Exam / Assignment ID ── */
+
+/**
+ * Build one marks-entry row for a student.
+ * @param {number} idx        - row index (1-based)
+ * @param {number} studentId  - student's ID
+ * @param {string} name       - student's display name
+ * @param {string} prefix     - 'em' | 'am' (used for unique IDs)
+ */
+function makeStudentMarkRow(idx, studentId, name, prefix) {
+  const row = document.createElement('div');
+  row.className = 'bulk-mark-row';
+  row.dataset.studentId = studentId;
+  row.style.cssText = 'display:grid;grid-template-columns:60px 1fr 180px;gap:12px;margin-bottom:10px;align-items:center';
+  row.innerHTML = `
+    <span style="font-size:13px;color:var(--text-muted);font-weight:600">${idx}</span>
+    <div style="line-height:1.3">
+      <div style="font-weight:600;font-size:14px">${name}</div>
+      <div style="font-size:12px;color:var(--text-muted)">ID: ${studentId}</div>
+    </div>
+    <input class="form-input bulk-marks" id="${prefix}-marks-${studentId}" type="number" min="0" placeholder="Marks" required />
+  `;
+  return row;
+}
+
+/* ── EXAM: Load students ── */
+document.getElementById('btn-load-exam-students').addEventListener('click', async () => {
+  const examId = Number(document.getElementById('em-exam').value);
+  if (!examId) return showError('Enter an Exam ID first.');
+  const infoEl = document.getElementById('em-exam-info');
+  const wrap   = document.getElementById('em-student-table-wrap');
+  const ph     = document.getElementById('em-placeholder');
+  const entries= document.getElementById('em-entries');
+  infoEl.textContent = 'Loading…';
+  wrap.style.display = 'none';
+  ph.style.display   = 'none';
+  try {
+    // 1. Get exam details to find courseId
+    const exam = await API.get(`/api/exams/${examId}`);
+    if (!exam || !exam.courseId) throw new Error('Exam not found or has no course.');
+    infoEl.textContent = `📝 ${exam.title || 'Exam'} — Max: ${exam.maxMarks ?? '?'} marks`;
+    // 2. Get all students for that course
+    const students = await API.get(`/api/students/course/${exam.courseId}`);
+    const list = Array.isArray(students) ? students : [];
+    if (!list.length) { infoEl.textContent += ' — No students found for this course.'; ph.style.display='block'; ph.textContent='No students enrolled in this course.'; return; }
+    // 3. Populate rows
+    entries.innerHTML = '';
+    list.forEach((s, i) => {
+      const name = [s.firstName, s.lastName].filter(Boolean).join(' ') || s.name || `Student #${s.id ?? s.studentId}`;
+      const sid  = s.id ?? s.studentId;
+      entries.appendChild(makeStudentMarkRow(i + 1, sid, name, 'em'));
+    });
+    document.getElementById('em-submit-info').textContent = `${list.length} student(s) loaded`;
+    wrap.style.display = 'block';
+    // Focus first marks input
+    const firstInput = entries.querySelector('.bulk-marks');
+    if (firstInput) firstInput.focus();
+  } catch (err) {
+    infoEl.textContent = '';
+    ph.style.display = 'block';
+    ph.textContent = `⚠ ${err.message}`;
+    showError(err.message);
+  }
+});
+
+document.getElementById('form-exam-marks').addEventListener('submit', async e => {
+  e.preventDefault();
+  const examId = Number(document.getElementById('em-exam').value);
+  if (!examId) return showError('Enter Exam ID.');
+  const rows = document.querySelectorAll('#em-entries .bulk-mark-row');
+  if (!rows.length) return showError('Load students first.');
+  const entries = [];
+  let hasEmpty = false;
+  rows.forEach(row => {
+    const sid   = Number(row.dataset.studentId);
+    const marks = row.querySelector('.bulk-marks').value;
+    if (!sid || marks === '') { hasEmpty = true; return; }
+    entries.push({ studentId: sid, examId, marksObtained: Number(marks) });
+  });
+  if (hasEmpty) return showError('Fill in marks for every student — no empty fields allowed.');
+  if (!entries.length) return showError('No valid entries to submit.');
+  try {
+    let ok = 0, errs = [];
+    for (const entry of entries) {
+      try { await API.post('/api/marks/exam', entry); ok++; }
+      catch(err) { errs.push(`Student ${entry.studentId}: ${err.message}`); }
+    }
+    if (ok > 0) showSuccess(`✓ Marks saved for ${ok} student(s).${errs.length ? ' Some failed.' : ''}`);
+    if (errs.length) showError(errs.join(' | '));
+  } catch(err) { showError(err.message); }
+});
+
+/* ── ASSIGNMENT: Load students ── */
+document.getElementById('btn-load-assign-students').addEventListener('click', async () => {
+  const assignId = Number(document.getElementById('am-assignment').value);
+  if (!assignId) return showError('Enter an Assignment ID first.');
+  const infoEl = document.getElementById('am-assign-info');
+  const wrap   = document.getElementById('am-student-table-wrap');
+  const ph     = document.getElementById('am-placeholder');
+  const entries= document.getElementById('am-entries');
+  infoEl.textContent = 'Loading…';
+  wrap.style.display = 'none';
+  ph.style.display   = 'none';
+  try {
+    // 1. Get assignment details to find courseId
+    const assign = await API.get(`/api/assignments/${assignId}`);
+    if (!assign || !assign.courseId) throw new Error('Assignment not found or has no course.');
+    infoEl.textContent = `📋 ${assign.title || 'Assignment'} — Max: ${assign.maxMarks ?? '?'} marks`;
+    // 2. Get all students for that course
+    const students = await API.get(`/api/students/course/${assign.courseId}`);
+    const list = Array.isArray(students) ? students : [];
+    if (!list.length) { infoEl.textContent += ' — No students found.'; ph.style.display='block'; ph.textContent='No students enrolled in this course.'; return; }
+    // 3. Populate rows
+    entries.innerHTML = '';
+    list.forEach((s, i) => {
+      const name = [s.firstName, s.lastName].filter(Boolean).join(' ') || s.name || `Student #${s.id ?? s.studentId}`;
+      const sid  = s.id ?? s.studentId;
+      entries.appendChild(makeStudentMarkRow(i + 1, sid, name, 'am'));
+    });
+    document.getElementById('am-submit-info').textContent = `${list.length} student(s) loaded`;
+    wrap.style.display = 'block';
+    const firstInput = entries.querySelector('.bulk-marks');
+    if (firstInput) firstInput.focus();
+  } catch (err) {
+    infoEl.textContent = '';
+    ph.style.display = 'block';
+    ph.textContent = `⚠ ${err.message}`;
+    showError(err.message);
+  }
+});
+
+document.getElementById('form-assignment-marks').addEventListener('submit', async e => {
+  e.preventDefault();
+  const assignmentId = Number(document.getElementById('am-assignment').value);
+  if (!assignmentId) return showError('Enter Assignment ID.');
+  const rows = document.querySelectorAll('#am-entries .bulk-mark-row');
+  if (!rows.length) return showError('Load students first.');
+  const entries = [];
+  let hasEmpty = false;
+  rows.forEach(row => {
+    const sid   = Number(row.dataset.studentId);
+    const marks = row.querySelector('.bulk-marks').value;
+    if (!sid || marks === '') { hasEmpty = true; return; }
+    entries.push({ studentId: sid, assignmentId, marksObtained: Number(marks) });
+  });
+  if (hasEmpty) return showError('Fill in marks for every student — no empty fields allowed.');
+  if (!entries.length) return showError('No valid entries to submit.');
+  try {
+    let ok = 0, errs = [];
+    for (const entry of entries) {
+      try { await API.post('/api/marks/assignment', entry); ok++; }
+      catch(err) { errs.push(`Student ${entry.studentId}: ${err.message}`); }
+    }
+    if (ok > 0) showSuccess(`✓ Marks saved for ${ok} student(s).${errs.length ? ' Some failed.' : ''}`);
+    if (errs.length) showError(errs.join(' | '));
+  } catch(err) { showError(err.message); }
+});
+window.updateExamMark = async function(sid,eid){const m=prompt(`New marks for student #${sid}, exam #${eid}:`);if(m===null)return;const parsed=Math.round(Number(m));if(isNaN(parsed)||String(m).trim()==='')return showError('Enter a valid whole number.');try{await API.put(`/api/marks/exam/${sid}/${eid}?marksObtained=${parsed}`);showSuccess('Updated.');document.getElementById('btn-view-exam-marks').click();}catch(e){showError(e.message);}};
+window.updateAssignmentMark = async function(sid,aid){const m=prompt(`New marks for student #${sid}, assignment #${aid}:`);if(m===null)return;const parsed=Math.round(Number(m));if(isNaN(parsed)||String(m).trim()==='')return showError('Enter a valid whole number.');try{await API.put(`/api/marks/assignment/${sid}/${aid}?marksObtained=${parsed}`);showSuccess('Updated.');document.getElementById('btn-view-assignment-marks').click();}catch(e){showError(e.message);}};
+document.getElementById('btn-view-exam-marks').addEventListener('click', async()=>{const eid=Number(document.getElementById('vm-exam').value);if(!eid)return showError('Enter exam ID.');const t=document.getElementById('exam-marks-view-body');t.innerHTML='<tr><td colspan="4" class="empty-state">Loading…</td></tr>';try{const l=await API.get(`/api/marks/exam/${eid}`);const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="4" class="empty-state">No marks.</td></tr>';return;}t.innerHTML=a.map(m=>`<tr><td>${m.studentId??'—'}</td><td>${m.examId??eid}</td><td><strong>${m.marksObtained??'—'}</strong></td><td><button class="btn btn-ghost btn-sm" onclick="updateExamMark(${m.studentId},${m.examId??eid})">✏</button></td></tr>`).join('');}catch(e){t.innerHTML=`<tr><td colspan="4" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}});
+document.getElementById('btn-view-assignment-marks').addEventListener('click', async()=>{const aid=Number(document.getElementById('vm-assignment').value);if(!aid)return showError('Enter assignment ID.');const t=document.getElementById('assignment-marks-view-body');t.innerHTML='<tr><td colspan="4" class="empty-state">Loading…</td></tr>';try{const l=await API.get(`/api/marks/assignment/${aid}`);const a=Array.isArray(l)?l:[];if(!a.length){t.innerHTML='<tr><td colspan="4" class="empty-state">No marks.</td></tr>';return;}t.innerHTML=a.map(m=>`<tr><td>${m.studentId??'—'}</td><td>${m.assignmentId??aid}</td><td><strong>${m.marksObtained??'—'}</strong></td><td><button class="btn btn-ghost btn-sm" onclick="updateAssignmentMark(${m.studentId},${m.assignmentId??aid})">✏</button></td></tr>`).join('');}catch(e){t.innerHTML=`<tr><td colspan="4" class="empty-state" style="color:#f87171">${e.message}</td></tr>`;}});
+
+/* REPORTS — parallel load with per-table error isolation */
+document.getElementById('btn-load-reports').addEventListener('click', async () => {
+  const cid = Number(document.getElementById('rpt-course').value);
+  if (!cid) return showError('Enter course ID.');
+
+  const btn = document.getElementById('btn-load-reports');
+  btn.disabled = true;
+  btn.textContent = 'Loading…';
+
+  const ab  = document.getElementById('rpt-attendance-body');
+  const eb  = document.getElementById('rpt-exam-body');
+  const asb = document.getElementById('rpt-assignment-body');
+
+  // Set all tables to loading state immediately
+  const LOADING_4 = '<tr><td colspan="4" class="empty-state">Loading…</td></tr>';
+  const LOADING_5 = '<tr><td colspan="5" class="empty-state">Loading…</td></tr>';
+  ab.innerHTML = LOADING_4; eb.innerHTML = LOADING_5; asb.innerHTML = LOADING_5;
+
+  // Fire all 3 requests in parallel — don't block on each other
+  const [attRes, examRes, assignRes] = await Promise.allSettled([
+    API.get(`/api/reports/attendance/course/${cid}`),
+    API.get(`/api/reports/exams/course/${cid}`),
+    API.get(`/api/reports/assignments/course/${cid}`)
+  ]);
+
+  // Attendance
+  if (attRes.status === 'fulfilled') {
+    const l = Array.isArray(attRes.value) ? attRes.value : [];
+    ab.innerHTML = l.length === 0
+      ? '<tr><td colspan="4" class="empty-state">No attendance data.</td></tr>'
+      : l.map(r => `<tr>
+          <td>${r.student_id ?? r.studentId ?? '—'}</td>
+          <td>${r.total_sessions ?? r.totalSessions ?? '—'}</td>
+          <td>${r.present_count ?? r.presentCount ?? '—'}</td>
+          <td><strong>${(r.attendance_percentage ?? r.attendancePercentage) != null
+            ? Number(r.attendance_percentage ?? r.attendancePercentage).toFixed(1) + '%'
+            : '—'}</strong></td>
+        </tr>`).join('');
+  } else {
+    ab.innerHTML = `<tr><td colspan="4" class="empty-state" style="color:#f87171">⚠ ${attRes.reason?.message ?? 'Failed to load attendance'}</td></tr>`;
+  }
+
+  // Exams
+  if (examRes.status === 'fulfilled') {
+    const l = Array.isArray(examRes.value) ? examRes.value : [];
+    eb.innerHTML = l.length === 0
+      ? '<tr><td colspan="5" class="empty-state">No exam data.</td></tr>'
+      : l.map(r => `<tr>
+          <td>${r.exam_title ?? r.examTitle ?? '—'}</td>
+          <td>${r.student_id ?? r.studentId ?? '—'}</td>
+          <td>${r.max_marks ?? r.maxMarks ?? '—'}</td>
+          <td><strong>${r.marks_obtained ?? r.marksObtained ?? '—'}</strong></td>
+          <td>${r.percentage != null ? Number(r.percentage).toFixed(1) + '%' : '—'}</td>
+        </tr>`).join('');
+  } else {
+    eb.innerHTML = `<tr><td colspan="5" class="empty-state" style="color:#f87171">⚠ ${examRes.reason?.message ?? 'Failed to load exam report'}</td></tr>`;
+  }
+
+  // Assignments
+  if (assignRes.status === 'fulfilled') {
+    const l = Array.isArray(assignRes.value) ? assignRes.value : [];
+    asb.innerHTML = l.length === 0
+      ? '<tr><td colspan="5" class="empty-state">No assignment data.</td></tr>'
+      : l.map(r => `<tr>
+          <td>${r.assignment_title ?? r.assignmentTitle ?? '—'}</td>
+          <td>${r.student_id ?? r.studentId ?? '—'}</td>
+          <td>${r.max_marks ?? r.maxMarks ?? '—'}</td>
+          <td><strong>${r.marks_obtained ?? r.marksObtained ?? '—'}</strong></td>
+          <td>${r.percentage != null ? Number(r.percentage).toFixed(1) + '%' : '—'}</td>
+        </tr>`).join('');
+  } else {
+    asb.innerHTML = `<tr><td colspan="5" class="empty-state" style="color:#f87171">⚠ ${assignRes.reason?.message ?? 'Failed to load assignment report'}</td></tr>`;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Load Reports →';
+});
+
+/* TEACHER TIMETABLE */
+async function loadTeacherTimetable() {
+  const wrap = document.getElementById('teacher-timetable-grid-wrap');
+  wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Loading…</div>';
+  try {
+    const teacherUserId = Number(getUserId());
+    const l = await API.get('/api/timetable');
+    // Try filter by teacher, fallback to all if teacherId != userId format
+    let slots = Array.isArray(l) ? l : [];
+    const mine = slots.filter(s => s.teacherId === teacherUserId);
+    if (mine.length > 0) slots = mine;
+    if (!slots.length) { wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">No timetable slots assigned to you yet.</div>'; return; }
+    const DAYS = ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+    const maxPeriod = Math.max(...slots.map(s => s.period), 6);
+    const periods = Array.from({length: maxPeriod}, (_, i) => i + 1);
+    const map = {};
+    slots.forEach(s => { if(!map[s.dayOfWeek])map[s.dayOfWeek]={}; if(!map[s.dayOfWeek][s.period])map[s.dayOfWeek][s.period]=[]; map[s.dayOfWeek][s.period].push(s); });
+    const daysToShow = DAYS.filter(d => map[d]);
+    if (!daysToShow.length) { wrap.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">No timetable slots assigned yet.</div>'; return; }
+    wrap.innerHTML = `<table class="tt-grid">
+      <thead><tr>
+        <th>Day / Period</th>
+        ${periods.map(p => `<th>Period ${p}</th>`).join('')}
+      </tr></thead>
+      <tbody>
+        ${daysToShow.map(day => `
+          <tr>
+            <td><div class="tt-day-label">${day.charAt(0)+day.slice(1).toLowerCase()}</div></td>
+            ${periods.map(p => {
+              const cell = map[day] && map[day][p];
+              if (!cell) return `<td><div class="tt-cell-empty">—</div></td>`;
+              return `<td>${cell.map(s => `
+                <div class="tt-cell">
+                  <span class="tt-cell-course">Course #${s.courseId}</span>
+                  <span class="tt-cell-room">${s.room || ''}</span>
+                </div>`).join('')}</td>`;
+            }).join('')}
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+  } catch(e) { wrap.innerHTML = `<div style="text-align:center;padding:32px;color:#f87171">${e.message}</div>`; }
+}
+})();
+</script>
+</body>
+</html>
